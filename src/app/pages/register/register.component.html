@@ -52,13 +52,21 @@
     </div>
 
     <div class="form-group">
+      <label for="mobileNo">Mobile Number</label>
+      <input id="mobileNo" formControlName="mobileNo" placeholder="Enter Mobile number"  inputmode="numeric" required/>
+      <span class="error-message" *ngIf="getControl('mobileNo').touched && getControl('mobileNo').invalid">
+        Mobile number is not a valid format.
+      </span>
+    </div>
+
+    <div class="form-group">
       <label for="password">Password</label>
       <input id="password" type="password" formControlName="password" placeholder="Enter your password" />
       <span class="error-message" *ngIf="getControl('password').touched && getControl('password').errors?.['required']">
         Password is required.
       </span>
       <span class="error-message" *ngIf="getControl('password').touched && getControl('password').errors?.['minlength']">
-        Password must be at least 6 characters.
+        Password must be at least 4 characters.
       </span>
     </div>
 
@@ -73,6 +81,12 @@
     <div class="form-buttons">
       <button class="btn btn-primary" type="submit" [disabled]="registerForm.invalid">Register</button>
       <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
+    </div>
+    <br>
+    <div class="form-group">
+      <span class="error-message" *ngIf="errMessege!='' ">
+        {{errMessege}}
+      </span>
     </div>
   </form>
 </div>

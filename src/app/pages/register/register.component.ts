@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { RegisterUserDto } from '../../../Models/DTOs/RegisterUserDto';
+import { SharedServiceService } from '../../shared-service.service';
 
 @Component({
   selector: 'app-register',
@@ -10,8 +12,10 @@ import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angula
 export class RegisterComponent {
   registerForm!: FormGroup;
   nameParts: string[] = [];
+  messege!:string
+  errMessege:string=''
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,private service:SharedServiceService) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -31,9 +35,10 @@ export class RegisterComponent {
           Validators.required,
           Validators.pattern(/^(\d{11}|\d{9}V)$/)
         ]
-      ],      
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      retypePassword: ['', [Validators.required, Validators.minLength(6)]]
+      ],  
+      mobileNo: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],    
+      password: ['', [Validators.required, Validators.minLength(4)]],
+      retypePassword: ['', [Validators.required, Validators.minLength(4)]]
     });
 
     this.registerForm.get('fullname')?.valueChanges.subscribe(value => {
@@ -43,8 +48,26 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log('Form submitted:', this.registerForm.value);
+      console.log('Form submitted:', this.registerForm.value,this.nameParts);
       // handle registration here
+
+      let submitModel:RegisterUserDto={
+        name: this.nameParts,
+        mobileNo: this.getControl('mobileNo').value,
+        nationalId:this.getControl('nationalId').value,
+        email:this.getControl('email').value,
+        userName:this.getControl('username').value,
+        password:this.getControl('password').value,
+        preferedName:this.getControl('preferedName').value
+      };
+      
+      this.service.registerUser(submitModel).subscribe(res=>{
+        this.messege=res.Data;
+       },
+       (err)=>{
+        this.errMessege=err.error.Data
+       }
+      )
     }
   }
 
@@ -55,11 +78,13 @@ export class RegisterComponent {
       preferredName: '',
       username: '',
       email: '',
+      mobileNo:'',
       password: '',
       retypePassword: '',
       nationalId: ''
     });
 
+    this.errMessege=''
     this.nameParts=[];
   }
 
