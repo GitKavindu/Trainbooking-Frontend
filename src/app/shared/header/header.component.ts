@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { SharedServiceService } from '../../shared-service.service';
+import { TokenService } from '../../common/TokenService';
+import { Token } from '../../../Models/Token';
 
 @Component({
   selector: 'app-header',
@@ -7,5 +10,6 @@ import { Component } from '@angular/core';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
-
+  
+  constructor(public service:SharedServiceService){}
 }

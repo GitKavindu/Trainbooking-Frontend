@@ -5,6 +5,8 @@ import { RegisterUserDto } from '../Models/DTOs/RegisterUserDto';
 import { LoginUserDto } from '../Models/DTOs/LoginUserDto';
 import { Token } from '../Models/Token';
 import { TokenService } from './common/TokenService';
+import { Station } from '../Models/Station';
+import { StationDto } from '../Models/DTOs/StationDto';
 
 
 @Injectable({
@@ -14,14 +16,14 @@ export class SharedServiceService {
 
   readonly APIUrl="http://localhost:5000";
 
-  public userToken:Token | undefined
-  private tokenService:TokenService
+ 
+  public tokenService:TokenService
 
   constructor(private http:HttpClient) {
-    this.tokenService=new TokenService()
-    this.userToken=this.tokenService.returnToken()  
+    this.tokenService=new TokenService() 
    }
 
+  //User
   registerUser(registerUserDto:RegisterUserDto){
     return this.http.post<BaseResponse<string>>(this.APIUrl+"/User/registerUser",registerUserDto);
   }
@@ -29,4 +31,24 @@ export class SharedServiceService {
   loginUser(loginUser:LoginUserDto){
     return this.http.post<BaseResponse<Token>>(this.APIUrl+"/User/getuserToken",loginUser);
   }
+
+  //Station
+  getAllStations(){
+    return this.http.get<BaseResponse<Station>>(this.APIUrl+"/Station/getAllStations");
+  }
+
+  addStation(station:StationDto){
+    return this.http.post<BaseResponse<string>>(this.APIUrl+"/Station/addStation",station);
+  }
+
+  editStation(station:StationDto){
+    return this.http.put<BaseResponse<string>>(this.APIUrl+"/Station/updateStation",station);
+  }
+
+  deleteStation(station:StationDto){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Station/deleteStation", {
+      body: station
+    });
+  }
+
 }

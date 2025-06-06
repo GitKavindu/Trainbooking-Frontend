@@ -9,6 +9,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './pages/login/login.component';
+import { StationComponent } from './pages/station/station.component';
+import { AddEditStationComponent } from './pages/station/add-edit-station/add-edit-station.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { LoginComponent } from './pages/login/login.component';
     HeaderComponent,
     FooterComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    StationComponent,
+    AddEditStationComponent
   ],
   imports: [
     BrowserModule,

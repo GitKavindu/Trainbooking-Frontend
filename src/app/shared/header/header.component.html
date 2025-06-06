@@ -4,9 +4,9 @@
         <h1>TrainBooking</h1>
       </div>
       <nav class="main-nav">
-        <a routerLink="/home" class="nav-link">Home</a>
+        <a routerLink="/station" class="nav-link">Station</a>
         <a routerLink="/register" class="nav-link">Register</a>
-        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/login" class="nav-link" *ngIf="service.tokenService.returnToken()==undefined">Login</a>
       </nav>
     </div>
   </header>

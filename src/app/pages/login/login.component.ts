@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SharedServiceService } from '../../shared-service.service';
 import { LoginUserDto } from '../../../Models/DTOs/LoginUserDto';
+import { TokenService } from '../../common/TokenService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent {
   errMessege:string=''
   messege!:string
 
-  constructor(private fb: FormBuilder,private service:SharedServiceService) {}
+  constructor(private fb: FormBuilder,private service:SharedServiceService,private router:Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -32,6 +34,7 @@ export class LoginComponent {
     });
 
     this.errMessege=''
+    localStorage.removeItem('userToken');
   }
 
   getControl(name: string): FormControl {
@@ -47,8 +50,8 @@ export class LoginComponent {
       
       this.service.loginUser(submitModel).subscribe(res=>{
           
-          this.service.userToken=res.Data
-          console.log(this.service.userToken)
+          new TokenService().setToken(res.Data)
+          this.router.navigateByUrl('/station');
         },
         (err)=>{
           this.errMessege=err.error.Data.messege
