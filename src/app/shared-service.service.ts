@@ -4,7 +4,8 @@ import { BaseResponse } from '../Models/BaseResponse';
 import { RegisterUserDto } from '../Models/DTOs/RegisterUserDto';
 import { LoginUserDto } from '../Models/DTOs/LoginUserDto';
 import { Token } from '../Models/Token';
-import { TokenService } from './pages/commmon/TokenService';
+import { TokenService } from './common/TokenService';
+
 
 @Injectable({
   providedIn: 'root'
