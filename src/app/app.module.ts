@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './pages/login/login.component';
 import { StationComponent } from './pages/station/station.component';
 import { AddEditStationComponent } from './pages/station/add-edit-station/add-edit-station.component';
+import { TrainComponent } from './pages/train/train.component';
+import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-train.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { AddEditStationComponent } from './pages/station/add-edit-station/add-ed
     RegisterComponent,
     LoginComponent,
     StationComponent,
-    AddEditStationComponent
+    AddEditStationComponent,
+    TrainComponent,
+    AddEditTrainComponent
   ],
   imports: [
     BrowserModule,

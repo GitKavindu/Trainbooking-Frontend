@@ -5,6 +5,7 @@
       </div>
       <nav class="main-nav">
         <a routerLink="/station" class="nav-link">Station</a>
+        <a routerLink="/train" class="nav-link">Train</a>
         <a routerLink="/register" class="nav-link">Register</a>
         <a routerLink="/login" class="nav-link" *ngIf="service.tokenService.returnToken()==undefined">Login</a>
       </nav>

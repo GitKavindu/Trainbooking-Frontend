@@ -7,6 +7,8 @@ import { Token } from '../Models/Token';
 import { TokenService } from './common/TokenService';
 import { Station } from '../Models/Station';
 import { StationDto } from '../Models/DTOs/StationDto';
+import { Train } from '../Models/Train';
+import { TrainDto } from '../Models/DTOs/TrainDto';
 
 
 @Injectable({
@@ -51,4 +53,22 @@ export class SharedServiceService {
     });
   }
 
+  //Train
+  getAllTrains(){
+    return this.http.get<BaseResponse<Train>>(this.APIUrl+"/Train/getAllTrains");
+  }
+
+  addTrain(train:TrainDto){
+    return this.http.post<BaseResponse<string>>(this.APIUrl+"/Train/addTrain",train);
+  }
+
+  editTrain(train:TrainDto){
+    return this.http.put<BaseResponse<string>>(this.APIUrl+"/Train/updateTrain",train);
+  }
+
+  deleteTrain(train:TrainDto){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Train/deleteTrain", {
+      body: train
+    });
+  }
 }
