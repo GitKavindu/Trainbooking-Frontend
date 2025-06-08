@@ -9,6 +9,7 @@ import { Station } from '../Models/Station';
 import { StationDto } from '../Models/DTOs/StationDto';
 import { Train } from '../Models/Train';
 import { TrainDto } from '../Models/DTOs/TrainDto';
+import { Apartment } from '../Models/Apartment';
 
 
 @Injectable({
@@ -36,7 +37,7 @@ export class SharedServiceService {
 
   //Station
   getAllStations(){
-    return this.http.get<BaseResponse<Station>>(this.APIUrl+"/Station/getAllStations");
+    return this.http.get<BaseResponse<Station[]>>(this.APIUrl+"/Station/getAllStations");
   }
 
   addStation(station:StationDto){
@@ -55,7 +56,7 @@ export class SharedServiceService {
 
   //Train
   getAllTrains(){
-    return this.http.get<BaseResponse<Train>>(this.APIUrl+"/Train/getAllTrains");
+    return this.http.get<BaseResponse<Train[]>>(this.APIUrl+"/Train/getAllTrains");
   }
 
   addTrain(train:TrainDto){
@@ -71,4 +72,12 @@ export class SharedServiceService {
       body: train
     });
   }
+
+  //Apartment
+  getAllApartments(trainId:number, seqNo:number) {
+  return this.http.get<BaseResponse<Apartment[]>>(
+    `${this.APIUrl}/Apartment/getAllApartmentsForTrain?trainId=${trainId}&seqNo=${seqNo}`
+  );
+}
+
 }

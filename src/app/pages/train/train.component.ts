@@ -28,6 +28,7 @@ export class TrainComponent {
         this.Train={
           train_no:0,
           train_name:'',
+          train_seq_no:0,
           created_date: '',
           lastUpdated_date:'',
           added_by:''

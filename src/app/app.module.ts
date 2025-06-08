@@ -13,6 +13,7 @@ import { StationComponent } from './pages/station/station.component';
 import { AddEditStationComponent } from './pages/station/add-edit-station/add-edit-station.component';
 import { TrainComponent } from './pages/train/train.component';
 import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-train.component';
+import { ApartmentComponent } from './pages/apartment/apartment.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-tra
     StationComponent,
     AddEditStationComponent,
     TrainComponent,
-    AddEditTrainComponent
+    AddEditTrainComponent,
+    ApartmentComponent
   ],
   imports: [
     BrowserModule,

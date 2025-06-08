@@ -1,6 +1,8 @@
 export class Train{
     public train_no!:number
 
+    public train_seq_no!:number
+
     public train_name!:string
 
     public added_by!:string
