@@ -14,6 +14,8 @@ import { AddEditStationComponent } from './pages/station/add-edit-station/add-ed
 import { TrainComponent } from './pages/train/train.component';
 import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-train.component';
 import { ApartmentComponent } from './pages/apartment/apartment.component';
+import { AddEditApartmentComponent } from './pages/apartment/add-edit-apartment/add-edit-apartment.component';
+import { TrainCompartmentComponent } from './pages/apartment/train-compartment/train-compartment.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ApartmentComponent } from './pages/apartment/apartment.component';
     AddEditStationComponent,
     TrainComponent,
     AddEditTrainComponent,
-    ApartmentComponent
+    ApartmentComponent,
+    AddEditApartmentComponent,
+    TrainCompartmentComponent
   ],
   imports: [
     BrowserModule,

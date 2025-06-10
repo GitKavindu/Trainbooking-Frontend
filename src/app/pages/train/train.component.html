@@ -15,7 +15,7 @@
         </div>
         <div class="modal-body">
           <app-add-edit-train  *ngIf="ActivateAddEditTrainComp" [Train]="Train"></app-add-edit-train>
-          <app-apartment  *ngIf="ActivateAddEditTrainComp && Train.train_no!=0"  [trainId]="Train.train_no" [trainSeqNo]="Train.train_seq_no"></app-apartment>
+          <app-apartment  *ngIf="ActivateAddEditTrainComp && Train.train_no!=0"  [trainId]="Train.train_no" [trainSeqNo]="Train.train_seq_no" ></app-apartment>
         </div>
   
       </div>

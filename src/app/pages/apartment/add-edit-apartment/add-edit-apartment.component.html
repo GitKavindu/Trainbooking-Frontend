@@ -1,0 +1,15 @@
+<div class="form-froup row">
+    <label class="col-sm-2 coll-form-label">Apartment Class</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="Apartmentclass" placeholder="Enter Apartment name">
+    </div>
+</div>
+
+<button (click)="addApartment()" *ngIf="Apartment.Apartment_id==0" class="btn btn-primary">
+    Add
+</button>
+
+<button (click)="updateApartment()" *ngIf="Apartment.Apartment_id!=0" class="btn btn-primary">
+    Edit
+</button>
+

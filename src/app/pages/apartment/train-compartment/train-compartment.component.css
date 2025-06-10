@@ -1,0 +1,93 @@
+.card {
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.seat {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.aisle {
+  width: 120px;
+  background: repeating-linear-gradient(
+    45deg,
+    #f8f9fa,
+    #f8f9fa 10px,
+    #e9ecef 10px,
+    #e9ecef 20px
+  );
+  border-radius: 4px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.legend {
+  margin-top: 10px;
+}
+
+.badge {
+  padding: 8px 12px;
+  border-radius: 4px;
+  min-width: 100px;
+  display: inline-block;
+  text-align: center;
+}
+
+.seat-group {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-width: 240px;
+  gap: 10px;
+}
+
+.compartment-card {
+  border: 2px solid #343a40;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.btn-success {
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.d-flex.justify-content-between {
+  gap: 20px;
+}
+
+.seat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-primary {
+  background-color: #0d6efd !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+  border: 1px solid #dee2e6;
+}
+
+/* Hover effect for available seats */
+.bg-light:hover {
+  background-color: #e9ecef !important;
+}
