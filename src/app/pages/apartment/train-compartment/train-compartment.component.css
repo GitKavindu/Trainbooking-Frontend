@@ -15,7 +15,10 @@
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
+.parent {
+  display: flex;
+  justify-content: center;
+}
 .aisle {
   width: 120px;
   background: repeating-linear-gradient(
@@ -26,6 +29,7 @@
     #e9ecef 20px
   );
   border-radius: 4px;
+  margin: 0 auto;
 }
 
 .cursor-pointer {

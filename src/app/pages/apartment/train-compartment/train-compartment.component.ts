@@ -22,7 +22,7 @@ export class TrainCompartmentComponent {
     { number: '2C', available: true, selected: false, isLeft: false, section: 'lower' },
     { number: '2D', available: false, selected: false, isLeft: false, section: 'lower' },
     // New seat
-    //  { number: '2F', available: false, selected: false, isLeft: false, section: 'lower' },
+    { number: '2F', available: false, selected: false, isLeft: false, section: 'lower' },
     //   { number: '2G', available: false, selected: false, isLeft: false, section: 'lower' },
     
     // Side berth - left side

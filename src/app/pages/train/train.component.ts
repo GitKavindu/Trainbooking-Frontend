@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Train } from '../../../Models/Train';
 import { TrainDto } from '../../../Models/DTOs/TrainDto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-train',
@@ -10,13 +11,15 @@ import { TrainDto } from '../../../Models/DTOs/TrainDto';
   styleUrl: './train.component.css'
 })
 export class TrainComponent {
-  constructor(private service:SharedServiceService){}
+  constructor(private service:SharedServiceService,private router:Router){}
   
-      TrainList:any=[]
+      TrainList:Train[]=[]
       ModalTitle!:string
       ActivateAddEditTrainComp:boolean=false
+
       Train!:Train
-  
+      enableApartment:boolean=false
+
       TrainIdFilter:string=""
       TrainNameFilter:string=""
       TrainListWithoutFilter:any=[]
@@ -95,5 +98,12 @@ export class TrainComponent {
               return (a[prop]<b[prop])?1:((a[prop]>b[prop])?-1:0)
             }
           })
+      }
+
+      enableDisableApartmentForTrain(i:number,train_id:number,train_seq_no:number){
+        this.enableApartment=!this.enableApartment;
+        this.router.navigate(['/apartment'], {
+          queryParams: { trainId: train_id, seqNo: train_seq_no}
+        });
       }
 }
