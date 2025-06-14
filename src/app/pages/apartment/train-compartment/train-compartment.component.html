@@ -8,32 +8,32 @@
       
       
       <!-- lower berth -->
-      <div class="d-flex justify-content-between mb-4 p-3 border-bottom">
+      <div class="d-flex justify-content-between mb-4 p-3 border-bottom" *ngFor="let seat of seats;let i=index">
 
         <!-- Left seats -->
           <div class="d-flex seat-group">
-            <div *ngFor="let seat of getSeats('lower', true)" class="seat-container">
+            <div *ngFor="let leftseatno of seat.left" class="seat-container">
                 <div 
                   class="seat m-2 p-2 rounded text-center cursor-pointer"
-                  [ngClass]="getSeatClass(seat)"
-                  (click)="toggleSeatSelection(seat)"
+                  [ngClass]="getSeatClass(leftseatno)"
+                  (click)="toggleSeatSelection(leftseatno,seat.row,'L')"
                 >
-                  {{ seat.number }}
+                  {{ seat.row+"L"+leftseatno.number }}
               </div>
             </div>
-          </div>
+         
 
             <!-- Gap in the middle -->
             <div class="aisle"></div>
-          <div class="d-flex seat-group">
+       
             <!-- Right seats -->
-            <div *ngFor="let seat of getSeats('lower', false)" class="seat-container">
+            <div *ngFor="let rightseatno of seat.right" class="seat-container">
               <div 
                 class="seat m-2 p-2 rounded text-center cursor-pointer"
-                [ngClass]="getSeatClass(seat)"
-                (click)="toggleSeatSelection(seat)"
+                [ngClass]="getSeatClass(rightseatno)"
+                (click)="toggleSeatSelection(rightseatno,seat.row,'R')"
               >
-                {{ seat.number }}
+                {{ seat.row+"R"+rightseatno.number }}
               </div>
             </div>
           </div>
@@ -42,38 +42,7 @@
       <!-- End of lower berth -->
 
       
-      <!-- Side berth -->
-      <div class="d-flex justify-content-between mb-4 p-3 border-bottom">
-
-        <!-- Left seats -->
-          <div class="d-flex seat-group">
-            <div *ngFor="let seat of getSeats('side', true)" class="seat-container">
-              <div 
-                class="seat m-2 p-2 rounded text-center cursor-pointer"
-                [ngClass]="getSeatClass(seat)"
-                (click)="toggleSeatSelection(seat)"
-              >
-                {{ seat.number }}
-            </div>
-          </div>
-
-          <!-- Gap in the middle -->
-          <div class="aisle"></div>
-
-          <!-- Right seats -->
-          <div *ngFor="let seat of getSeats('side', false)" class="seat-container">
-            <div 
-              class="seat m-2 p-2 rounded text-center cursor-pointer"
-              [ngClass]="getSeatClass(seat)"
-              (click)="toggleSeatSelection(seat)"
-            >
-              {{ seat.number }}
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <!-- End of Side berth -->
+     
 
     </div>
     
