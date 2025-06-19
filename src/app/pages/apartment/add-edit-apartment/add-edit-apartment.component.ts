@@ -17,8 +17,10 @@ export class AddEditApartmentComponent {
   Apartmentclass!:string
 
   ngOnInit(): void {
-      this.Apartmentid=this.Apartment.Apartment_id
+    if(this.Apartment!=undefined){
+        this.Apartmentid=this.Apartment.Apartment_id
       this.Apartmentclass=this.Apartment.ApartmrntClass
+    }    
   }
   addApartment(){
     // let val:ApartmentDto={
