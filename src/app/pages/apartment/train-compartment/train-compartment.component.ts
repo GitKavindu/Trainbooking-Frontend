@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { SeatModel } from '../../../../Models/SeatModel';
 
 @Component({
   selector: 'app-train-compartment',
@@ -7,6 +8,15 @@ import { Component } from '@angular/core';
   styleUrl: './train-compartment.component.css'
 })
 export class TrainCompartmentComponent {
+
+  @Input() seat :SeatModel[] | undefined
+  seats!:SeatModel[]
+
+  ngOnInit():void{
+    if(this.seat!=undefined)
+       this.seats=this.seat
+  }
+
 //  seats = [
 //     // Upper berth - left side
 //     { number: '1A', available: true, selected: false, isLeft: true, section: 'upper' },
@@ -34,108 +44,108 @@ export class TrainCompartmentComponent {
 //     // { number: '2E', available: false, selected: false, isLeft: false, section: 'lower' },
 //   ];
 
-  seats = [
-    {
-      row:1,
-      left:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ],
-      right:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ]
-    },
-    {
-      row:2,
-      left:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ],
-      right:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ]
-    },
-    {
-      row:3,
-      left:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:false,
-              selected:false
-            }
-           ],
-      right:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ]
-    },
-    {
-      row:4,
-      left:[{ 
-              number:1,
-              available:false,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ],
-      right:[{ 
-              number:1,
-              available:true,
-              selected:false
-            },
-            { 
-              number:2,
-              available:true,
-              selected:false
-            }
-           ]
-    }
-  ]
+  // seats :SeatModel[]= [
+  //   {
+  //     row:1,
+  //     left:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ],
+  //     right:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ]
+  //   },
+  //   {
+  //     row:2,
+  //     left:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ],
+  //     right:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ]
+  //   },
+  //   {
+  //     row:3,
+  //     left:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:false,
+  //             selected:false
+  //           }
+  //          ],
+  //     right:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ]
+  //   },
+  //   {
+  //     row:4,
+  //     left:[{ 
+  //             number:1,
+  //             available:false,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ],
+  //     right:[{ 
+  //             number:1,
+  //             available:true,
+  //             selected:false
+  //           },
+  //           { 
+  //             number:2,
+  //             available:true,
+  //             selected:false
+  //           }
+  //          ]
+  //   }
+  // ]
 
   selectedSeats: string[] = [];
 
@@ -163,4 +173,5 @@ export class TrainCompartmentComponent {
   //     seat.section === section && seat.isLeft === isLeft
   //   );
   // }
-}
+} 
+    

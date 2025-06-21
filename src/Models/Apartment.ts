@@ -8,5 +8,5 @@ export class Apartment{
   created_date!: string
   lastUpdated_date!: string
 
-  seatModel!:Seat
+  seatModel!:Seat[]
 }

@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Apartment } from '../../../Models/Apartment';
 import { ActivatedRoute } from '@angular/router';
+import { CommonService } from '../../common/CommonService';
+import { SeatModel } from '../../../Models/SeatModel';
 
 @Component({
   selector: 'app-apartment',
@@ -34,8 +36,7 @@ export class ApartmentComponent {
       } else {
         this.trainId = params['trainId'];
         this.trainSeqNo = +params['seqNo']; // + converts it to number
-        console.log('trainId:', this.trainId);
-        console.log('seqNo:', this.trainSeqNo);     
+           
       }
       this.refreshApartmentList(this.trainId,this.trainSeqNo);
     });
@@ -115,4 +116,17 @@ export class ApartmentComponent {
         }
       })
   }
+
+  getSeatModelForApartment(apartmentId:number){
+    for(let i=0;i<this.ApartmentList.length;i++){
+        if(this.ApartmentList[i].Apartment_id==apartmentId){
+          return new CommonService().convertSeatToSeatModel(this.ApartmentList[i].seatModel)
+        }
+    }
+
+    let seatModel:SeatModel[]=new Array()
+          return seatModel
+  }
+
+
 }

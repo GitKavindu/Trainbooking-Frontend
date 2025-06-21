@@ -1,5 +1,4 @@
 import { Token } from "../../Models/Token";
-import { SharedServiceService } from "../shared-service.service";
 
 
 export class TokenService {
