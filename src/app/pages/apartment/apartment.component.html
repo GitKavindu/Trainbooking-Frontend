@@ -14,10 +14,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <!-- <app-add-edit-apartment  *ngIf="ActivateAddEditApartmentComp==true"></app-add-edit-apartment> -->
-            <app-train-compartment *ngIf="Apartment!=undefined && ActivateAddEditApartmentComp==true" [seat]="getSeatModelForApartment(Apartment.Apartment_id)"></app-train-compartment> 
+            <app-add-edit-apartment  *ngIf="ActivateAddEditApartmentComp==true" [Apartment]="Apartment"></app-add-edit-apartment>       
         </div>
-  
+        
       </div>
     </div>
   </div>

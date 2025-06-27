@@ -96,7 +96,38 @@ export class CommonService{
 
         }
 
-       
         return seatModel
+    }
+
+    convertSeatModelToSeat(seatModel:SeatModel[],apartment_id:number):Seat[]{
+        let seat:Seat[]=new Array()
+        for(let i=0;i<seatModel.length;i++){
+
+            for(let j=0;j<seatModel[i].left.length;j++){
+               
+                if(seatModel[i].left[j].available==true){
+
+                    let leftSeat:Seat=new Seat()
+                    leftSeat.isLeft=true
+                    leftSeat.apartmentId=apartment_id
+                    leftSeat.rowNo=seatModel[i].row
+                    leftSeat.seqNo=seatModel[i].left[j].number
+                    seat.push(leftSeat)
+                }
+            }
+
+            for(let j=0;j<seatModel[i].right.length;j++){
+                 if(seatModel[i].right[j].available==true){
+
+                    let rightSeat:Seat=new Seat()
+                    rightSeat.isLeft=false
+                    rightSeat.apartmentId=apartment_id
+                    rightSeat.rowNo=seatModel[i].row
+                    rightSeat.seqNo=seatModel[i].right[j].number
+                    seat.push(rightSeat)
+                }
+            }
+        }
+        return seat
     }
 }

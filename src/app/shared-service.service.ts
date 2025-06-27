@@ -10,6 +10,9 @@ import { StationDto } from '../Models/DTOs/StationDto';
 import { Train } from '../Models/Train';
 import { TrainDto } from '../Models/DTOs/TrainDto';
 import { Apartment } from '../Models/Apartment';
+import { SeatModel } from '../Models/SeatModel';
+import { of } from 'rxjs';
+import { ApartmentDto } from '../Models/DTOs/ApartmentDto';
 
 
 @Injectable({
@@ -75,9 +78,122 @@ export class SharedServiceService {
 
   //Apartment
   getAllApartments(trainId:number, seqNo:number) {
-  return this.http.get<BaseResponse<Apartment[]>>(
-    `${this.APIUrl}/Apartment/getAllApartmentsForTrain?trainId=${trainId}&seqNo=${seqNo}`
-  );
-}
+    return this.http.get<BaseResponse<Apartment[]>>(
+      `${this.APIUrl}/Apartment/getAllApartmentsForTrain?trainId=${trainId}&seqNo=${seqNo}`
+    );
+  }
 
+  updateApartment(Apartment:ApartmentDto) {
+    return this.http.put<BaseResponse<string[]>>(
+      `${this.APIUrl}/Apartment/updateApartment`,Apartment
+    );
+  }
+
+  //
+  getSeatModel(){
+    let seat:SeatModel[]=new Array()
+      seat = [
+      {
+        row:1,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:2,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:3,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:false,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:4,
+        left:[{ 
+                number:1,
+                available:false,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      }
+    ]
+    return of(seat)
+  }
 }

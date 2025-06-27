@@ -22,7 +22,7 @@
     </div>
   </div>
   
-  <table class="table table-striped" *ngIf="enableApartment==false">
+  <table class="table table-striped" >
       <thead>
          <tr>
             <th>
@@ -60,10 +60,10 @@
             <th>Options</th>
         </tr>
       </thead>
-      <tbody *ngFor="let dataItem of TrainList;let i=index" (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">
+      <tbody *ngFor="let dataItem of TrainList;let i=index" >
         <tr>   
-          <td>{{dataItem.train_no}}</td>
-           <td>{{dataItem.train_name}}</td>
+          <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_no}}</td>
+           <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_name}}</td>
            <td>{{dataItem.created_date}}</td>
            <td>{{dataItem.lastUpdated_date}}</td>
            <td>

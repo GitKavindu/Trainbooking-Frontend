@@ -3,10 +3,14 @@
     <div class="card-header bg-dark text-white">
       <h3 class="text-center">Train Compartment</h3>
     </div>
-    
+
     <div class="card">
-      
-      
+      <select class="clean-select" [(ngModel)]="selectedModel" (change)="onModelChange($event)" *ngIf="type==2">
+        <option>Model 1</option>
+        <option disabled>──────────</option>
+        <option selected>Reset</option>
+      </select>
+      <br>
       <!-- lower berth -->
       <div class="d-flex justify-content-between mb-4 p-3 border-bottom" *ngFor="let seat of seats;let i=index">
 
@@ -16,7 +20,7 @@
                 <div 
                   class="seat m-2 p-2 rounded text-center cursor-pointer"
                   [ngClass]="getSeatClass(leftseatno)"
-                  (click)="toggleSeatSelection(leftseatno,seat.row,'L')"
+                  (click)="toggleSeatSelection(leftseatno,seat.row,true)"
                 >
                   {{ seat.row+"L"+leftseatno.number }}
               </div>
@@ -31,7 +35,7 @@
               <div 
                 class="seat m-2 p-2 rounded text-center cursor-pointer"
                 [ngClass]="getSeatClass(rightseatno)"
-                (click)="toggleSeatSelection(rightseatno,seat.row,'R')"
+                (click)="toggleSeatSelection(rightseatno,seat.row,false)"
               >
                 {{ seat.row+"R"+rightseatno.number }}
               </div>
@@ -40,10 +44,6 @@
 
       </div>
       <!-- End of lower berth -->
-
-      
-     
-
     </div>
     
     <div class="card-footer" *ngIf="type!=3">
@@ -54,8 +54,8 @@
       </div>
       
       <div *ngIf="selectedSeats.length > 0" class="mt-3 text-center">
-        <h5>Selected Seats: {{ selectedSeats.join(', ') }}</h5>
-        <button class="btn btn-success mt-2">Proceed to Book</button>
+        <h5>Selected Seats: {{returnSelectedSeats()}}</h5>
+        <button class="btn btn-success mt-2" *ngIf="type!=2">Proceed to Book</button>
       </div>
     </div>
   </div>

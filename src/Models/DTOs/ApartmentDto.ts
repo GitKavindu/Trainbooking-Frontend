@@ -8,5 +8,5 @@ export class ApartmentDto{
   train_seq_no!: number
   tokenId!: string | undefined
 
-  seatModel!:Seat
+  seatModel!:Seat[]
 }

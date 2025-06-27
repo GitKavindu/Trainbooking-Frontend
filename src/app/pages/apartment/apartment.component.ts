@@ -4,6 +4,7 @@ import { Apartment } from '../../../Models/Apartment';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../common/CommonService';
 import { SeatModel } from '../../../Models/SeatModel';
+import { Seat } from '../../../Models/Seat';
 
 @Component({
   selector: 'app-apartment',
@@ -45,16 +46,17 @@ export class ApartmentComponent {
   }
 
   addClick(){
-    // this.Apartment={
-    //   apartment_no:0,
-    //   apartment_name:'',
-    //   apartment_seq_no:0,
-    //   created_date: '',
-    //   lastUpdated_date:'',
-    //   added_by:''
-    // }
-    // this.ModalTitle="Add Apartment"
-    // this.ActivateAddEditApartmentComp=true
+    let seat:Seat[]=new Array()
+    this.Apartment={
+      Apartment_id:0,
+      ApartmrntClass:'',
+       seatModel: seat,
+      created_date: '',
+      lastUpdated_date:'',
+      added_by:''
+    }
+    this.ModalTitle="Add Apartment"
+    this.ActivateAddEditApartmentComp=true
   }
 
   editClick(item: Apartment){
@@ -117,16 +119,7 @@ export class ApartmentComponent {
       })
   }
 
-  getSeatModelForApartment(apartmentId:number){
-    for(let i=0;i<this.ApartmentList.length;i++){
-        if(this.ApartmentList[i].Apartment_id==apartmentId){
-          return new CommonService().convertSeatToSeatModel(this.ApartmentList[i].seatModel)
-        }
-    }
-
-    let seatModel:SeatModel[]=new Array()
-          return seatModel
-  }
+  
 
 
 }
