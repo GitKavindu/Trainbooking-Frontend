@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../common/CommonService';
 import { SeatModel } from '../../../Models/SeatModel';
 import { Seat } from '../../../Models/Seat';
+import { ApartmentDto } from '../../../Models/DTOs/ApartmentDto';
 
 @Component({
   selector: 'app-apartment',
@@ -66,19 +67,22 @@ export class ApartmentComponent {
   }
 
   deleteClick(ApartmentId:any){
-    // if(confirm('Are you sure ?')){
+    if(confirm('Are you sure ?')){
       
-    //   let val:Apartment={
-    //     Apartment_id:ApartmentId,
-    //     Apartment_name:'',
-    //     token_id:this.service.tokenService.returnToken()?.tokenId
-    //   }
+      let val:ApartmentDto={
+        apartment_id:ApartmentId,
+        _class:'',
+        tokenId:this.service.tokenService.returnToken()?.tokenId,
+        train_id:0,
+        train_seq_no:0,
+        seatModel:[]
+    }
 
-    //   this.service.deleteApartment(val).subscribe((res)=>{
-    //     alert(res.Data.toString());
-    //     this.refreshApartmentList()
-    //   })
-    // }
+      this.service.deleteApartment(val).subscribe((res)=>{
+        alert(res.Data.toString());
+        this.refreshApartmentList(0,0)
+      })
+    }
     
   }
 

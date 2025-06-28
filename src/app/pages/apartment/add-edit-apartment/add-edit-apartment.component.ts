@@ -39,14 +39,18 @@ export class AddEditApartmentComponent {
     });
   }
   addApartment(){
-    // let val:ApartmentDto={
-    //   apartment_id:this.Apartmentid,
-    //   _class:this.Apartmentclass,
-    //   tokenId:this.service.tokenService.returnToken()?.tokenId
-    // }
-    // this.service.addApartment(val).subscribe(res=>{
-    //   alert(res.Data.toString());
-    // })
+    let commonService:CommonService=new CommonService()
+    let val:ApartmentDto={
+      apartment_id:0,
+      _class:this.Apartmentclass,
+      tokenId:this.service.tokenService.returnToken()?.tokenId,
+      train_id:this.trainId,
+      train_seq_no:this.trainSeqNo,
+      seatModel:commonService.convertSeatModelToSeat(this.compartment.seats,0)
+    }
+    this.service.addApartment(val).subscribe(res=>{
+      alert(res.Data.toString());
+    })
   }
 
   updateApartment(){

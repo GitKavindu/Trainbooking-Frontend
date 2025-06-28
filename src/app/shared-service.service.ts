@@ -83,12 +83,23 @@ export class SharedServiceService {
     );
   }
 
+  addApartment(Apartment:ApartmentDto) {
+    return this.http.post<BaseResponse<string[]>>(
+      `${this.APIUrl}/Apartment/addApartment`,Apartment
+    );
+  }
+
   updateApartment(Apartment:ApartmentDto) {
     return this.http.put<BaseResponse<string[]>>(
       `${this.APIUrl}/Apartment/updateApartment`,Apartment
     );
   }
 
+  deleteApartment(Apartment:ApartmentDto){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Apartment/deleteApartment", {
+      body: Apartment
+    });
+  }
   //
   getSeatModel(){
     let seat:SeatModel[]=new Array()
