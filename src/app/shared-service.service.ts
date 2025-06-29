@@ -13,6 +13,7 @@ import { Apartment } from '../Models/Apartment';
 import { SeatModel } from '../Models/SeatModel';
 import { of } from 'rxjs';
 import { ApartmentDto } from '../Models/DTOs/ApartmentDto';
+import { Schedule } from '../Models/Schedule';
 
 
 @Injectable({
@@ -100,6 +101,14 @@ export class SharedServiceService {
       body: Apartment
     });
   }
+  
+  //Journey
+  getAllSchedules() {
+    return this.http.get<BaseResponse<Schedule[]>>(
+      `${this.APIUrl}/Journey/getAllSchedules`
+    );
+  }
+
   //
   getSeatModel(){
     let seat:SeatModel[]=new Array()

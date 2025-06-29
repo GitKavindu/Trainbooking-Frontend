@@ -16,6 +16,7 @@ import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-tra
 import { ApartmentComponent } from './pages/apartment/apartment.component';
 import { AddEditApartmentComponent } from './pages/apartment/add-edit-apartment/add-edit-apartment.component';
 import { TrainCompartmentComponent } from './pages/apartment/train-compartment/train-compartment.component';
+import { ScheduleComponent } from './pages/schedule/schedule.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { TrainCompartmentComponent } from './pages/apartment/train-compartment/t
     AddEditTrainComponent,
     ApartmentComponent,
     AddEditApartmentComponent,
-    TrainCompartmentComponent
+    TrainCompartmentComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

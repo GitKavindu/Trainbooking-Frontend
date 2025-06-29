@@ -1,0 +1,4 @@
+.no-style-wrapper {
+  all: unset;
+  display: contents; /* behaves like the div doesn't exist */
+}
