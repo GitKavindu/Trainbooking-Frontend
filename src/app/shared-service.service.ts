@@ -109,6 +109,12 @@ export class SharedServiceService {
     );
   }
 
+  getSchedule(scheduleId:string) {
+    return this.http.get<BaseResponse<Schedule[]>>(
+      `${this.APIUrl}/Booking/selectAllJourneysForSchedule?scheduleId=${scheduleId}`
+    );
+  }
+
   //
   getSeatModel(){
     let seat:SeatModel[]=new Array()

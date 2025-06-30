@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary float-right m-2" data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false">
+<button type="button" class="btn btn-primary float-right m-2" data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false" *ngIf="enablethisschedule==false">
     Add Schedule
   </button>
   
@@ -60,12 +60,12 @@
             
             <th>End Date</th>
             <th>End Time</th>
-            <th>Options</th>
+            <th *ngIf="enablethisschedule==false">Options</th>
         </tr>
       </thead>
       <tbody *ngFor="let dataItem of ScheduleList;let i=index" >
         <tr>   
-           <div class="no-style-wrapper" (click)="enableScheduleDetails()">
+           <div class="no-style-wrapper" (click)="enableScheduleDetails(dataItem.scheduleId)" [title]="titleText">
               <td>{{dataItem.startstation}}</td>
               <td>{{dataItem.startingDate}}</td>
               <td>{{dataItem.startingTime}}</td>
@@ -73,8 +73,7 @@
               <td>{{dataItem.endingDate}}</td>
               <td>{{dataItem.endingTime}}</td>
            </div>
-          <div *ngIf="enablethisschedule==true">Heloo</div>
-           <td>
+           <td class="no-style-wrapper" *ngIf="enablethisschedule==false">
               <button type="button" class="btn btn-light mr-1"
                   data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

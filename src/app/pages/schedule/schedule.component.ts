@@ -22,6 +22,11 @@ export class ScheduleComponent {
       FromStationFilter:string=""
       ToStationFilter:string=""
       ScheduleListWithoutFilter:any=[]
+
+      enablethisschedule:boolean=false
+      scheduleId:string=''
+
+      titleText:string=''
       ngOnInit():void{
         this.refreshScheduleList();
       }
@@ -68,12 +73,22 @@ export class ScheduleComponent {
       }
   
       refreshScheduleList(){
-        this.service.getAllSchedules().subscribe(res=>{
+        if(this.enablethisschedule==false){
+            this.service.getAllSchedules().subscribe(res=>{
+            this.ScheduleList=res.Data;
+            this.ScheduleListWithoutFilter=res.Data
+            this.titleText='Click here to see more details'
+          })
+        }
+        else{
+          this.service.getSchedule(this.scheduleId).subscribe(res=>{
           this.ScheduleList=res.Data;
           this.ScheduleListWithoutFilter=res.Data
+          this.titleText='Click here to go back'
         })
+        }
       }
-  
+
       filterFn(){
         var FromStationFilter=this.FromStationFilter
         var ToStationFilter=this.ToStationFilter
@@ -106,8 +121,13 @@ export class ScheduleComponent {
         // });
       }
 
-      enablethisschedule:boolean=false
-      enableScheduleDetails(){
+      
+      enableScheduleDetails(schedule_id:string){
         this.enablethisschedule=!this.enablethisschedule
+        this.scheduleId=this.enablethisschedule ? schedule_id:''
+        this.scheduleId=schedule_id
+        this.refreshScheduleList()
       }
+
+
 }
