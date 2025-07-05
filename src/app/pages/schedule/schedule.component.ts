@@ -20,13 +20,19 @@ export class ScheduleComponent {
       enableApartment:boolean=false
 
       FromStationFilter:string=""
-      ToStationFilter:string=""
       ScheduleListWithoutFilter:any=[]
 
       enablethisschedule:boolean=false
       scheduleId:string=''
 
       titleText:string=''
+
+      asc:boolean=true //represents ascending order
+      startStation:boolean=false
+      endStation:boolean=false
+
+      selectedModel:string='start'
+
       ngOnInit():void{
         this.refreshScheduleList();
       }
@@ -91,27 +97,42 @@ export class ScheduleComponent {
 
       filterFn(){
         var FromStationFilter=this.FromStationFilter
-        var ToStationFilter=this.ToStationFilter
-  
-        this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
-          return el.startstation.toString().toLowerCase().includes(
-            FromStationFilter.toString().trim().toLowerCase()
-          )
-          &&
-          el.endstation.toString().toLowerCase().includes(
-            ToStationFilter.toString().trim().toLowerCase()
-          )
-        })
+        
+        if(this.selectedModel=='start'){
+          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+            return el.startstation.toString().toLowerCase().includes(
+              FromStationFilter.toString().trim().toLowerCase()
+            )
+          })
+        }
+        else{
+          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+            return el.endstation.toString().toLowerCase().includes(
+             FromStationFilter.toString().trim().toLowerCase()
+            )
+          })
+        }
       }
-  
-      sortResult(prop:any,asc:boolean){
-          this.ScheduleList=this.ScheduleListWithoutFilter.sort(function(a:any,b:any){
-            if(asc){
-                return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0)
+
+      sortResult(prop:string){
+        this.ScheduleList=this.ScheduleListWithoutFilter.sort((a:any,b:any)=>{
+            if(this.asc===true){
+                return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0) //asc true
             }else{
               return (a[prop]<b[prop])?1:((a[prop]>b[prop])?-1:0)
             }
-          })
+        })
+        this.asc=!this.asc
+
+        if(prop=='startstation'){
+          this.startStation=true
+          this.endStation=false
+        }
+        else{
+          this.startStation=false
+          this.endStation=true
+        }
+
       }
 
       enableDisableApartmentForSchedule(i:number,schedule_id:number,schedule_seq_no:number){
@@ -127,7 +148,17 @@ export class ScheduleComponent {
         this.scheduleId=this.enablethisschedule ? schedule_id:''
         this.scheduleId=schedule_id
         this.refreshScheduleList()
+        this.resetOptions()
       }
 
+      resetOptions(){
+        this.selectedModel='start'
+        this.FromStationFilter=''
+
+        this.asc=true
+
+        this.startStation=false
+        this.endStation=false
+      }
 
 }
