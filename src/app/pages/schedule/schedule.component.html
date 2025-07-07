@@ -26,6 +26,7 @@
       <select id="filterType" title="Filter By:"  [(ngModel)]="selectedModel">
         <option value="start">Start</option>
         <option value="destination">Destination</option>
+        <option value="train" *ngIf="enablethisschedule==false">Train</option>
       </select>
     
     <input id="filterInput" (keyup)="filterFn()"  [(ngModel)]="FromStationFilter" placeholder="Search...">
@@ -34,6 +35,9 @@
   <table class="table table-striped" >
       <thead>
          <tr>
+            <th (click)="sortResult('train')" *ngIf="enablethisschedule==false">Train  
+              <div class="no-style-wrapper" *ngIf="train==true">{{ asc == true ? '▲' : '▼' }}</div>
+            </th>
             <th (click)="sortResult('startstation')">Start  
               <div class="no-style-wrapper" *ngIf="startStation==true">{{ asc == true ? '▲' : '▼' }}</div>
             </th>
@@ -52,6 +56,7 @@
       <tbody *ngFor="let dataItem of ScheduleList;let i=index" >
         <tr>   
            <div class="no-style-wrapper" (click)="enableScheduleDetails(dataItem.scheduleId)" [title]="titleText">
+              <td *ngIf="enablethisschedule==false">{{dataItem.train}}</td>  
               <td>{{dataItem.startstation}}</td>
               <td>{{dataItem.startingDate}}</td>
               <td>{{dataItem.startingTime}}</td>

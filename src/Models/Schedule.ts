@@ -13,4 +13,6 @@ export class Schedule{
 
   public endingDate!:string
   public endingTime!:string
+
+  public train!:string
 }

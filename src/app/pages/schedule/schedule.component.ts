@@ -30,6 +30,7 @@ export class ScheduleComponent {
       asc:boolean=true //represents ascending order
       startStation:boolean=false
       endStation:boolean=false
+      train:boolean=false
 
       selectedModel:string='start'
 
@@ -105,6 +106,13 @@ export class ScheduleComponent {
             )
           })
         }
+        else if(this.selectedModel=='train'){
+          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+            return el.train.toString().toLowerCase().includes(
+              FromStationFilter.toString().trim().toLowerCase()
+            )
+          })
+        }
         else{
           this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
             return el.endstation.toString().toLowerCase().includes(
@@ -127,10 +135,17 @@ export class ScheduleComponent {
         if(prop=='startstation'){
           this.startStation=true
           this.endStation=false
+          this.train=false
+        }
+        else if(prop=='train'){
+          this.startStation=false
+          this.endStation=false
+          this.train=true
         }
         else{
           this.startStation=false
           this.endStation=true
+          this.train=false
         }
 
       }
@@ -159,6 +174,7 @@ export class ScheduleComponent {
 
         this.startStation=false
         this.endStation=false
+        this.train=false
       }
 
 }
