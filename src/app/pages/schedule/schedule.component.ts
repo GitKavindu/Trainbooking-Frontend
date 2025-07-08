@@ -49,6 +49,8 @@ export class ScheduleComponent {
         // }
         this.ModalTitle="Add Schedule"
         this.ActivateAddEditScheduleComp=true
+
+        this.ScheduleList=[]
       }
   
       editClick(item: Schedule){
@@ -77,6 +79,7 @@ export class ScheduleComponent {
       closeClick(){
         this.ActivateAddEditScheduleComp=false
         this.refreshScheduleList()
+        this.resetOptions()
       }
   
       refreshScheduleList(){

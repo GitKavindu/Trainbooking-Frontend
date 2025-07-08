@@ -1,0 +1,54 @@
+ <form class="add-edit" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+    <label for="username">Username</label>
+    <input id="username" formControlName="username" placeholder="Enter your username" />
+    <span class="error-message" *ngIf="getControl('username').touched && getControl('username').invalid">
+        Username is required.
+    </span>
+    </div>
+      
+    <div class="form-group" *ngIf="trainList.length!=0">
+        <label for="filterType">Train</label>
+        <select id="filterType" title="Filter By:" formControlName="train" >
+            <option *ngFor="let train of trainList"  [value]="train.train_no">{{train.train_name}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="startStationList.length!=0">
+        <label for="filterType">Start Station</label>
+        <select id="filterType" title="Filter By:" formControlName="startstation" >
+            <option *ngFor="let station of startStationList"  [value]="station.station_id">{{station.station_name}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="startStationList.length!=0">
+        <label for="filterType">End Station</label>
+        <select id="filterType" title="Filter By:" formControlName="endstation" >
+            <option *ngFor="let station of startStationList"  [value]="station.station_id">{{station.station_name}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" placeholder="Enter your password" />
+    <span class="error-message" *ngIf="getControl('password').touched && getControl('password').errors?.['required']">
+        Password is required.
+    </span>
+    <span class="error-message" *ngIf="getControl('password').touched && getControl('password').errors?.['minlength']">
+        Password must be at least 4 characters.
+    </span>
+    </div>
+      
+    <div class="form-buttons">
+    <button class="btn btn-primary" type="submit" [disabled]="scheduleForm.invalid">Register</button>
+    <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
+    <button class="btn btn-secondary" type="button" (click)="closeForm()">Close</button>
+    </div>
+    <br>
+    <div class="form-group">
+    <span class="error-message" *ngIf="errMessege!='' ">
+        {{errMessege}}
+    </span>
+    </div>
+
+  </form>
