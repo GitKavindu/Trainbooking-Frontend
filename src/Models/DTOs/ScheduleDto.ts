@@ -6,16 +6,18 @@ export class ScheduleDto
     
     public trainSeqNo!:number
 
-    public token_id!:string | undefined
+    public tokenId!:string | undefined
 
     public addJourneyStationDto!:AddJourneyStationDto[]
 }
 
 export class AddJourneyStationDto
 {
-    public scheduledStartTime!:Date
-
     public stationId!:number
 
     public stationSeqNo!:number
+
+    public startDate!:string
+
+    public startTime!:string
 }
