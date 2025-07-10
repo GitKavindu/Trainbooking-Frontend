@@ -27,8 +27,8 @@ export class AddEditScheduleComponent {
 
   scheduleDto:ScheduleDto[]=[]
 
-  lastSelectedStartStation!:Station
-  lastSelectedEndStation!:Station
+  lastSelectedStartStation:Station | null=null
+  lastSelectedEndStation:Station | null=null
 
   @Output() notifyParent = new EventEmitter<void>();
 
@@ -46,19 +46,12 @@ export class AddEditScheduleComponent {
       endTime: new FormControl('')
     });
 
-    this.getTrainList()
-    this.getStationsList()
-
-    this.scheduleForm.get('train')?.valueChanges.subscribe((val) => {
-      console.log('Train changed:', val);
-    });
-
-     this.scheduleForm.get('startDate')?.valueChanges.subscribe((val) => {
-      console.log('date changed:', val);
+    this.scheduleForm.get('startDate')?.valueChanges.subscribe((val) => {
+      this.scheduleForm.get('endDate')?.enable();
     });
 
     this.scheduleForm.get('startTime')?.valueChanges.subscribe((val) => {
-      console.log('time changed:', this.formatTime(val));
+      this.scheduleForm.get('endTime')?.enable();
     });
 
     this.scheduleForm.get('startstation')?.valueChanges.subscribe((val:Station) => {
@@ -68,8 +61,29 @@ export class AddEditScheduleComponent {
      this.scheduleForm.get('endstation')?.valueChanges.subscribe((val) => {
       this.findIndexAndRemove(val,false)
     });
+
+    this.scheduleForm.get('endTime')?.valueChanges.subscribe((val) => {
+        this.validateForm()
+    });
+
+    // this.scheduleForm.get('endstation')?.disable();
+    this.setDefaultValues()
+    this.disableEndStation()
   }
 
+  disableEndStation(){
+    this.scheduleForm.get('endDate')?.disable();
+    this.scheduleForm.get('endTime')?.disable();
+    this.scheduleForm.get('endDate')?.markAsUntouched();
+    this.scheduleForm.get('endTime')?.markAsUntouched();
+  }
+
+  setDefaultValues(){
+    this.getTrainList()
+    this.getStationsList()
+    this.lastSelectedStartStation=null
+    this.lastSelectedEndStation=null
+  }
   closeForm():void{
     this.notifyParent.emit();
   }
@@ -80,7 +94,20 @@ export class AddEditScheduleComponent {
   }
 
   onSubmit(): void {}
-  onClear(): void {}
+
+  onClear(): void {
+    this.scheduleForm.get('train')?.setValue('')
+    this.scheduleForm.get('startstation')?.setValue('')
+    this.scheduleForm.get('endstation')?.setValue('')
+    this.scheduleForm.get('startDate')?.setValue('')
+    this.scheduleForm.get('startTime')?.setValue('')
+    this.scheduleForm.get('endDate')?.setValue('')
+    this.scheduleForm.get('endTime')?.setValue('')
+    
+    this.setDefaultValues()
+    this.disableEndStation()
+    
+  }
 
   getTrainList(){
     this.service.getAllTrains().subscribe(res=>{
@@ -133,7 +160,7 @@ export class AddEditScheduleComponent {
 
     arr.splice(removeIndex,1)
 
-    if(isStart==true && this.lastSelectedStartStation!=undefined){
+    if(isStart==true && this.lastSelectedStartStation!=null){
       arr.unshift(this.lastSelectedStartStation);
     }
     else if(isStart==false && this.lastSelectedEndStation!=null){
@@ -147,6 +174,40 @@ export class AddEditScheduleComponent {
     else{
       this.lastSelectedStartStation=station
     }
+  }
+
+  compareDates(leftdate:string,leftTime:string,rightdate:string,rightTime:string):boolean{
+
+    const EndtDate =this.parseDateTime(leftdate,leftTime);
+    const StartDate = this.parseDateTime(rightdate,rightTime);
+
+    //return true if start date is small than end date
+    return EndtDate >= StartDate; 
+  }
+
+  parseDateTime(date:string,time:string){
+      const dateTimeStr = `${date} ${time}`;
+      return new Date(dateTimeStr);
+  }
+
+  validateEndDate():boolean{
+    if(this.getControl('endDate').value!='' && this.getControl('endTime').value!=''){
+      return this.compareDates(
+      this.scheduleForm.get('endDate')?.value,
+      this.scheduleForm.get('endTime')?.value,
+      this.scheduleForm.get('startDate')?.value,
+      this.scheduleForm.get('startTime')?.value
+      ) 
+    }
+    return false
+  }
+
+  validateForm():boolean{
+    if(this.getControl('endDate').value!='' && this.getControl('endTime').value!=''){
+      
+      return this.scheduleForm.invalid==false && this.validateEndDate()
+    }
+    return false
   }
 
 }

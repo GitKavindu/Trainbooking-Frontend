@@ -24,20 +24,24 @@
 
     <div class="form-group" *ngIf="endStationList.length!=0">
         <label for="endstation">End Station</label>
-        <select id="endstation" title="Filter By:" formControlName="endstation" >
+        <select id="endstation" title="Filter By:" formControlName="endstation">
             <option value="" disabled selected hidden>----------Select a station---------</option>
             <option *ngFor="let station of endStationList"  [ngValue]="station">{{station.station_name}}</option>
         </select>
 
         <label for="enddate">End date:</label>
-        <input type="date" id="enddate" name="enddate" formControlName="endDate">
+        <input type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
 
         <label for="endtime">End time:</label>
         <input type="time" id="endtime" name="endtime" formControlName="endTime">
+
+        <span class="error-message" *ngIf="!validateEndDate() && getControl('endDate').untouched==false && getControl('endTime').untouched==false">
+            Select a date and time larger than start date and time
+        </span>
     </div>
       
     <div class="form-buttons">
-        <button class="btn btn-primary" type="submit" [disabled]="scheduleForm.invalid">Register</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
         <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
         <button class="btn btn-secondary" type="button" (click)="closeForm()">Close</button>
     </div>
