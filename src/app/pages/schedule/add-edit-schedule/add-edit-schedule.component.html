@@ -4,7 +4,7 @@
         <label for="trainType">Train</label>
         <select id="trainType" title="Filter By:" formControlName="train" >
             <option value="" disabled selected hidden>----------Select a train---------</option>
-            <option *ngFor="let train of trainList"  [value]="train.train_no">{{train.train_name}}</option>
+            <option *ngFor="let train of trainList"  [ngValue]="train">{{train.train_name}}</option>
         </select>
     </div>
 

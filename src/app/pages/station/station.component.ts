@@ -28,6 +28,7 @@ export class StationComponent {
     addClick(){
       this.Station={
         station_id:0,
+        stationSeqNo:0,
         station_name:'',
         created_date: '',
         lastUpdated_date:'',

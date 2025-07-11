@@ -64,4 +64,4 @@
       </tbody>
   </table>
 
-  <app-add-edit-schedule *ngIf="ActivateAddEditScheduleComp==true" (notifyParent)="closeClick()"></app-add-edit-schedule>
+  <app-add-edit-schedule *ngIf="ActivateAddEditScheduleComp==true" (notifyParent)="closeClick()" [scheduleList]="ScheduleList"></app-add-edit-schedule>

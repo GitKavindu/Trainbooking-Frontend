@@ -20,4 +20,14 @@ export class AddJourneyStationDto
     public startDate!:string
 
     public startTime!:string
+
+    private stationName!:string
+
+    getStationName():string{
+        return this.stationName
+    }
+
+    setStationName(stationName:string):void{
+        this.stationName=stationName
+    }
 }

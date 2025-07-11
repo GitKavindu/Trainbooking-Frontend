@@ -2,6 +2,8 @@ export class Station{
     public station_id!:number
 
     public station_name!:string
+     
+    public stationSeqNo!:number
 
     public added_by!:string
 
