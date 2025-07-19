@@ -29,20 +29,35 @@ export class AddEditScheduleComponent {
 
   scheduleDto:ScheduleDto =new ScheduleDto()
 
-  lastSelectedStartStation:Station | null=null
-  lastSelectedEndStation:Station | null=null
+  lastSelectedStartStation!:Station
+  lastSelectedEndStation!:Station
 
   @Output() notifyParent = new EventEmitter<void>();
   @Input() scheduleList!:Schedule[]
+  @Input() scheduleDetails!:Schedule
 
-  constructor(private service:SharedServiceService){}
+  defaultStation:Station
+
+  constructor(private service:SharedServiceService){
+    this.defaultStation={
+      station_id:0,
+      stationSeqNo:0,
+      station_name:'----------Select a station---------',
+      added_by:'',
+      created_date:'',
+      lastUpdated_date:''
+    }
+
+    this.lastSelectedStartStation=this.defaultStation
+    this.lastSelectedEndStation=this.defaultStation
+  }
 
   ngOnInit(): void {
 
     this.scheduleForm = new FormGroup({
       train: new FormControl('', Validators.required), // or new FormControl(new Train())
-      startstation: new FormControl('', Validators.required),
-      endstation: new FormControl('', Validators.required),
+      startstation: new FormControl(this.defaultStation, Validators.required),
+      endstation: new FormControl(this.defaultStation, Validators.required),
       startDate: new FormControl(''),
       startTime: new FormControl(''),
       endDate: new FormControl(''),
@@ -63,7 +78,7 @@ export class AddEditScheduleComponent {
     });
 
      this.scheduleForm.get('endstation')?.valueChanges.subscribe((val:Station) => {
-      if(this.scheduleList.length==0)
+      //if(this.scheduleList.length==0)
         this.findIndexAndRemove(val,false)
     });
 
@@ -73,7 +88,9 @@ export class AddEditScheduleComponent {
 
     // this.scheduleForm.get('endstation')?.disable();
     this.setDefaultValues()
-    this.disableEndStation()
+    if(this.scheduleList.length==0){
+      this.disableEndStation()
+    }   
   }
 
   disableStartStation(){
@@ -101,8 +118,7 @@ export class AddEditScheduleComponent {
   setDefaultValues(){
     this.getTrainList()
     this.getStationsList()
-    this.lastSelectedStartStation=null
-    this.lastSelectedEndStation=null
+    
   }
   closeForm():void{
     this.notifyParent.emit();
@@ -118,26 +134,30 @@ export class AddEditScheduleComponent {
   }
 
   onClear(): void {
-
+    
     if(this.scheduleList.length==0){
       this.scheduleForm.get('train')?.setValue('')
-      this.scheduleForm.get('startstation')?.setValue('')
+      this.scheduleForm.get('startstation')?.setValue(this.defaultStation)
       this.scheduleForm.get('startDate')?.setValue('')
       this.scheduleForm.get('startTime')?.setValue('')
       this.setDefaultValues()
       this.disableEndStation()
+      
     }
     else{
-      this.scheduleForm.get('startstation')?.setValue(this.lastSelectedEndStation)
-      this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
+      // this.scheduleForm.get('startstation')?.setValue(this.lastSelectedEndStation)
+      // this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
 
-      this.scheduleForm.get('startTime')?.setValue(
-        this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
-      )
-
+      // this.scheduleForm.get('startTime')?.setValue(
+      //   this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
+      // )
+      
       this.disableStartStation()
-    }   
-    this.scheduleForm.get('endstation')?.setValue('')
+       
+    }
+   
+    this.scheduleForm.get('endstation')?.setValue(this.defaultStation, { emitEvent: false });
+
     this.scheduleForm.get('endDate')?.setValue('')
     this.scheduleForm.get('endTime')?.setValue('')
 
@@ -184,8 +204,9 @@ export class AddEditScheduleComponent {
 
   //remove station from 
   findIndexAndRemove(station:Station,isStart:boolean){
+  
     let arr:Station[]=new Array()
-
+    
     if(isStart==false){
       arr= this.startStationList
     }
@@ -193,30 +214,41 @@ export class AddEditScheduleComponent {
       arr=this.endStationList
     }
 
-    let removeIndex:number=0
+    if(station.station_id!=this.defaultStation.station_id){
 
-    for (let index = 0; index < arr.length; index++) {
-      if(arr[index].station_id==station.station_id){
-        removeIndex=index
-        break 
+      console.log(JSON.stringify(this.lastSelectedEndStation),'val ',JSON.stringify(station),'istrue ',isStart)
+
+      
+      let removeIndex:number=0
+
+      for (let index = 0; index < arr.length; index++) {
+        if(arr[index].station_id==station.station_id){
+          removeIndex=index
+          break 
+        }
       }
-    }
-    console.log(removeIndex)
-    arr.splice(removeIndex,1)
+    
+      arr.splice(removeIndex,1)
 
-    if(isStart==true && this.lastSelectedStartStation!=null){
+    }
+    console.log('sus pre',JSON.stringify(this.startStationList))
+
+    if(isStart==true && this.lastSelectedStartStation.station_id!=this.defaultStation.station_id){
       arr.unshift(this.lastSelectedStartStation);
     }
-    else if(isStart==false && this.lastSelectedEndStation!=null){
+    else if(isStart==false && this.lastSelectedEndStation.station_id!=this.defaultStation.station_id){
       arr.unshift(this.lastSelectedEndStation)
     }
 
-    if(isStart==false){
+    console.log('sus ',JSON.stringify(this.startStationList),'\n',JSON.stringify(arr),isStart)
+
+    if(isStart==false && station.station_id!=this.defaultStation.station_id){
       this.lastSelectedEndStation=station
     }
-    else{
+    else if(isStart==true && station.station_id!=this.defaultStation.station_id){
       this.lastSelectedStartStation=station
     }
+
   }
 
   compareDates(leftdate:string,leftTime:string,rightdate:string,rightTime:string):boolean{
@@ -264,32 +296,41 @@ export class AddEditScheduleComponent {
       this.scheduleDto.addJourneyStationDto=new Array<AddJourneyStationDto>()
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(true))
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(false))
-
-      this.findIndexAndRemove(this.scheduleForm.get('endstation')?.value,false)
-
-      this.scheduleList.push( 
-        this.convertScheduleDtoToSchedule( 
-          this.scheduleDto.addJourneyStationDto[0],
-          this.scheduleDto.addJourneyStationDto[1] 
-        ) 
-      )
-
+      
+    
+      //this.findIndexAndRemove(this.scheduleForm.get('endstation')?.value,false)
+       console.log('start ',JSON.stringify(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2]))
+       this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2])
+     
+      // this.scheduleList.push( 
+      //   this.convertScheduleDtoToSchedule( 
+      //     this.scheduleDto.addJourneyStationDto[0],
+      //     this.scheduleDto.addJourneyStationDto[1] 
+      //   ) 
+      // )
+       
     }
     else{
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(false))
+      //this.setdefaultFormValues()
+      
 
-      this.scheduleList.push( 
+    }
+
+    this.scheduleList.push( 
         this.convertScheduleDtoToSchedule( 
           this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2],
           this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1]
         ) 
-      )
-
-    }
-
-    this.onClear()
+     )
+    
+    this.setdefaultFormValues()
+         
     this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
-    console.log(this.scheduleDto)
+   
+    this.onClear()
+    //this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
+    
   }
 
   getFormValues(isFirst:boolean):AddJourneyStationDto{
@@ -312,6 +353,20 @@ export class AddEditScheduleComponent {
     return addJourneyStationDto
   }
 
+  setdefaultFormValues(){
+    
+    this.scheduleForm.get('startstation')?.setValue(this.scheduleForm.get('endstation')?.value)
+    this.scheduleForm.get('endstation')?.setValue(this.defaultStation);
+    console.log(JSON.stringify(this.startStationList))
+
+    this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
+
+    this.scheduleForm.get('startTime')?.setValue(
+      this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
+    )
+
+  }
+
   convertScheduleDtoToSchedule(startStation:AddJourneyStationDto,endStation:AddJourneyStationDto):Schedule{
     let schedule:Schedule=new Schedule()
     schedule.startstation=startStation.getStationName()
@@ -325,14 +380,54 @@ export class AddEditScheduleComponent {
     return schedule
   }
 
-  removeEndStationsFromlist(addJourneyStationDto:AddJourneyStationDto){
-    console.log(' ' ,this.endStationList.length)
-   for (let index = 0; index < this.endStationList.length; index++) {
-      if(this.endStationList[index].station_id==addJourneyStationDto.stationId){
-        this.endStationList.splice(index,1)
-        
-        break
-      }   
-   }
+  prepareForUpdate(){
+    let addJourneyStationDto:AddJourneyStationDto[]=[]
+    
+    addJourneyStationDto.push(this.convertScheduleToScheduleDto(this.scheduleList[0],true))
+
+    for (let index = 0; index < this.scheduleList.length-1; index++) {
+       addJourneyStationDto.push(this.convertScheduleToScheduleDto(this.scheduleList[index+1],true))
+    }
+
+    let scheduleDto:ScheduleDto=new ScheduleDto()
+    scheduleDto.addJourneyStationDto=addJourneyStationDto
+    scheduleDto.trainId=this.scheduleDetails.trainId
+    scheduleDto.trainSeqNo=this.scheduleDetails.trainSeqNo
+    scheduleDto.tokenId=this.service.tokenService.returnToken()?.tokenId
+
+
   }
+
+  convertScheduleToScheduleDto(schedule:Schedule,isFirst:boolean):AddJourneyStationDto{
+    let addJourneyStationDto:AddJourneyStationDto=new AddJourneyStationDto()
+      if(isFirst){
+        addJourneyStationDto.stationId=schedule.startStationId
+        addJourneyStationDto.stationSeqNo=schedule.startSeqNo
+        addJourneyStationDto.startDate=schedule.startingDate
+        addJourneyStationDto.startTime=schedule.startingTime
+      }
+      else{
+        addJourneyStationDto.stationId=schedule.endStationId
+        addJourneyStationDto.stationSeqNo=schedule.endSeqNo
+        addJourneyStationDto.startDate=schedule.endingDate
+        addJourneyStationDto.startTime=schedule.endingTime
+      }
+
+      return addJourneyStationDto
+    }
+
+
+  removeEndStationsFromlist(addJourneyStationDto:AddJourneyStationDto){
+    //console.log('end ',this.endStationList)
+   for (let index = 0; index < this.endStationList.length; index++) {
+    if(this.endStationList[index].station_id==addJourneyStationDto.stationId){
+      //console.log(this.endStationList[index])
+      this.endStationList.splice(index,1)
+      break
+    }   
+   }
+  
+  }
+
+
 }

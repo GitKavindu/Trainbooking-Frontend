@@ -37,7 +37,7 @@
       <tbody *ngFor="let dataItem of ScheduleList;let i=index" >
         <tr>   
            <div class="no-style-wrapper" (click)="enableScheduleDetails(dataItem.scheduleId)" [title]="titleText">
-              <td *ngIf="enablethisschedule==false">{{dataItem.train}}</td>  
+              <td *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">{{dataItem.train}}</td>  
               <td>{{dataItem.startstation}}</td>
               <td>{{dataItem.startingDate}}</td>
               <td>{{dataItem.startingTime}}</td>
@@ -64,4 +64,9 @@
       </tbody>
   </table>
 
-  <app-add-edit-schedule *ngIf="ActivateAddEditScheduleComp==true" (notifyParent)="closeClick()" [scheduleList]="ScheduleList"></app-add-edit-schedule>
+  <app-add-edit-schedule 
+    *ngIf="ActivateAddEditScheduleComp==true" 
+    (notifyParent)="closeClick()" 
+    [scheduleList]="ScheduleList" 
+    [scheduleDetails]="Schedule"
+  ></app-add-edit-schedule>
