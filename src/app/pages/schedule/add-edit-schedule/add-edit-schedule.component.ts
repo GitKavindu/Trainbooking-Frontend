@@ -34,7 +34,7 @@ export class AddEditScheduleComponent {
 
   @Output() notifyParent = new EventEmitter<void>();
   @Input() scheduleList!:Schedule[]
-  @Input() scheduleDetails!:Schedule
+  @Input() scheduleDetails!:Schedule //rquired to take train id and seq no for update
 
   defaultStation:Station
 
@@ -86,11 +86,15 @@ export class AddEditScheduleComponent {
         this.validateForm()
     });
 
-    // this.scheduleForm.get('endstation')?.disable();
-    this.setDefaultValues()
+     this.setDefaultValues()
     if(this.scheduleList.length==0){
       this.disableEndStation()
+    }
+    else{
+      setTimeout(()=>this.prepareForUpdate(),0)
     }   
+
+    console.log('init')
   }
 
   disableStartStation(){
@@ -144,16 +148,8 @@ export class AddEditScheduleComponent {
       this.disableEndStation()
       
     }
-    else{
-      // this.scheduleForm.get('startstation')?.setValue(this.lastSelectedEndStation)
-      // this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
-
-      // this.scheduleForm.get('startTime')?.setValue(
-      //   this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
-      // )
-      
-      this.disableStartStation()
-       
+    else{      
+      this.disableStartStation()       
     }
    
     this.scheduleForm.get('endstation')?.setValue(this.defaultStation, { emitEvent: false });
@@ -216,9 +212,6 @@ export class AddEditScheduleComponent {
 
     if(station.station_id!=this.defaultStation.station_id){
 
-      console.log(JSON.stringify(this.lastSelectedEndStation),'val ',JSON.stringify(station),'istrue ',isStart)
-
-      
       let removeIndex:number=0
 
       for (let index = 0; index < arr.length; index++) {
@@ -229,9 +222,7 @@ export class AddEditScheduleComponent {
       }
     
       arr.splice(removeIndex,1)
-
     }
-    console.log('sus pre',JSON.stringify(this.startStationList))
 
     if(isStart==true && this.lastSelectedStartStation.station_id!=this.defaultStation.station_id){
       arr.unshift(this.lastSelectedStartStation);
@@ -239,8 +230,6 @@ export class AddEditScheduleComponent {
     else if(isStart==false && this.lastSelectedEndStation.station_id!=this.defaultStation.station_id){
       arr.unshift(this.lastSelectedEndStation)
     }
-
-    console.log('sus ',JSON.stringify(this.startStationList),'\n',JSON.stringify(arr),isStart)
 
     if(isStart==false && station.station_id!=this.defaultStation.station_id){
       this.lastSelectedEndStation=station
@@ -297,24 +286,11 @@ export class AddEditScheduleComponent {
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(true))
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(false))
       
-    
-      //this.findIndexAndRemove(this.scheduleForm.get('endstation')?.value,false)
-       console.log('start ',JSON.stringify(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2]))
-       this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2])
-     
-      // this.scheduleList.push( 
-      //   this.convertScheduleDtoToSchedule( 
-      //     this.scheduleDto.addJourneyStationDto[0],
-      //     this.scheduleDto.addJourneyStationDto[1] 
-      //   ) 
-      // )
-       
+      console.log('start ',JSON.stringify(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2]))
+       this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2])       
     }
     else{
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(false))
-      //this.setdefaultFormValues()
-      
-
     }
 
     this.scheduleList.push( 
@@ -329,8 +305,6 @@ export class AddEditScheduleComponent {
     this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
    
     this.onClear()
-    //this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
-    
   }
 
   getFormValues(isFirst:boolean):AddJourneyStationDto{
@@ -367,13 +341,42 @@ export class AddEditScheduleComponent {
 
   }
 
+  setFirstFormValues(){
+    
+    
+    this.scheduleForm.get('startstation')?.setValue(
+      this.getStationFromScheduleDto(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
+    )
+    this.scheduleForm.get('endstation')?.setValue(this.defaultStation);
+    console.log(this.scheduleForm.get('startstation')?.value)
+
+    this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
+
+    this.scheduleForm.get('startTime')?.setValue(
+      this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
+    )
+
+  }
+
+  getStationFromScheduleDto(addJourneyStationDto:AddJourneyStationDto):Station{
+    let station:Station=new Station()
+    station.station_id=addJourneyStationDto.stationId
+    station.station_name=addJourneyStationDto.getStationName()
+    station.stationSeqNo=addJourneyStationDto.stationSeqNo
+    return station
+  }
+
   convertScheduleDtoToSchedule(startStation:AddJourneyStationDto,endStation:AddJourneyStationDto):Schedule{
     let schedule:Schedule=new Schedule()
     schedule.startstation=startStation.getStationName()
+    schedule.startStationId=startStation.stationId
+    schedule.startSeqNo=startStation.stationSeqNo
     schedule.startingDate=startStation.startDate
     schedule.startingTime=startStation.startTime
 
     schedule.endstation=endStation.getStationName()
+    schedule.endStationId=endStation.stationId
+    schedule.endSeqNo=endStation.stationSeqNo
     schedule.endingDate=endStation.startDate
     schedule.endingTime=endStation.startTime
 
@@ -385,8 +388,8 @@ export class AddEditScheduleComponent {
     
     addJourneyStationDto.push(this.convertScheduleToScheduleDto(this.scheduleList[0],true))
 
-    for (let index = 0; index < this.scheduleList.length-1; index++) {
-       addJourneyStationDto.push(this.convertScheduleToScheduleDto(this.scheduleList[index+1],true))
+    for (let index = 0; index < this.scheduleList.length; index++) {
+       addJourneyStationDto.push(this.convertScheduleToScheduleDto(this.scheduleList[index],false))
     }
 
     let scheduleDto:ScheduleDto=new ScheduleDto()
@@ -395,33 +398,37 @@ export class AddEditScheduleComponent {
     scheduleDto.trainSeqNo=this.scheduleDetails.trainSeqNo
     scheduleDto.tokenId=this.service.tokenService.returnToken()?.tokenId
 
+    console.log(scheduleDto)
 
+    this.scheduleDto=scheduleDto
+
+    this.setFirstFormValues()
   }
 
   convertScheduleToScheduleDto(schedule:Schedule,isFirst:boolean):AddJourneyStationDto{
+     console.log(this.scheduleList[0])
     let addJourneyStationDto:AddJourneyStationDto=new AddJourneyStationDto()
       if(isFirst){
         addJourneyStationDto.stationId=schedule.startStationId
         addJourneyStationDto.stationSeqNo=schedule.startSeqNo
         addJourneyStationDto.startDate=schedule.startingDate
         addJourneyStationDto.startTime=schedule.startingTime
+        addJourneyStationDto.setStationName(schedule.startstation)
       }
       else{
         addJourneyStationDto.stationId=schedule.endStationId
         addJourneyStationDto.stationSeqNo=schedule.endSeqNo
         addJourneyStationDto.startDate=schedule.endingDate
         addJourneyStationDto.startTime=schedule.endingTime
+        addJourneyStationDto.setStationName(schedule.endstation)
       }
 
       return addJourneyStationDto
-    }
-
+  }
 
   removeEndStationsFromlist(addJourneyStationDto:AddJourneyStationDto){
-    //console.log('end ',this.endStationList)
    for (let index = 0; index < this.endStationList.length; index++) {
     if(this.endStationList[index].station_id==addJourneyStationDto.stationId){
-      //console.log(this.endStationList[index])
       this.endStationList.splice(index,1)
       break
     }   

@@ -56,7 +56,7 @@ export class ScheduleComponent {
       editClick(item: Schedule){
         this.Schedule=item
         this.ModalTitle="Edit Schedule"
-        this.ActivateAddEditScheduleComp=true
+        this.enableScheduleDetails(item.scheduleId)
       }
   
       deleteClick(ScheduleId:any){
@@ -94,6 +94,8 @@ export class ScheduleComponent {
           this.service.getSchedule(this.scheduleId).subscribe(res=>{
           this.ScheduleList=res.Data;
           this.ScheduleListWithoutFilter=res.Data
+          if(this.Schedule!=undefined)
+            this.ActivateAddEditScheduleComp=true
           this.titleText='Click here to go back'
         })
         }
