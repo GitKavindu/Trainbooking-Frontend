@@ -14,6 +14,7 @@ import { SeatModel } from '../Models/SeatModel';
 import { of } from 'rxjs';
 import { ApartmentDto } from '../Models/DTOs/ApartmentDto';
 import { Schedule } from '../Models/Schedule';
+import { ScheduleDto } from '../Models/DTOs/ScheduleDto';
 
 
 @Injectable({
@@ -112,6 +113,18 @@ export class SharedServiceService {
   getSchedule(scheduleId:string) {
     return this.http.get<BaseResponse<Schedule[]>>(
       `${this.APIUrl}/Booking/selectAllJourneysForSchedule?scheduleId=${scheduleId}`
+    );
+  }
+
+  addSchedule(scheduleDto:ScheduleDto) {
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Journey/addJourney`,scheduleDto
+    );
+  }
+
+  updateSchedule(scheduleDto:ScheduleDto) {
+    return this.http.put<BaseResponse<string>>(
+      `${this.APIUrl}/Journey/updateJourney`,scheduleDto
     );
   }
 
@@ -222,4 +235,6 @@ export class SharedServiceService {
     ]
     return of(seat)
   }
+
+
 }

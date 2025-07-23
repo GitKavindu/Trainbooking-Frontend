@@ -5,7 +5,6 @@ import { SharedServiceService } from '../../../shared-service.service';
 import { Station } from '../../../../Models/Station';
 import { AddJourneyStationDto, ScheduleDto } from '../../../../Models/DTOs/ScheduleDto';
 import { Schedule } from '../../../../Models/Schedule';
-import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-add-edit-schedule',
@@ -73,13 +72,14 @@ export class AddEditScheduleComponent {
     });
 
     this.scheduleForm.get('startstation')?.valueChanges.subscribe((val:Station) => {
-      if(this.scheduleList.length==0)
-        this.findIndexAndRemove(val,true)
+      if(this.scheduleList.length==0) //this was added because it gives back removed stations by method removeEndStationsFromlist
+        this.findIndexAndRemove(val,true) 
     });
 
      this.scheduleForm.get('endstation')?.valueChanges.subscribe((val:Station) => {
       //if(this.scheduleList.length==0)
         this.findIndexAndRemove(val,false)
+        //console.log(JSON.stringify(this.lastSelectedStartStation),'\n\n',JSON.stringify(this.lastSelectedEndStation))
     });
 
     this.scheduleForm.get('endTime')?.valueChanges.subscribe((val) => {
@@ -91,10 +91,9 @@ export class AddEditScheduleComponent {
       this.disableEndStation()
     }
     else{
-      setTimeout(()=>this.prepareForUpdate(),0)
-    }   
-
-    console.log('init')
+      setTimeout(()=>this.prepareForUpdate(),50)
+    }
+    
   }
 
   disableStartStation(){
@@ -122,8 +121,8 @@ export class AddEditScheduleComponent {
   setDefaultValues(){
     this.getTrainList()
     this.getStationsList()
-    
   }
+
   closeForm():void{
     this.notifyParent.emit();
   }
@@ -152,7 +151,7 @@ export class AddEditScheduleComponent {
       this.disableStartStation()       
     }
    
-    this.scheduleForm.get('endstation')?.setValue(this.defaultStation, { emitEvent: false });
+    this.scheduleForm.get('endstation')?.setValue(this.defaultStation);
 
     this.scheduleForm.get('endDate')?.setValue('')
     this.scheduleForm.get('endTime')?.setValue('')
@@ -231,10 +230,10 @@ export class AddEditScheduleComponent {
       arr.unshift(this.lastSelectedEndStation)
     }
 
-    if(isStart==false && station.station_id!=this.defaultStation.station_id){
+    if(isStart==false){
       this.lastSelectedEndStation=station
     }
-    else if(isStart==true && station.station_id!=this.defaultStation.station_id){
+    else if(isStart==true){
       this.lastSelectedStartStation=station
     }
 
@@ -286,7 +285,6 @@ export class AddEditScheduleComponent {
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(true))
       this.scheduleDto.addJourneyStationDto.push(this.getFormValues(false))
       
-      console.log('start ',JSON.stringify(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2]))
        this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-2])       
     }
     else{
@@ -303,8 +301,6 @@ export class AddEditScheduleComponent {
     this.setdefaultFormValues()
          
     this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
-   
-    this.onClear()
   }
 
   getFormValues(isFirst:boolean):AddJourneyStationDto{
@@ -331,7 +327,6 @@ export class AddEditScheduleComponent {
     
     this.scheduleForm.get('startstation')?.setValue(this.scheduleForm.get('endstation')?.value)
     this.scheduleForm.get('endstation')?.setValue(this.defaultStation);
-    console.log(JSON.stringify(this.startStationList))
 
     this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
 
@@ -339,16 +334,33 @@ export class AddEditScheduleComponent {
       this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
     )
 
+    this.scheduleForm.get('endDate')?.setValue('')
+    this.scheduleForm.get('endTime')?.setValue('')
+    
+    this.disableStartStation()
   }
 
   setFirstFormValues(){
+    let station:Station= this.getStationFromScheduleDto(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
     
-    
-    this.scheduleForm.get('startstation')?.setValue(
-      this.getStationFromScheduleDto(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1])
-    )
+    //set the train
+    for (let index = 0; index < this.trainList.length; index++) {
+       if(this.scheduleDto.trainId==this.trainList[index].train_no && this.scheduleDto.trainSeqNo==this.trainList[index].train_seq_no){
+            this.scheduleForm.get('train')?.setValue(this.trainList[index])
+            break
+       }
+    }
+
+     //set the start station
+    for (let index = 0; index < this.startStationList.length; index++) {
+       if(station.station_id==this.startStationList[index].station_id){
+            this.scheduleForm.get('startstation')?.setValue(this.startStationList[index])
+            break
+       }
+    }
+    this.lastSelectedStartStation=this.scheduleForm.get('startstation')?.value
+        
     this.scheduleForm.get('endstation')?.setValue(this.defaultStation);
-    console.log(this.scheduleForm.get('startstation')?.value)
 
     this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
 
@@ -356,6 +368,7 @@ export class AddEditScheduleComponent {
       this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
     )
 
+    this.disableStartStation()
   }
 
   getStationFromScheduleDto(addJourneyStationDto:AddJourneyStationDto):Station{
@@ -397,16 +410,20 @@ export class AddEditScheduleComponent {
     scheduleDto.trainId=this.scheduleDetails.trainId
     scheduleDto.trainSeqNo=this.scheduleDetails.trainSeqNo
     scheduleDto.tokenId=this.service.tokenService.returnToken()?.tokenId
+    scheduleDto.scheduleId=this.scheduleDetails.scheduleId
 
     console.log(scheduleDto)
 
     this.scheduleDto=scheduleDto
 
     this.setFirstFormValues()
+
+    for (let index = 0; index < this.scheduleDto.addJourneyStationDto.length; index++) {
+      this.removeEndStationsFromlist(this.scheduleDto.addJourneyStationDto[index])      
+    }
   }
 
   convertScheduleToScheduleDto(schedule:Schedule,isFirst:boolean):AddJourneyStationDto{
-     console.log(this.scheduleList[0])
     let addJourneyStationDto:AddJourneyStationDto=new AddJourneyStationDto()
       if(isFirst){
         addJourneyStationDto.stationId=schedule.startStationId
@@ -436,5 +453,16 @@ export class AddEditScheduleComponent {
   
   }
 
-
+  submitSchedule(){
+    if(this.scheduleDetails==undefined){
+      this.service.addSchedule(this.scheduleDto).subscribe(res=>{
+        alert(res.Data.toString());
+      })
+    }
+    else{
+      this.service.updateSchedule(this.scheduleDto).subscribe(res=>{
+        alert(res.Data.toString());
+      })
+    }
+  }
 }

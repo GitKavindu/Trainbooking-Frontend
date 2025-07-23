@@ -53,3 +53,9 @@
     </div>
 
   </form>
+
+<div class="form-buttons" *ngIf="endStationList.length!=0">
+    <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
+        {{ scheduleDetails ? 'Update Schedule' : 'Add Schedule' }}
+    </button>
+</div>
