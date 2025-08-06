@@ -6,6 +6,7 @@ import { StationComponent } from './pages/station/station.component';
 import { TrainComponent } from './pages/train/train.component';
 import { ApartmentComponent } from './pages/apartment/apartment.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
+import { BookingComponent } from './pages/booking/booking.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'station', component: StationComponent },
   { path: 'train', component: TrainComponent },
   { path: 'apartment', component: ApartmentComponent },
-  { path: 'schedule', component: ScheduleComponent }
+  { path: 'schedule', component: ScheduleComponent },
+  { path: 'booking', component: BookingComponent }
 ];
 
 @NgModule({

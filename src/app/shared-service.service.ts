@@ -15,6 +15,9 @@ import { of } from 'rxjs';
 import { ApartmentDto } from '../Models/DTOs/ApartmentDto';
 import { Schedule } from '../Models/Schedule';
 import { ScheduleDto } from '../Models/DTOs/ScheduleDto';
+import { ReturnUserDto } from '../Models/DTOs/ReturnUserDto';
+import { GetSortedSchedulesDto } from '../Models/DTOs/GetSortedSchedulesDto';
+import { ReturnSortedSchedulesDto } from '../Models/DTOs/ReturnSortedSchedulesDto';
 
 
 @Injectable({
@@ -38,6 +41,10 @@ export class SharedServiceService {
 
   loginUser(loginUser:LoginUserDto){
     return this.http.post<BaseResponse<Token>>(this.APIUrl+"/User/getuserToken",loginUser);
+  }
+
+  getTokenDetails(tokenId:string){
+    return this.http.get<BaseResponse<ReturnUserDto>>(this.APIUrl+`/User/getTokenDetails/${tokenId}`);
   }
 
   //Station
@@ -125,6 +132,13 @@ export class SharedServiceService {
   updateSchedule(scheduleDto:ScheduleDto) {
     return this.http.put<BaseResponse<string>>(
       `${this.APIUrl}/Journey/updateJourney`,scheduleDto
+    );
+  }
+
+  //booking
+  selectSortedSchedules(getSortedSchedulesDto:GetSortedSchedulesDto) {
+    return this.http.post<BaseResponse<ReturnSortedSchedulesDto[]>>(
+      `${this.APIUrl}/Booking/selectSortedSchedules`,getSortedSchedulesDto
     );
   }
 

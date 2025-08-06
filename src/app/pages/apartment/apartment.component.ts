@@ -6,6 +6,7 @@ import { CommonService } from '../../common/CommonService';
 import { SeatModel } from '../../../Models/SeatModel';
 import { Seat } from '../../../Models/Seat';
 import { ApartmentDto } from '../../../Models/DTOs/ApartmentDto';
+import { TokenService } from '../../common/TokenService';
 
 @Component({
   selector: 'app-apartment',
@@ -17,6 +18,7 @@ export class ApartmentComponent {
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
     this.trainId=0
     this.trainSeqNo=0
+    this.tokenService=new TokenService()
   }
   trainId:number
   trainSeqNo:number
@@ -29,6 +31,8 @@ export class ApartmentComponent {
   ApartmentIdFilter:string=""
   ApartmentNameFilter:string=""
   ApartmentListWithoutFilter:any=[]
+  tokenService:TokenService
+  
   ngOnInit():void{
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length === 0) {
@@ -64,6 +68,13 @@ export class ApartmentComponent {
     this.Apartment=item
     this.ModalTitle="Edit Apartment"
     this.ActivateAddEditApartmentComp=true
+  }
+
+  bookClick(item: Apartment){
+    this.Apartment=item
+    this.ModalTitle="Book Apartment"
+    this.ActivateAddEditApartmentComp=true
+    console.log('dsadsad')
   }
 
   deleteClick(ApartmentId:any){

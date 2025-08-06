@@ -41,4 +41,8 @@ export class TokenService {
         localStorage.setItem('userToken', JSON.stringify(token));
         return token
     }
+
+    getIsUserAdmin():boolean | undefined{
+        return this.returnToken()?.isAdmin
+    }
   }

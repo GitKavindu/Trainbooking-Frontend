@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Schedule } from '../../../Models/Schedule';
 import { ScheduleDto } from '../../../Models/DTOs/ScheduleDto';
+import { TokenService } from '../../common/TokenService';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-schedule',
@@ -10,7 +12,10 @@ import { ScheduleDto } from '../../../Models/DTOs/ScheduleDto';
   styleUrl: './schedule.component.css'
 })
 export class ScheduleComponent {
-  constructor(private service:SharedServiceService){}
+  
+  constructor(private service:SharedServiceService,private router:Router){
+    this.tokenService=new TokenService()
+  }
   
       ScheduleList:Schedule[]=[]
       ModalTitle!:string
@@ -33,6 +38,7 @@ export class ScheduleComponent {
       train:boolean=false
 
       selectedModel:string='start'
+      tokenService:TokenService
 
       ngOnInit():void{
         this.refreshScheduleList();
@@ -180,6 +186,12 @@ export class ScheduleComponent {
         this.startStation=false
         this.endStation=false
         this.train=false
+      }
+
+      bookSeats(item: Schedule){
+        this.router.navigate(['/apartment'], {
+          queryParams: { trainId:item.trainId, seqNo: item.trainSeqNo}
+        });
       }
 
 }

@@ -7,4 +7,8 @@ export class Token {
     public endTime!:Date
 
     public isActive!:boolean
+
+    public PreferedName!:string
+
+    public isAdmin!:boolean
 }

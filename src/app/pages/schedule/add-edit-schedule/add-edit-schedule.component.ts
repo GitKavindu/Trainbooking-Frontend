@@ -5,6 +5,7 @@ import { SharedServiceService } from '../../../shared-service.service';
 import { Station } from '../../../../Models/Station';
 import { AddJourneyStationDto, ScheduleDto } from '../../../../Models/DTOs/ScheduleDto';
 import { Schedule } from '../../../../Models/Schedule';
+import { TimeService } from '../../../common/TimeService';
 
 @Component({
   selector: 'app-add-edit-schedule',
@@ -36,6 +37,7 @@ export class AddEditScheduleComponent {
   @Input() scheduleDetails!:Schedule //rquired to take train id and seq no for update
 
   defaultStation:Station
+  private timeService:TimeService
 
   constructor(private service:SharedServiceService){
     this.defaultStation={
@@ -49,6 +51,7 @@ export class AddEditScheduleComponent {
 
     this.lastSelectedStartStation=this.defaultStation
     this.lastSelectedEndStation=this.defaultStation
+    this.timeService=new TimeService()
   }
 
   ngOnInit(): void {
@@ -173,29 +176,7 @@ export class AddEditScheduleComponent {
     })
   }
 
-  formatTime(timeString: string): string {
-    const [hourStr, minuteStr] = timeString.split(':');
-    let hours = parseInt(hourStr, 10);
-    const minutes = minuteStr;
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-
-    const formattedHours = String(hours).padStart(2, '0');
-    return `${formattedHours}:${minutes} ${ampm}`;
-  }
-
-  formatTimeReverse(timeString: string): string{
-      const [time,suffix]=timeString.split(' ');
-      let [hh,mm]=time.split(':');
-
-      if(suffix=='PM' && hh!='12'){
-        hh=(Number(hh)+12).toString()
-      }
-
-      return `${hh}:${mm}`
-  }
+  
 
   //remove station from 
   findIndexAndRemove(station:Station,isStart:boolean){
@@ -311,14 +292,14 @@ export class AddEditScheduleComponent {
       addJourneyStationDto.stationId=this.scheduleForm.get('startstation')?.value.station_id
       addJourneyStationDto.stationSeqNo=this.scheduleForm.get('startstation')?.value.stationSeqNo
       addJourneyStationDto.startDate=this.scheduleForm.get('startDate')?.value
-      addJourneyStationDto.startTime=this.formatTime(this.scheduleForm.get('startTime')?.value)
+      addJourneyStationDto.startTime=this.timeService.formatTime(this.scheduleForm.get('startTime')?.value)
     }
     else{
       addJourneyStationDto.setStationName(this.scheduleForm.get('endstation')?.value.station_name)
       addJourneyStationDto.stationId=this.scheduleForm.get('endstation')?.value.station_id
       addJourneyStationDto.stationSeqNo=this.scheduleForm.get('endstation')?.value.stationSeqNo
       addJourneyStationDto.startDate=this.scheduleForm.get('endDate')?.value
-      addJourneyStationDto.startTime=this.formatTime(this.scheduleForm.get('endTime')?.value)
+      addJourneyStationDto.startTime=this.timeService.formatTime(this.scheduleForm.get('endTime')?.value)
     }
     return addJourneyStationDto
   }
@@ -331,7 +312,7 @@ export class AddEditScheduleComponent {
     this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
 
     this.scheduleForm.get('startTime')?.setValue(
-      this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
+      this.timeService.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
     )
 
     this.scheduleForm.get('endDate')?.setValue('')
@@ -365,7 +346,7 @@ export class AddEditScheduleComponent {
     this.scheduleForm.get('startDate')?.setValue(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startDate)
 
     this.scheduleForm.get('startTime')?.setValue(
-      this.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
+      this.timeService.formatTimeReverse(this.scheduleDto.addJourneyStationDto[this.scheduleDto.addJourneyStationDto.length-1].startTime)
     )
 
     this.disableStartStation()

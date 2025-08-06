@@ -1,14 +1,10 @@
- <form class="add-edit" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" *ngIf="endStationList.length!=0">
-      
-    <div class="form-group" *ngIf="trainList.length!=0">
-        <label for="trainType">Train</label>
-        <select id="trainType" title="Filter By:" formControlName="train" >
-            <option value="" disabled selected hidden>----------Select a train---------</option>
-            <option *ngFor="let train of trainList"  [ngValue]="train">{{train.train_name}}</option>
-        </select>
-    </div>
+<div class="login-container">
+    <h2>Log In</h2>
+  
+    <form [formGroup]="bookingForm" >
 
-    <div class="form-group" *ngIf="startStationList.length!=0">
+      
+       <div class="form-group" *ngIf="startStationList.length!=0">
         <label for="startstation">Start Station</label>
         <select id="startstation" title="Filter By:" formControlName="startstation" >
             <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
@@ -20,15 +16,20 @@
         
         <label for="starttime">Start time:</label>
         <input type="time" id="starttime" name="starttime" formControlName="startTime">
-    </div>
 
-    <div class="form-group" *ngIf="endStationList.length!=0">
         <label for="endstation">End Station</label>
         <select id="endstation" title="Filter By:" formControlName="endstation">
             <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
             <option *ngFor="let station of endStationList" [ngValue]="station">{{station.station_name}}</option>
         </select>
+       </div>
 
+       <!------------------ -->
+       <p (click)="activateDeactivateEndStationRibbon()" *ngIf="isEndStationRibbonActivated==false"><u>Search also by destination Date +++</u></p>
+       <p (click)="activateDeactivateEndStationRibbon()" *ngIf="isEndStationRibbonActivated==true"><u>Search only by start Date ---</u></p>
+
+       <div class="form-group" *ngIf="endStationList.length!=0 && isEndStationRibbonActivated==true">
+                
         <label for="enddate">End date:</label>
         <input type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
 
@@ -40,22 +41,18 @@
         </span>
     </div>
       
-    <div class="form-buttons">
-        <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
+      <div class="form-buttons">
         <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
-        <button class="btn btn-secondary" type="button" (dblclick)="closeForm()">Close</button>
-    </div>
-    <br>
-    <div class="form-group">
-    <span class="error-message" *ngIf="errMessege!='' ">
-        {{errMessege}}
-    </span>
-    </div>
+      </div>
+      <br>
+      <div class="form-group">
+        <span class="error-message" *ngIf="errMessege!='' ">
+          {{errMessege}}
+        </span>
+      </div>
 
-  </form>
+    </form>
+  </div>
+  
 
-<div class="form-buttons" *ngIf="endStationList.length!=0">
-    <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
-        {{ scheduleDetails ? 'Update Schedule' : 'Add Schedule' }}
-    </button>
-</div>
+

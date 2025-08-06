@@ -1,0 +1,6 @@
+<app-booking-form [scheduleList]="scheduleLit" (scheduleListChange)="detectScheduleChange($event)"></app-booking-form>
+
+<div *ngFor="let schedule of scheduleLit">
+    <p>{{schedule.startStationName}}</p>
+    <button href="" [disabled]="true"></button>
+</div>

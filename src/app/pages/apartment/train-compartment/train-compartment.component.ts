@@ -3,6 +3,7 @@ import { SeatModel } from '../../../../Models/SeatModel';
 import { Seat } from '../../../../Models/Seat';
 import { CompartmentSeatModel } from '../../../../Models/CompartmentSeatModel';
 import { SharedServiceService } from '../../../shared-service.service';
+import { TokenService } from '../../../common/TokenService';
 
 @Component({
   selector: 'app-train-compartment',
@@ -12,11 +13,11 @@ import { SharedServiceService } from '../../../shared-service.service';
 })
 export class TrainCompartmentComponent {
 
-  @Input() type:number=2
+  type:number
   @Input() seat :SeatModel[] | undefined
   seats!:SeatModel[]
-  selectedModel:string = 'Reset';
-
+  selectedModel:string = 'ResegetSeatModelForApartmentt';
+  tokenService:TokenService
   ngOnInit():void{
     if(this.seat!=undefined)
        this.seats=this.seat
@@ -24,7 +25,15 @@ export class TrainCompartmentComponent {
     //
   }
 
-  constructor(private service:SharedServiceService){}
+  constructor(private service:SharedServiceService){
+     this.tokenService=new TokenService()
+     if(this.tokenService.getIsUserAdmin()==undefined)
+      this.type=3
+     else if(this.tokenService.getIsUserAdmin()==false)
+      this.type=1
+     else
+      this.type=2
+  }
 
   selectedSeats: Seat[] = [];
 
@@ -105,6 +114,10 @@ export class TrainCompartmentComponent {
       if(this.seat!=undefined)
         this.seats=this.seat
     }
+  }
+
+  proceedClick(){
+    console.log('proceed')
   }
 
 } 

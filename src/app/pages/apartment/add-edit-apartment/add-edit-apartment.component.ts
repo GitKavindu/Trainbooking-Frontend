@@ -6,6 +6,7 @@ import { SeatModel } from '../../../../Models/SeatModel';
 import { CommonService } from '../../../common/CommonService';
 import { TrainCompartmentComponent } from '../train-compartment/train-compartment.component';
 import { ActivatedRoute } from '@angular/router';
+import { TokenService } from '../../../common/TokenService';
 
 @Component({
   selector: 'app-add-edit-apartment',
@@ -16,11 +17,16 @@ import { ActivatedRoute } from '@angular/router';
 export class AddEditApartmentComponent {
   @Input() Apartment!:Apartment
 
-  constructor(private service:SharedServiceService,private route:ActivatedRoute){}
+  constructor(private service:SharedServiceService,private route:ActivatedRoute){
+    this.tokenService=new TokenService()
+    this.apartmentClasses=['First','Second','Third']
+  }
   Apartmentid!:number
   Apartmentclass!:string
   trainId:number=0
   trainSeqNo:number=0
+  tokenService:TokenService
+  apartmentClasses:string[]
   
   @ViewChild(TrainCompartmentComponent) compartment!: TrainCompartmentComponent;
   ngOnInit(): void {
@@ -37,6 +43,7 @@ export class AddEditApartmentComponent {
         this.trainSeqNo=trainSeqNo
       }
     });
+    console.log('awa',this.Apartment)
   }
   addApartment(){
     let commonService:CommonService=new CommonService()
