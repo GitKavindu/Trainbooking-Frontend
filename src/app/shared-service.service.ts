@@ -18,6 +18,7 @@ import { ScheduleDto } from '../Models/DTOs/ScheduleDto';
 import { ReturnUserDto } from '../Models/DTOs/ReturnUserDto';
 import { GetSortedSchedulesDto } from '../Models/DTOs/GetSortedSchedulesDto';
 import { ReturnSortedSchedulesDto } from '../Models/DTOs/ReturnSortedSchedulesDto';
+import { AddBookingDto } from '../Models/DTOs/AddBookingDto';
 
 
 @Injectable({
@@ -139,6 +140,12 @@ export class SharedServiceService {
   selectSortedSchedules(getSortedSchedulesDto:GetSortedSchedulesDto) {
     return this.http.post<BaseResponse<ReturnSortedSchedulesDto[]>>(
       `${this.APIUrl}/Booking/selectSortedSchedules`,getSortedSchedulesDto
+    );
+  }
+
+  bookSeats(addBookingDto:AddBookingDto) {
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Booking/BookForSchedule`,addBookingDto
     );
   }
 

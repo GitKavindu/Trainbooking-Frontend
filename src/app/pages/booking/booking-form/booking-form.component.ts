@@ -5,6 +5,7 @@ import { SharedServiceService } from '../../../shared-service.service';
 import { GetSortedSchedulesDto } from '../../../../Models/DTOs/GetSortedSchedulesDto';
 import { TimeService } from '../../../common/TimeService';
 import { ReturnSortedSchedulesDto } from '../../../../Models/DTOs/ReturnSortedSchedulesDto';
+import { ScheduleDto } from '../../../../Models/DTOs/ScheduleDto';
 
 @Component({
   selector: 'app-booking-form',
@@ -15,7 +16,7 @@ import { ReturnSortedSchedulesDto } from '../../../../Models/DTOs/ReturnSortedSc
 export class BookingFormComponent {
 
   @Input() scheduleList!:ReturnSortedSchedulesDto[]
-  @Output() scheduleListChange = new EventEmitter<any[]>();
+  @Output() scheduleListChange = new EventEmitter<ReturnSortedSchedulesDto[]>();
   
   bookingForm!: FormGroup
   errMessege:string=''

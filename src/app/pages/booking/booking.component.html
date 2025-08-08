@@ -1,6 +1,79 @@
-<app-booking-form [scheduleList]="scheduleLit" (scheduleListChange)="detectScheduleChange($event)"></app-booking-form>
+<div *ngIf="trainId==0 && trainSeqNo==0">
+    <app-booking-form [scheduleList]="scheduleLit" (scheduleListChange)="detectScheduleChange($event)"></app-booking-form>
 
-<div *ngFor="let schedule of scheduleLit">
-    <p>{{schedule.startStationName}}</p>
-    <button href="" [disabled]="true"></button>
+    <div class="container mt-4 mb-4" *ngIf="scheduleLit!=undefined && scheduleLit.length!=0">
+        <div class="card shadow border-primary">
+            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                <div>
+                    <i class="fas fa-subway mr-2"></i>
+                    <strong class="h5 mb-0">Train Info</strong>
+                </div>
+                <img src="images/icons/train_2.svg" height="50" alt="Train Icon">
+            </div>
+
+            <div class="card-body">
+                <div class="mb-3">
+                    <h5 class="text-dark mb-1">
+                        <span class="badge badge-secondary p-2">{{scheduleLit[0].startStationName}}</span>
+                        <i class="fas fa-chevron-right mx-2 text-muted">-</i>
+                        <span class="badge badge-secondary p-2">{{scheduleLit[0].endStationName}}</span>
+                    </h5>
+                    <small class="form-text text-muted">Date - 2025-08-07</small>
+                </div>
+
+                <div class="mb-3 d-flex align-items-center justify-content-between">
+                    <span class="text-muted">Select a train and proceed</span>
+                    <i class="fas fa-chevron-right text-primary"></i>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Train Name</th>
+                                <th colspan="2">Departs from {{scheduleLit[0].startStationName}}</th>
+                                <th colspan="2">Arrives at {{scheduleLit[0].endStationName}}</th>
+                                <th style="width: 25%">Class</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-row" *ngFor="let schedule of scheduleLit" (click)="goToBooking(schedule)">
+                                <td>
+                                    <strong>{{schedule.trainName}}</strong><br>
+                                    {{schedule.startDestDetails.startstation}} - {{schedule.startDestDetails.endstation}}<br>
+                                </td>
+                                <td>{{schedule.startDate}}</td>
+                                <td>{{schedule.startTime}}</td>
+                                <td>{{schedule.endDate}}</td>
+                                <td>{{schedule.endTime}}</td>
+                                <td>
+                                    <span class="badge badge-info">Available types</span><br>
+                                    <small>2nd and 3rd</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ✅ Styled Pagination Below Table -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end mt-4 mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+<app-apartment *ngIf="trainId!=0 && trainSeqNo!=0"></app-apartment>

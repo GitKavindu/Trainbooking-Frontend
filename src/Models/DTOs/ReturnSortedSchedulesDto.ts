@@ -1,3 +1,5 @@
+import { Schedule } from "../Schedule"
+
 export class ReturnSortedSchedulesDto
 {
       public scheduleId!:string
@@ -19,4 +21,11 @@ export class ReturnSortedSchedulesDto
 
       public endDate!: string
       public endTime!: string
+
+      public startDestDetails! :Schedule
+
+      public startJourneyId!:number
+      public endJourneyId!:number
 }
+
+

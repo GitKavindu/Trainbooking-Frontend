@@ -4,6 +4,9 @@ import { Seat } from '../../../../Models/Seat';
 import { CompartmentSeatModel } from '../../../../Models/CompartmentSeatModel';
 import { SharedServiceService } from '../../../shared-service.service';
 import { TokenService } from '../../../common/TokenService';
+import { CommonService } from '../../../common/CommonService';
+import { AddBookingDto } from '../../../../Models/DTOs/AddBookingDto';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-train-compartment',
@@ -15,18 +18,40 @@ export class TrainCompartmentComponent {
 
   type:number
   @Input() seat :SeatModel[] | undefined
+  @Input() apartmentId:number
   seats!:SeatModel[]
   selectedModel:string = 'ResegetSeatModelForApartmentt';
   tokenService:TokenService
+
+  scheduleId!:string
+  startJourneyId!:number
+  endJourneyId!:number
+
   ngOnInit():void{
     if(this.seat!=undefined)
        this.seats=this.seat
 
     //
+    this.route.queryParams.subscribe(params => {
+        if (Object.keys(params).length === 0) {
+          console.log('No query parameters');
+          this.scheduleId=''
+          this.startJourneyId=0
+          this.endJourneyId=0
+          
+        } else {
+          this.scheduleId = params['scheduleId'];
+          this.startJourneyId=+params['startJourneyId'];
+          this.endJourneyId=+params['endJourneyId'];
+        }
+       
+      });  
   }
 
-  constructor(private service:SharedServiceService){
+  constructor(private service:SharedServiceService,private route:ActivatedRoute){
      this.tokenService=new TokenService()
+     this.apartmentId=0
+     
      if(this.tokenService.getIsUserAdmin()==undefined)
       this.type=3
      else if(this.tokenService.getIsUserAdmin()==false)
@@ -59,6 +84,7 @@ export class TrainCompartmentComponent {
         addSeat.isLeft=isLeft
         addSeat.rowNo=rowNo
         addSeat.seqNo=seat.number
+        addSeat.apartmentId=this.apartmentId
         this.selectedSeats.push(addSeat);
       }
     }
@@ -118,6 +144,19 @@ export class TrainCompartmentComponent {
 
   proceedClick(){
     console.log('proceed')
+
+    let commonService:CommonService=new CommonService()
+    let val:AddBookingDto={
+      
+      scheduleId:this.scheduleId,
+      tokenId:this.service.tokenService.returnToken()?.tokenId,
+      fromJourneyId:this.startJourneyId,
+      toJourneyId:this.endJourneyId,
+      seatModel:this.selectedSeats
+    }
+    this.service.bookSeats(val).subscribe(res=>{
+      alert(res.Data.toString());
+    })
   }
 
 } 

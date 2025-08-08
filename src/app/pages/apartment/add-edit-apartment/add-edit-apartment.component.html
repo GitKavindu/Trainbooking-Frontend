@@ -11,7 +11,7 @@
     </select>
 </div>
 
-<app-train-compartment  [seat]="getSeatModelForApartment()"></app-train-compartment>
+<app-train-compartment  [seat]="getSeatModelForApartment()" [apartmentId]="Apartmentid"></app-train-compartment>
 
 <div class=".no-style-wrapper" *ngIf="tokenService.getIsUserAdmin()==true">
     <button (click)="addApartment()" *ngIf="Apartmentid==0" class="btn btn-primary">
