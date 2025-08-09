@@ -73,7 +73,8 @@ export class TrainCompartmentComponent {
   }
 
   toggleSeatSelection(seat: CompartmentSeatModel,rowNo:number,isLeft:boolean): void {
-    if (seat.available && this.getBookedSeatClass(seat,isLeft,rowNo)===false) {
+
+    if (seat.available && this.isSeatBooked(seat,isLeft,rowNo)===false) {
       seat.selected = !seat.selected;
       
       let addSeat:Seat
@@ -100,14 +101,14 @@ export class TrainCompartmentComponent {
     }
   }
 
-  getSeatClass(seat: any,isLeft:boolean,rowNo:number): string {
+  getSeatClass(seat:CompartmentSeatModel,isLeft:boolean,rowNo:number): string {
     if(this.type==3)
       return 'bg-secondary text-white fake-disabled';
     else if (!seat.available)
       return 'bg-secondary text-white';
 
     if(this.type==1){
-       if(this.getBookedSeatClass(seat,isLeft,rowNo)==true)
+      if(this.isSeatBooked(seat,isLeft,rowNo)==false)
         return seat.selected ? 'bg-primary text-white' : 'bg-light';
       else
          return 'bg-secondary text-white';
@@ -198,23 +199,21 @@ export class TrainCompartmentComponent {
     
   }
 
-  getBookedSeatClass(seat:CompartmentSeatModel,isLeft:boolean,rowNo:number):boolean{
-    console.log(seat,isLeft,rowNo)
+  isSeatBooked(seat:CompartmentSeatModel,isLeft:boolean,rowNo:number):boolean{
+    
     if(this.bookedSeats!=null){
       for(let i=0;i<this.bookedSeats.length;i++){
         if(
           isLeft==this.bookedSeats[i].isLeft &&
-          rowNo+1==this.bookedSeats[i].rowNo &&
+          rowNo==this.bookedSeats[i].rowNo &&
           seat.number==this.bookedSeats[i].seqNo
         ){
-          return false
+          return true
         }
       }
     }
 
-    console.log('false')
-    return true
-    
+    return false    
   }
 
 } 

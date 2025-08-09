@@ -19,7 +19,7 @@
             <div *ngFor="let leftseatno of seat.left" class="seat-container">
                 <div 
                   class="seat m-2 p-2 rounded text-center cursor-pointer"
-                  [ngClass]="getSeatClass(leftseatno,true,i)"
+                  [ngClass]="getSeatClass(leftseatno,true,seat.row)"
                   (click)="toggleSeatSelection(leftseatno,seat.row,true)"
                 >
                   {{ seat.row+"L"+leftseatno.number }}
@@ -34,7 +34,7 @@
             <div *ngFor="let rightseatno of seat.right" class="seat-container">
               <div 
                 class="seat m-2 p-2 rounded text-center cursor-pointer"
-                [ngClass]="getSeatClass(rightseatno,false,i)"
+                [ngClass]="getSeatClass(rightseatno,false,seat.row)"
                 (click)="toggleSeatSelection(rightseatno,seat.row,false)"
               >
                 {{ seat.row+"R"+rightseatno.number }}
