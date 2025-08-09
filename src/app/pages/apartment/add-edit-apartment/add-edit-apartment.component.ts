@@ -78,7 +78,7 @@ export class AddEditApartmentComponent {
   }
 
   getSeatModelForApartment(){
-     return new CommonService().convertSeatToSeatModel(this.Apartment.seatModel)
+     return this.Apartment.seatModel
   }
   consoleLog(){
     console.log(this.compartment.selectedSeats)

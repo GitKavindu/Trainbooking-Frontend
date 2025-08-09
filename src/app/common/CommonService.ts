@@ -67,6 +67,7 @@ export class CommonService{
             if(seatModel[i-1].row!=i){
                 
                 tempSeat=new SeatModel()
+                tempSeat.row=i
                 tempSeat.left=[]
                 tempSeat.right=[]
                 seatModel.splice(i-1,0,tempSeat)

@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 export class TrainCompartmentComponent {
 
   type:number
-  @Input() seat :SeatModel[] | undefined
+  @Input() seat :Seat[] | undefined
   @Input() apartmentId:number
   seats!:SeatModel[]
   selectedModel:string = 'ResegetSeatModelForApartmentt';
@@ -27,10 +27,10 @@ export class TrainCompartmentComponent {
   startJourneyId!:number
   endJourneyId!:number
 
-  ngOnInit():void{
-    if(this.seat!=undefined)
-       this.seats=this.seat
+  bookedSeats:Seat[]| null=null;
+  selectedSeats: Seat[] = [];
 
+  ngOnInit():void{
     //
     this.route.queryParams.subscribe(params => {
         if (Object.keys(params).length === 0) {
@@ -45,13 +45,25 @@ export class TrainCompartmentComponent {
           this.endJourneyId=+params['endJourneyId'];
         }
        
-      });  
+    });
+    
+    
+    if(this.type==1 && this.startJourneyId!= 0){
+      this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,this.apartmentId).subscribe((res)=>{
+        this.bookedSeats=res.Data
+        if(this.seat!=undefined){
+          this.seats=new CommonService().convertSeatToSeatModel(this.seat)
+        }
+      })
+    }
+    
+    
   }
 
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
      this.tokenService=new TokenService()
      this.apartmentId=0
-     
+
      if(this.tokenService.getIsUserAdmin()==undefined)
       this.type=3
      else if(this.tokenService.getIsUserAdmin()==false)
@@ -60,10 +72,8 @@ export class TrainCompartmentComponent {
       this.type=2
   }
 
-  selectedSeats: Seat[] = [];
-
   toggleSeatSelection(seat: CompartmentSeatModel,rowNo:number,isLeft:boolean): void {
-    if (seat.available) {
+    if (seat.available && this.getBookedSeatClass(seat,isLeft,rowNo)===false) {
       seat.selected = !seat.selected;
       
       let addSeat:Seat
@@ -90,14 +100,18 @@ export class TrainCompartmentComponent {
     }
   }
 
-  getSeatClass(seat: any): string {
+  getSeatClass(seat: any,isLeft:boolean,rowNo:number): string {
     if(this.type==3)
       return 'bg-secondary text-white fake-disabled';
     else if (!seat.available)
       return 'bg-secondary text-white';
 
-    if(this.type==1)
-      return seat.selected ? 'bg-primary text-white' : 'bg-light';
+    if(this.type==1){
+       if(this.getBookedSeatClass(seat,isLeft,rowNo)==true)
+        return seat.selected ? 'bg-primary text-white' : 'bg-light';
+      else
+         return 'bg-secondary text-white';
+    }
     else
       return seat.selected ? 'bg-third text-white' : 'bg-light';
   }
@@ -138,7 +152,7 @@ export class TrainCompartmentComponent {
     }
     else{
       if(this.seat!=undefined)
-        this.seats=this.seat
+        this.seats=new CommonService().convertSeatToSeatModel(this.seat)
     }
   }
 
@@ -157,6 +171,50 @@ export class TrainCompartmentComponent {
     this.service.bookSeats(val).subscribe(res=>{
       alert(res.Data.toString());
     })
+  }
+
+  getBookedSeatsModel(seat:Seat[]){
+    let seatModel:SeatModel=new SeatModel()
+    for(let i=0;i<seat.length;i++){
+      let pushSeat:SeatModel
+      
+    }
+  }
+
+  removeBookedSeats(seats:Seat[],bookedSeats:Seat[]){
+    
+    for(let j=0;j<bookedSeats.length;j++){
+      for(let i=0;i<seats.length;i++){
+        if(
+          seats[i].isLeft==bookedSeats[j].isLeft &&
+          seats[i].rowNo==bookedSeats[j].rowNo &&
+          seats[i].seqNo==bookedSeats[j].seqNo
+        ){
+          seats.splice(i,1)
+          break
+        }
+      }      
+    }
+    
+  }
+
+  getBookedSeatClass(seat:CompartmentSeatModel,isLeft:boolean,rowNo:number):boolean{
+    console.log(seat,isLeft,rowNo)
+    if(this.bookedSeats!=null){
+      for(let i=0;i<this.bookedSeats.length;i++){
+        if(
+          isLeft==this.bookedSeats[i].isLeft &&
+          rowNo+1==this.bookedSeats[i].rowNo &&
+          seat.number==this.bookedSeats[i].seqNo
+        ){
+          return false
+        }
+      }
+    }
+
+    console.log('false')
+    return true
+    
   }
 
 } 
