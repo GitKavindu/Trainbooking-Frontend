@@ -20,6 +20,8 @@ import { GetSortedSchedulesDto } from '../Models/DTOs/GetSortedSchedulesDto';
 import { ReturnSortedSchedulesDto } from '../Models/DTOs/ReturnSortedSchedulesDto';
 import { AddBookingDto } from '../Models/DTOs/AddBookingDto';
 import { Seat } from '../Models/Seat';
+import { GetBookingDetailsDto } from '../Models/DTOs/GetBookingDetailsDto';
+import { TokenDto } from '../Models/DTOs/TokenDto';
 
 
 @Injectable({
@@ -153,6 +155,18 @@ export class SharedServiceService {
   selectBookedSeatsForJourney(fromJourneyId:number,toJourneyId:number,apartmentId:number) {
     return this.http.get<BaseResponse<Seat[]>>(
       `${this.APIUrl}/Booking/selectBookedSeatsForJourney?fromJourneyId=${fromJourneyId}&toJourneyId=${toJourneyId}&apartmentId=${apartmentId}`
+    );
+  }
+
+  getBookingDetails(bookingId:number) {
+    return this.http.get<BaseResponse<GetBookingDetailsDto>>(
+      `${this.APIUrl}/Booking/getBookingDetails?bookingId=${bookingId}`
+    );
+  }
+
+  selectMyBookings(token:TokenDto) {
+    return this.http.post<BaseResponse<GetBookingDetailsDto[]>>(
+      `${this.APIUrl}/Booking/selectMyBookings`,token
     );
   }
 

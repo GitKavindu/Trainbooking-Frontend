@@ -20,6 +20,7 @@ import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { AddEditScheduleComponent } from './pages/schedule/add-edit-schedule/add-edit-schedule.component';
 import { BookingComponent } from './pages/booking/booking.component';
 import { BookingFormComponent } from './pages/booking/booking-form/booking-form.component';
+import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { BookingFormComponent } from './pages/booking/booking-form/booking-form.
     ScheduleComponent,
     AddEditScheduleComponent,
     BookingComponent,
-    BookingFormComponent
+    BookingFormComponent,
+    MybookingsComponent
   ],
   imports: [
     BrowserModule,
