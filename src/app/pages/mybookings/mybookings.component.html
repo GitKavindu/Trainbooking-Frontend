@@ -19,23 +19,39 @@
                 <table class="table table-hover table-bordered">
                     <thead class="thead-light">
                         <tr class="text-center">
+                            <th>Booking Id</th>
                             <th>Train Name</th>
                             <th colspan="2">Date</th>
                             <th style="width: 25%">Price</th>
                             <th style="width: 25%">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="table-row" *ngFor="let booking of bookingDetails">
-                            <td>
-                                <strong>{{booking.trainName}}</strong><br>
-                            </td>
-                            <td>{{booking.bookingDate}}</td>
-                            <td>{{booking.bookingTime}}</td>
-                            <td class="text-center"> {{'$' + booking.price.toFixed(2)}}</td>
-                            <td class="text-center" *ngIf="booking.isCanceled==true"><span class="badge badge-pill badge-danger px-3 py-2">Canceled</span></td>
-                            <td class="text-center" *ngIf="booking.isCanceled==false"><span class="badge badge-pill badge-success px-3 py-2">Active</span></td>
-                        </tr>
+                    <tbody *ngIf="bookingDetails!=undefined">
+                        <ng-container *ngFor="let booking of bookingDetails">
+                            <tr class="table-row" *ngIf="isGetBookingDetailsDto(booking)" (click)="rowClick()">
+                                <td>{{ getBookingId(booking.bookingId) }}</td>
+                                <td>
+                                <strong>{{ booking.trainName }}</strong><br>
+                                </td>
+                                <td>{{ booking.bookingDate }}</td>
+                                <td>{{ booking.bookingTime }}</td>
+                                <td class="text-center">{{ '$' + booking.price.toFixed(2) }}</td>
+                                <td class="text-center" *ngIf="booking.isCanceled === true">
+                                <span class="badge badge-pill badge-danger px-3 py-2">Canceled</span>
+                                </td>
+                                <td class="text-center" *ngIf="booking.isCanceled === false">
+                                <span class="badge badge-pill badge-success px-3 py-2">Active</span>
+                                </td>
+                            </tr>
+
+                             <!-- When booking is a string -->
+                            <tr class="table-row" *ngIf="isString(booking)">
+                                <td colspan="6" class="text-center text-muted">
+                                    {{booking}}
+                                    <app-train-compartment></app-train-compartment>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>

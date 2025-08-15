@@ -48,7 +48,7 @@ export class TrainCompartmentComponent {
     });
     
     
-    if(this.type==1 && this.startJourneyId!= 0){
+    if( (this.type==1 || this.type==4) && this.startJourneyId!= 0 ){
       this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,this.apartmentId).subscribe((res)=>{
         this.bookedSeats=res.Data
         if(this.seat!=undefined){
@@ -56,7 +56,6 @@ export class TrainCompartmentComponent {
         }
       })
     }
-    
     
   }
 
@@ -107,11 +106,11 @@ export class TrainCompartmentComponent {
     else if (!seat.available)
       return 'bg-secondary text-white';
 
-    if(this.type==1){
+    if(this.type==1 || this.type==4){
       if(this.isSeatBooked(seat,isLeft,rowNo)==false)
         return seat.selected ? 'bg-primary text-white' : 'bg-light';
       else
-         return 'bg-secondary text-white';
+         return 'bg-third text-white';
     }
     else
       return seat.selected ? 'bg-third text-white' : 'bg-light';
@@ -126,7 +125,7 @@ export class TrainCompartmentComponent {
 
   getRightText(){
     if(this.type==1)
-      return 'Booked / Not Available'
+      return 'Not Available'
     else
       return 'Already Disabled'
   }

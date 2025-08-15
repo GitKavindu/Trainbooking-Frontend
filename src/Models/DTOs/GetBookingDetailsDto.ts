@@ -1,8 +1,7 @@
 import { Seat } from "../Seat"
 
 export class GetBookingDetailsDto{
-    
-    public  bookingId!: string
+
     public  bookedBy!: string
     
     public  isCanceled!:boolean
@@ -11,5 +10,7 @@ export class GetBookingDetailsDto{
     public  bookingTime!: string
     public trainName!:string
     public  price!:number
+
+    public bookingId!: number;
 
 }

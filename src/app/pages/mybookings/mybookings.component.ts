@@ -13,7 +13,8 @@ import { TokenDto } from '../../../Models/DTOs/TokenDto';
 })
 export class MybookingsComponent {
   
-  bookingDetails!:GetBookingDetailsDto[]
+  bookingDetails!:(GetBookingDetailsDto | string)[] 
+  
   constructor(private service:SharedServiceService,private router:Router){}
 
   ngOnInit(){
@@ -23,6 +24,7 @@ export class MybookingsComponent {
     if(token!=undefined){
        this.service.selectMyBookings(token).subscribe((res)=>{
           this.bookingDetails=res.Data
+          this.bookingDetails.splice(2,0,'dsadsadsad')
        })
     }
     else{
@@ -30,5 +32,33 @@ export class MybookingsComponent {
     }
      
   }
+
+  rowClick(){
+    
+  }
+
+  getBookingId(bookingNum:number){
+    return 'BS' + (bookingNum.toString().padStart(4, '0'))
+  }
+
+  isGetBookingDetailsDto(booking: string | GetBookingDetailsDto): booking is GetBookingDetailsDto {
+     return typeof booking === 'object' && booking !== null && booking!=undefined && 'bookingId' in booking //this.checkIfGetBookingDetailsDto(booking);
+  }
+
+  isString(booking: string | GetBookingDetailsDto): booking is string {
+    return typeof booking === 'string';
+  }
+
+  checkIfGetBookingDetailsDto(booking:any):boolean{
+    let gh:GetBookingDetailsDto=new GetBookingDetailsDto()
+    let vari=Object.keys(gh)
+    console.log('varii ',vari)
+    for(let i=0;i<vari.length;i++){
+      if( (vari[i] in booking)==false)
+        return false
+    }
+    return true
+  }
+
 
 }
