@@ -7,6 +7,7 @@ import { TokenService } from '../../../common/TokenService';
 import { CommonService } from '../../../common/CommonService';
 import { AddBookingDto } from '../../../../Models/DTOs/AddBookingDto';
 import { ActivatedRoute } from '@angular/router';
+import { CancelBookingDto } from '../../../../Models/DTOs/CancelBookingDto';
 
 @Component({
   selector: 'app-train-compartment',
@@ -16,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TrainCompartmentComponent {
 
-  type:number
+  type!:number
   @Input() seat :Seat[] | undefined
   @Input() apartmentId:number
   seats!:SeatModel[]
@@ -27,7 +28,8 @@ export class TrainCompartmentComponent {
   startJourneyId!:number
   endJourneyId!:number
 
-  bookedSeats:Seat[]| null=null;
+  @Input() bookedSeats:Seat[]| null=null;
+  @Input() bookingId:number
   selectedSeats: Seat[] = [];
 
   ngOnInit():void{
@@ -44,16 +46,16 @@ export class TrainCompartmentComponent {
           this.startJourneyId=+params['startJourneyId'];
           this.endJourneyId=+params['endJourneyId'];
         }
-       
+        this.setTrainCompartmentType()
     });
     
-    
-    if( (this.type==1 || this.type==4) && this.startJourneyId!= 0 ){
+    if(this.seat!=undefined){
+      this.seats=new CommonService().convertSeatToSeatModel(this.seat)
+    }
+
+    if(this.type==1 && this.startJourneyId!= 0){
       this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,this.apartmentId).subscribe((res)=>{
         this.bookedSeats=res.Data
-        if(this.seat!=undefined){
-          this.seats=new CommonService().convertSeatToSeatModel(this.seat)
-        }
       })
     }
     
@@ -62,18 +64,25 @@ export class TrainCompartmentComponent {
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
      this.tokenService=new TokenService()
      this.apartmentId=0
+     this.bookingId=0
+  }
 
+  setTrainCompartmentType(){
      if(this.tokenService.getIsUserAdmin()==undefined)
       this.type=3
-     else if(this.tokenService.getIsUserAdmin()==false)
+     else if(this.tokenService.getIsUserAdmin()==false && this.startJourneyId!=0)
       this.type=1
+     else if(this.tokenService.getIsUserAdmin()==false )
+      this.type=4
      else
       this.type=2
+
+      //console.log(this.type,this.startJourneyId)
   }
 
   toggleSeatSelection(seat: CompartmentSeatModel,rowNo:number,isLeft:boolean): void {
 
-    if (seat.available && this.isSeatBooked(seat,isLeft,rowNo)===false) {
+    if (this.type!=4 && seat.available && this.isSeatBooked(seat,isLeft,rowNo)===false) {
       seat.selected = !seat.selected;
       
       let addSeat:Seat
@@ -124,7 +133,7 @@ export class TrainCompartmentComponent {
   }
 
   getRightText(){
-    if(this.type==1)
+    if(this.type==1 ||this.type==4)
       return 'Not Available'
     else
       return 'Already Disabled'
@@ -146,7 +155,7 @@ export class TrainCompartmentComponent {
   }
 
   onModelChange(event: Event){
-    //console.log(event)
+
     if(this.selectedModel!="Reset"){
       this.service.getSeatModel().subscribe(res=>this.seats=res)
     }
@@ -158,8 +167,29 @@ export class TrainCompartmentComponent {
 
   proceedClick(){
     console.log('proceed')
+    if(this.selectedSeats.length <= 0 && this.type==1){
+      alert('Please select one or more seats')
+    }
+    else if(this.type==1){
+      this.bookSeats()
+    }
+    else if(this.type==4){
+      this.cancelBooking()
+    }
+    
+  }
 
-    let commonService:CommonService=new CommonService()
+  cancelBooking(){
+    let val:CancelBookingDto={
+      tokenId:this.service.tokenService.returnToken()?.tokenId,
+      bookingId:this.bookingId
+    }
+    this.service.cancelBookings(val).subscribe(res=>{
+      alert(res.Data.toString());
+    })
+  }
+
+  bookSeats(){
     let val:AddBookingDto={
       
       scheduleId:this.scheduleId,
@@ -171,6 +201,15 @@ export class TrainCompartmentComponent {
     this.service.bookSeats(val).subscribe(res=>{
       alert(res.Data.toString());
     })
+  }
+
+  proceedClickLabel():string | undefined{
+    if(this.type==1)
+      return 'Proceed to book'
+    else if(this.type==4)
+      return 'Cancel booking'
+    else
+      return undefined
   }
 
   getBookedSeatsModel(seat:Seat[]){

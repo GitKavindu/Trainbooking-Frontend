@@ -48,15 +48,15 @@
     
     <div class="card-footer" *ngIf="type!=3">
       <div class="legend d-flex justify-content-around">
-        <div><span [ngClass]="getLabelClass()">Selected</span></div>
+        <div *ngIf="type!=4"><span [ngClass]="getLabelClass()">Selected</span></div>
         <div  *ngIf="type!=4"><span class="badge bg-light mr-2">Available</span></div>
         <div  *ngIf="type==1 || type==4"><span class="badge bg-third mr-2 text-white">Booked</span></div>
-        <div><span class="badge bg-secondary mr-2">{{getRightText()}}</span></div>
+        <div><span class="badge bg-secondary mr-2 text-white">{{getRightText()}}</span></div>
       </div>
       
-      <div *ngIf="selectedSeats.length > 0" class="mt-3 text-center">
-        <h5>Selected Seats: {{returnSelectedSeats()}}</h5>
-        <button class="btn btn-success mt-2" (click)="proceedClick()" *ngIf="type!=2">Proceed to Book</button>
+      <div class="mt-3 text-center">
+        <h5 *ngIf="selectedSeats.length > 0">Selected Seats: {{returnSelectedSeats()}}</h5>
+        <button class="btn btn-success mt-2" (click)="proceedClick()" *ngIf="type==1 || type==4">{{proceedClickLabel()}}</button>
       </div>
     </div>
   </div>

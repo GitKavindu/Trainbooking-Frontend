@@ -11,6 +11,15 @@ export class GetBookingDetailsDto{
     public trainName!:string
     public  price!:number
 
-    public bookingId!: number;
+    public bookingId!: number
+    public scheduleId!:string
 
+    public trainNo!:number
+    public trainSeqNo!:number
+
+    public fromStationNo!:number
+    public fromStationSeqNo!:number
+
+    public toStationNo!:number
+    public toStationSeqNo!:number
 }

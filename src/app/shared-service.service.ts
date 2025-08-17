@@ -22,6 +22,7 @@ import { AddBookingDto } from '../Models/DTOs/AddBookingDto';
 import { Seat } from '../Models/Seat';
 import { GetBookingDetailsDto } from '../Models/DTOs/GetBookingDetailsDto';
 import { TokenDto } from '../Models/DTOs/TokenDto';
+import { CancelBookingDto } from '../Models/DTOs/CancelBookingDto';
 
 
 @Injectable({
@@ -167,6 +168,12 @@ export class SharedServiceService {
   selectMyBookings(token:TokenDto) {
     return this.http.post<BaseResponse<GetBookingDetailsDto[]>>(
       `${this.APIUrl}/Booking/selectMyBookings`,token
+    );
+  }
+
+  cancelBookings(cancelBookingDto:CancelBookingDto){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Booking/cancelBooking`,cancelBookingDto
     );
   }
 
