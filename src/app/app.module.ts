@@ -21,6 +21,7 @@ import { AddEditScheduleComponent } from './pages/schedule/add-edit-schedule/add
 import { BookingComponent } from './pages/booking/booking.component';
 import { BookingFormComponent } from './pages/booking/booking-form/booking-form.component';
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
+import { UserpageComponent } from './pages/userpage/userpage.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { MybookingsComponent } from './pages/mybookings/mybookings.component';
     AddEditScheduleComponent,
     BookingComponent,
     BookingFormComponent,
-    MybookingsComponent
+    MybookingsComponent,
+    UserpageComponent
   ],
   imports: [
     BrowserModule,

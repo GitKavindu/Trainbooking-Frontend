@@ -8,6 +8,7 @@ import { ApartmentComponent } from './pages/apartment/apartment.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { BookingComponent } from './pages/booking/booking.component';
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
+import { UserpageComponent } from './pages/userpage/userpage.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -17,7 +18,8 @@ const routes: Routes = [
   { path: 'apartment', component: ApartmentComponent },
   { path: 'schedule', component: ScheduleComponent },
   { path: 'booking', component: BookingComponent },
-  { path: 'mybookings', component: MybookingsComponent }
+  { path: 'mybookings', component: MybookingsComponent },
+  { path: 'users', component: UserpageComponent }
 ];
 
 @NgModule({

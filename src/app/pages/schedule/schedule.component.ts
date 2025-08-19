@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Schedule } from '../../../Models/Schedule';
-import { ScheduleDto } from '../../../Models/DTOs/ScheduleDto';
 import { TokenService } from '../../common/TokenService';
 import { Router } from '@angular/router';
 

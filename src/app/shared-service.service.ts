@@ -23,6 +23,9 @@ import { Seat } from '../Models/Seat';
 import { GetBookingDetailsDto } from '../Models/DTOs/GetBookingDetailsDto';
 import { TokenDto } from '../Models/DTOs/TokenDto';
 import { CancelBookingDto } from '../Models/DTOs/CancelBookingDto';
+import { ReturnUUserStatusDto } from '../Models/DTOs/ReturnUUserStatusDto';
+import { GetUserStatusDto } from '../Models/DTOs/GetUserStatusDto';
+import { AppointAdmin } from '../Models/DTOs/AppointAdmin';
 
 
 @Injectable({
@@ -175,6 +178,37 @@ export class SharedServiceService {
     return this.http.post<BaseResponse<string>>(
       `${this.APIUrl}/Booking/cancelBooking`,cancelBookingDto
     );
+  }
+
+  //Admin
+  GetUserStatus(getUserStatusDto:GetUserStatusDto){
+    return this.http.post<BaseResponse<ReturnUUserStatusDto[]>>(
+      `${this.APIUrl}/Admin/GetUserStatus`,getUserStatusDto
+    );
+  }
+
+  appointAdmin(appointAdmin:AppointAdmin){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Admin/appointAdmin`,appointAdmin
+    );
+  }
+
+  disableAdmin(appointAdmin:AppointAdmin){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Admin/disableAdmin", {
+      body: appointAdmin
+    });
+  }
+
+  enableUser(appointAdmin:AppointAdmin){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Admin/enableUser`,appointAdmin
+    );
+  }
+
+  disableUser(appointAdmin:AppointAdmin){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Admin/disableUser", {
+      body: appointAdmin
+    });
   }
 
   //

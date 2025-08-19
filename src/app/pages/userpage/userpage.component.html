@@ -1,0 +1,179 @@
+<div class="filters" >
+      <select id="filterType" title="Filter By:"  [(ngModel)]="selectedFilterType" (change)="filterFn()">
+        <option value=1>UserName</option>
+        <option value=2>MobileNo</option>
+        <option value=3>Email</option>
+        <option value=4>NationalId</option>
+        <option value=5>PreferedName</option>
+        <option value=6>FullName</option>
+      </select>
+
+      <select id="filterType" title="Filter By:" [(ngModel)]="selectedAccessType" (change)="filterFn()">
+        <option value=1>Admin only</option>
+        <option value=2>Passengers only</option>
+        <option value=0>Both</option>
+      </select>
+
+      <select id="filterType" title="Filter By:" [(ngModel)]="selectedUserType" (change)="filterFn()">
+        <option value=1>Active users only</option>
+        <option value=2>Inactive users only</option>
+        <option value=0>All user types</option>
+      </select>
+    
+    <input id="filterInput" (keyup)="filterFn()" [(ngModel)]="userFilter" placeholder="Search...">
+</div>
+
+<div class="container mt-4 mb-4">
+    <div class="card shadow border-primary">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div>
+                <i class="fas fa-subway mr-2"></i>
+                <strong class="h5 mb-0">Users</strong>
+            </div>
+            <img src="images/icons/train_2.svg" height="50" alt="Booking Icon">
+        </div>
+
+        <div class="card-body">
+          <div class="mb-3 d-flex align-items-center justify-content-between">
+              <span class="text-muted">Select a user and proceed</span>
+              <i class="fas fa-chevron-right text-primary"></i>
+          </div>
+
+          <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                  <thead class="thead-light">
+                      <tr class="text-center">
+                          <th>Name</th>                    
+                          <th style="width: 20%">Type</th>
+                          <th style="width: 20%">Status</th>
+                          <th>Username</th>
+                      </tr>
+                  </thead>
+
+                  <tbody *ngIf="loadingBit==true || returnedUsers==undefined || returnedUsers.length==0">
+                    <tr>
+                      <td colspan="6" class="text-center">{{getLabelTextWhenNotHavingUsers()}}</td>
+                    </tr>
+                  </tbody>
+
+                  <tbody *ngIf="loadingBit==false && returnedUsers!=undefined && returnedUsers.length!=0">                      
+                      <ng-container *ngFor="let user of returnedUsers;let i=index">
+                            <tr class="table-row"  (click)="rowClick(i)">
+                                <td>{{ user.PreferedName }}</td>
+                                
+                                <td class="text-center" *ngIf="user.IsAdmin==true">
+                                  <span class="badge badge-pill badge-danger px-3 py-2">Admin</span>
+                                </td>
+                                <td class="text-center" *ngIf="user.IsAdmin==false">
+                                  <span class="badge badge-pill badge-success px-3 py-2">Passenger</span>
+                                </td>
+
+                                <td class="text-center" *ngIf="user.IsActive==false">
+                                  <span class="badge badge-pill badge-danger px-3 py-2">Disabled</span>
+                                </td>
+                                <td class="text-center" *ngIf="user.IsActive==true">
+                                  <span class="badge badge-pill badge-success px-3 py-2">Active</span>
+                                </td>
+
+                                <td>
+                                  <strong>{{ user.UserName }}</strong><br>
+                                </td>
+
+                            </tr>
+                          
+                            <ng-container *ngIf="user.showRow == true">
+                              <tr>
+                                <td colspan="6" class="bg-white p-4">
+
+                                  <div class="card shadow-sm border-0">
+                                    <div class="card-body">
+
+                                      <!-- Section Header -->
+                                      <h5 class="font-weight-bold mb-4">User Info</h5>
+
+                                      <!-- Full Name -->
+                                      <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                                        <div class="text-muted">Full Name</div>
+                                        <div>{{ user.FullName }}</div>
+                                      </div>
+
+                                      <!-- Preferred Name -->
+                                      <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                                        <div class="text-muted">Preferred Name</div>
+                                        <div>{{ user.PreferedName }}</div>
+                                      </div>
+
+                                      <!-- Email -->
+                                      <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                                        <div class="text-muted">Email</div>
+                                        <div>{{ user.Email }}</div>
+                                      </div>
+
+                                      <!-- Mobile No -->
+                                      <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                                        <div class="text-muted">Mobile Number</div>
+                                        <div>{{ user.MobileNo }}</div>
+                                      </div>
+
+                                      <!-- National ID -->
+                                      <div class="d-flex justify-content-between align-items-center py-3">
+                                        <div class="text-muted">National ID</div>
+                                        <div>{{ user.NationalId }}</div>
+                                      </div>
+                                      
+                                      <div class="d-flex mt-3 align-items-center">
+
+                                        <!-- User Active/Inactive Control Buttons (Left Side) -->
+                                        <div class="mr-3">
+                                          <button *ngIf="!user.IsActive" class="btn btn-outline-success mr-2"  (click)="enableUser(user.UserName)">
+                                            Enable User
+                                          </button>
+
+                                          <button *ngIf="user.IsActive" class="btn btn-outline-danger mr-2" (click)="disableUser(user.UserName)">
+                                            Disable User
+                                          </button>
+                                        </div>
+
+                                        <!-- Admin Control Buttons (Right Side) -->
+                                        <div *ngIf="user.IsActive"> 
+                                          <button *ngIf="!user.IsAdmin" class="btn btn-outline-success mr-2" (click)="makeAdmin(user.UserName)">
+                                            Make Admin
+                                          </button>
+
+                                          <button *ngIf="user.IsAdmin" class="btn btn-outline-danger" (click)="disableAdmin(user.UserName)">
+                                            Disable Admin
+                                          </button>
+                                        </div>
+
+                                      </div>                                   
+
+                                    </div>
+                                  </div>
+
+                                </td>
+                              </tr>
+                            </ng-container>
+                          
+                        
+                      </ng-container>
+                  </tbody>
+              </table>
+          </div>
+
+          <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-end mt-4 mb-0">
+                  <li class="page-item disabled">
+                      <a class="page-link" href="#" tabindex="-1">Previous</a>
+                  </li>
+                  <li class="page-item active">
+                      <a class="page-link" href="#">1</a>
+                  </li>
+                  <li class="page-item disabled">
+                      <a class="page-link" href="#">Next</a>
+                  </li>
+              </ul>
+          </nav>
+        </div>
+    </div>
+</div>
+
