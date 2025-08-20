@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TokenDto } from '../../../Models/DTOs/TokenDto';
 import { BookingDetails } from '../../../Models/BookingDetails';
 import { Apartment } from '../../../Models/Apartment';
+import { NavigationService } from '../../common/NavigationService';
 
 @Component({
   selector: 'app-mybookings',
@@ -17,7 +18,11 @@ export class MybookingsComponent {
   
   getbookingDetailsDto!:GetBookingDetailsDto[] 
   bookingDetails:BookingDetails[]=[]
-  constructor(private service:SharedServiceService,private router:Router){}
+  navigationService:NavigationService<BookingDetails>
+
+  constructor(private service:SharedServiceService,private router:Router){
+    this.navigationService=new NavigationService<BookingDetails>(this.bookingDetails)
+  }
 
   ngOnInit(){
     let token:TokenDto=new TokenDto()
@@ -157,5 +162,7 @@ export class MybookingsComponent {
         this.getApartmentIds(rowNo)
     })
   }
+  
+  
 
 }
