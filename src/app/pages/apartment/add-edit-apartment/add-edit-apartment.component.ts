@@ -1,7 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { SharedServiceService } from '../../../shared-service.service';
 import { ApartmentDto } from '../../../../Models/DTOs/ApartmentDto';
 import { Apartment } from '../../../../Models/Apartment';
+import { SeatModel } from '../../../../Models/SeatModel';
+import { CommonService } from '../../../common/CommonService';
+import { TrainCompartmentComponent } from '../train-compartment/train-compartment.component';
+import { ActivatedRoute } from '@angular/router';
+import { TokenService } from '../../../common/TokenService';
 
 @Component({
   selector: 'app-add-edit-apartment',
@@ -11,35 +16,71 @@ import { Apartment } from '../../../../Models/Apartment';
 })
 export class AddEditApartmentComponent {
   @Input() Apartment!:Apartment
-  
-  constructor(private service:SharedServiceService){}
+
+  constructor(private service:SharedServiceService,private route:ActivatedRoute){
+    this.tokenService=new TokenService()
+    this.apartmentClasses=['First','Second','Third']
+  }
   Apartmentid!:number
   Apartmentclass!:string
-
+  trainId:number=0
+  trainSeqNo:number=0
+  tokenService:TokenService
+  apartmentClasses:string[]
+  
+  @ViewChild(TrainCompartmentComponent) compartment!: TrainCompartmentComponent;
   ngOnInit(): void {
-      this.Apartmentid=this.Apartment.Apartment_id
+    if(this.Apartment!=undefined){
+        this.Apartmentid=this.Apartment.Apartment_id
       this.Apartmentclass=this.Apartment.ApartmrntClass
+    }
+    
+    this.route.queryParams.subscribe(params => {
+      const trainId = params['trainId'];
+      const trainSeqNo = params['seqNo'];
+      if(trainId!=undefined && trainSeqNo!=undefined){
+        this.trainId=trainId
+        this.trainSeqNo=trainSeqNo
+      }
+    });
+    console.log('awa',this.Apartment)
   }
   addApartment(){
-    // let val:ApartmentDto={
-    //   apartment_id:this.Apartmentid,
-    //   _class:this.Apartmentclass,
-    //   tokenId:this.service.tokenService.returnToken()?.tokenId
-    // }
-    // this.service.addApartment(val).subscribe(res=>{
-    //   alert(res.Data.toString());
-    // })
+    let commonService:CommonService=new CommonService()
+    let val:ApartmentDto={
+      apartment_id:0,
+      _class:this.Apartmentclass,
+      tokenId:this.service.tokenService.returnToken()?.tokenId,
+      train_id:this.trainId,
+      train_seq_no:this.trainSeqNo,
+      seatModel:commonService.convertSeatModelToSeat(this.compartment.seats,0)
+    }
+    this.service.addApartment(val).subscribe(res=>{
+      alert(res.Data.toString());
+    })
   }
 
   updateApartment(){
-    // let val:ApartmentDto={
-    //   apartment_id:this.Apartmentid,
-    //   _class:this.Apartmentclass,
-    //   tokenId:this.service.tokenService.returnToken()?.tokenId
-    // }
-    // console.log(val)
-    // this.service.editApartment(val).subscribe(res=>{
-    //   alert(res.Data.toString());
-    // })
+    this.consoleLog()
+    let commonService:CommonService=new CommonService()
+    let val:ApartmentDto={
+      apartment_id:this.Apartmentid,
+      _class:this.Apartmentclass,
+      tokenId:this.service.tokenService.returnToken()?.tokenId,
+      train_id:this.trainId,
+      train_seq_no:this.trainSeqNo,
+      seatModel:commonService.convertSeatModelToSeat(this.compartment.seats,this.Apartmentid)
+    }
+    console.log(val)
+    this.service.updateApartment(val).subscribe(res=>{
+      alert(res.Data.toString());
+    })
   }
+
+  getSeatModelForApartment(){
+     return this.Apartment.seatModel
+  }
+  consoleLog(){
+    console.log(this.compartment.selectedSeats)
+  }  
 }

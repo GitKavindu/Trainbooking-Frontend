@@ -10,6 +10,22 @@ import { StationDto } from '../Models/DTOs/StationDto';
 import { Train } from '../Models/Train';
 import { TrainDto } from '../Models/DTOs/TrainDto';
 import { Apartment } from '../Models/Apartment';
+import { SeatModel } from '../Models/SeatModel';
+import { of } from 'rxjs';
+import { ApartmentDto } from '../Models/DTOs/ApartmentDto';
+import { Schedule } from '../Models/Schedule';
+import { ScheduleDto } from '../Models/DTOs/ScheduleDto';
+import { ReturnUserDto } from '../Models/DTOs/ReturnUserDto';
+import { GetSortedSchedulesDto } from '../Models/DTOs/GetSortedSchedulesDto';
+import { ReturnSortedSchedulesDto } from '../Models/DTOs/ReturnSortedSchedulesDto';
+import { AddBookingDto } from '../Models/DTOs/AddBookingDto';
+import { Seat } from '../Models/Seat';
+import { GetBookingDetailsDto } from '../Models/DTOs/GetBookingDetailsDto';
+import { TokenDto } from '../Models/DTOs/TokenDto';
+import { CancelBookingDto } from '../Models/DTOs/CancelBookingDto';
+import { ReturnUUserStatusDto } from '../Models/DTOs/ReturnUUserStatusDto';
+import { GetUserStatusDto } from '../Models/DTOs/GetUserStatusDto';
+import { AppointAdmin } from '../Models/DTOs/AppointAdmin';
 
 
 @Injectable({
@@ -33,6 +49,10 @@ export class SharedServiceService {
 
   loginUser(loginUser:LoginUserDto){
     return this.http.post<BaseResponse<Token>>(this.APIUrl+"/User/getuserToken",loginUser);
+  }
+
+  getTokenDetails(tokenId:string){
+    return this.http.get<BaseResponse<ReturnUserDto>>(this.APIUrl+`/User/getTokenDetails/${tokenId}`);
   }
 
   //Station
@@ -75,9 +95,229 @@ export class SharedServiceService {
 
   //Apartment
   getAllApartments(trainId:number, seqNo:number) {
-  return this.http.get<BaseResponse<Apartment[]>>(
-    `${this.APIUrl}/Apartment/getAllApartmentsForTrain?trainId=${trainId}&seqNo=${seqNo}`
-  );
-}
+    return this.http.get<BaseResponse<Apartment[]>>(
+      `${this.APIUrl}/Apartment/getAllApartmentsForTrain?trainId=${trainId}&seqNo=${seqNo}`
+    );
+  }
+
+  addApartment(Apartment:ApartmentDto) {
+    return this.http.post<BaseResponse<string[]>>(
+      `${this.APIUrl}/Apartment/addApartment`,Apartment
+    );
+  }
+
+  updateApartment(Apartment:ApartmentDto) {
+    return this.http.put<BaseResponse<string[]>>(
+      `${this.APIUrl}/Apartment/updateApartment`,Apartment
+    );
+  }
+
+  deleteApartment(Apartment:ApartmentDto){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Apartment/deleteApartment", {
+      body: Apartment
+    });
+  }
+  
+  //Journey
+  getAllSchedules() {
+    return this.http.get<BaseResponse<Schedule[]>>(
+      `${this.APIUrl}/Journey/getAllSchedules`
+    );
+  }
+
+  getSchedule(scheduleId:string) {
+    return this.http.get<BaseResponse<Schedule[]>>(
+      `${this.APIUrl}/Booking/selectAllJourneysForSchedule?scheduleId=${scheduleId}`
+    );
+  }
+
+  addSchedule(scheduleDto:ScheduleDto) {
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Journey/addJourney`,scheduleDto
+    );
+  }
+
+  updateSchedule(scheduleDto:ScheduleDto) {
+    return this.http.put<BaseResponse<string>>(
+      `${this.APIUrl}/Journey/updateJourney`,scheduleDto
+    );
+  }
+
+  //booking
+  selectSortedSchedules(getSortedSchedulesDto:GetSortedSchedulesDto) {
+    return this.http.post<BaseResponse<ReturnSortedSchedulesDto[]>>(
+      `${this.APIUrl}/Booking/selectSortedSchedules`,getSortedSchedulesDto
+    );
+  }
+
+  bookSeats(addBookingDto:AddBookingDto) {
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Booking/BookForSchedule`,addBookingDto
+    );
+  }
+
+  selectBookedSeatsForJourney(fromJourneyId:number,toJourneyId:number,apartmentId:number) {
+    return this.http.get<BaseResponse<Seat[]>>(
+      `${this.APIUrl}/Booking/selectBookedSeatsForJourney?fromJourneyId=${fromJourneyId}&toJourneyId=${toJourneyId}&apartmentId=${apartmentId}`
+    );
+  }
+
+  getBookingDetails(bookingId:number) {
+    return this.http.get<BaseResponse<GetBookingDetailsDto>>(
+      `${this.APIUrl}/Booking/getBookingDetails?bookingId=${bookingId}`
+    );
+  }
+
+  selectMyBookings(token:TokenDto) {
+    return this.http.post<BaseResponse<GetBookingDetailsDto[]>>(
+      `${this.APIUrl}/Booking/selectMyBookings`,token
+    );
+  }
+
+  cancelBookings(cancelBookingDto:CancelBookingDto){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Booking/cancelBooking`,cancelBookingDto
+    );
+  }
+
+  //Admin
+  GetUserStatus(getUserStatusDto:GetUserStatusDto){
+    return this.http.post<BaseResponse<ReturnUUserStatusDto[]>>(
+      `${this.APIUrl}/Admin/GetUserStatus`,getUserStatusDto
+    );
+  }
+
+  appointAdmin(appointAdmin:AppointAdmin){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Admin/appointAdmin`,appointAdmin
+    );
+  }
+
+  disableAdmin(appointAdmin:AppointAdmin){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Admin/disableAdmin", {
+      body: appointAdmin
+    });
+  }
+
+  enableUser(appointAdmin:AppointAdmin){
+    return this.http.post<BaseResponse<string>>(
+      `${this.APIUrl}/Admin/enableUser`,appointAdmin
+    );
+  }
+
+  disableUser(appointAdmin:AppointAdmin){
+    return this.http.delete<BaseResponse<string>>(this.APIUrl+"/Admin/disableUser", {
+      body: appointAdmin
+    });
+  }
+
+  //
+  getSeatModel(){
+    let seat:SeatModel[]=new Array()
+      seat = [
+      {
+        row:1,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:2,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:3,
+        left:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:false,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      },
+      {
+        row:4,
+        left:[{ 
+                number:1,
+                available:false,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ],
+        right:[{ 
+                number:1,
+                available:true,
+                selected:false
+              },
+              { 
+                number:2,
+                available:true,
+                selected:false
+              }
+            ]
+      }
+    ]
+    return of(seat)
+  }
+
 
 }

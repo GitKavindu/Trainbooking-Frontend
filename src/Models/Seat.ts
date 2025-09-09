@@ -4,5 +4,5 @@ export class Seat{
     public  rowNo!: number
     public  seqNo!: number
     public  apartmentId!: number
-    
+
 }

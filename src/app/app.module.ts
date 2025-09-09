@@ -16,6 +16,12 @@ import { AddEditTrainComponent } from './pages/train/add-edit-train/add-edit-tra
 import { ApartmentComponent } from './pages/apartment/apartment.component';
 import { AddEditApartmentComponent } from './pages/apartment/add-edit-apartment/add-edit-apartment.component';
 import { TrainCompartmentComponent } from './pages/apartment/train-compartment/train-compartment.component';
+import { ScheduleComponent } from './pages/schedule/schedule.component';
+import { AddEditScheduleComponent } from './pages/schedule/add-edit-schedule/add-edit-schedule.component';
+import { BookingComponent } from './pages/booking/booking.component';
+import { BookingFormComponent } from './pages/booking/booking-form/booking-form.component';
+import { MybookingsComponent } from './pages/mybookings/mybookings.component';
+import { UserpageComponent } from './pages/userpage/userpage.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +36,13 @@ import { TrainCompartmentComponent } from './pages/apartment/train-compartment/t
     AddEditTrainComponent,
     ApartmentComponent,
     AddEditApartmentComponent,
-    TrainCompartmentComponent
+    TrainCompartmentComponent,
+    ScheduleComponent,
+    AddEditScheduleComponent,
+    BookingComponent,
+    BookingFormComponent,
+    MybookingsComponent,
+    UserpageComponent
   ],
   imports: [
     BrowserModule,

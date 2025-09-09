@@ -1,0 +1,89 @@
+<!---->
+<div class="container mt-4 mb-4">
+    <div class="card shadow border-primary">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div>
+                <i class="fas fa-subway mr-2"></i>
+                <strong class="h5 mb-0">Booking Info</strong>
+            </div>
+            <img src="images/icons/train_2.svg" height="50" alt="Booking Icon">
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+                <span class="text-muted">Select a booking and proceed</span>
+                <i class="fas fa-chevron-right text-primary"></i>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-light">
+                        <tr class="text-center">
+                            <th>Booking Id</th>
+                            <th>Train Name</th>
+                            <th colspan="2">Date</th>
+                            <th style="width: 25%">Price</th>
+                            <th style="width: 25%">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="bookingDetails!=undefined">
+                        <ng-container *ngFor="let booking of navigationService.getVisibleRows()">
+                            <ng-container >
+                                <tr class="table-row"  (click)="rowClick(booking)">
+                                    <td>{{ getBookingId(booking.getbookingDetailsDto.bookingId) }}</td>
+                                    <td>
+                                    <strong>{{ booking.getbookingDetailsDto.trainName }}</strong><br>
+                                    </td>
+                                    <td>{{ booking.getbookingDetailsDto.bookingDate }}</td>
+                                    <td>{{ booking.getbookingDetailsDto.bookingTime }}</td>
+                                    <td class="text-center">{{ '$' + booking.getbookingDetailsDto.price.toFixed(2) }}</td>
+                                    <td class="text-center" *ngIf="booking.getbookingDetailsDto.isCanceled === true">
+                                    <span class="badge badge-pill badge-danger px-3 py-2">Canceled</span>
+                                    </td>
+                                    <td class="text-center" *ngIf="booking.getbookingDetailsDto.isCanceled === false">
+                                    <span class="badge badge-pill badge-success px-3 py-2">Active</span>
+                                    </td>
+                                </tr>
+                                
+                                <ng-container *ngIf="booking.showRow==true">
+                                    <tr class="table-row" *ngIf="booking.getbookingDetailsDto.isCanceled === false">
+                                        <td colspan="6" class="text-center text-muted">
+                                            <app-train-compartment 
+                                                [seat]="booking.apartments[booking.selectedApartmentIndex].seatModel" 
+                                                [apartmentId]="booking.apartmentIds[booking.selectedApartmentIndex]"
+                                                [bookedSeats]="booking.getbookingDetailsDto.bookedSeats"
+                                                [bookingId]="booking.getbookingDetailsDto.bookingId">
+                                            </app-train-compartment>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-row" *ngIf="booking.getbookingDetailsDto.isCanceled === true">
+                                        <td colspan="6" class="text-center text-muted">
+                                        <p>Booking is canceled</p>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                
+                            </ng-container>
+                        </ng-container>
+                            
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ✅ Styled Pagination Below Table -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end mt-4 mb-0">
+                    <li class="page-item" [class.disabled]="navigationService.selectedPage === 1">
+                        <button class="page-link" tabindex="-1" (click)="navigationService.pageBackward()" [disabled]="navigationService.selectedPage==1">Previous</button>
+                    </li>
+                    <li class="page-item active disabled">
+                        <a class="page-link">{{navigationService.selectedPage}}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="navigationService.selectedPage === navigationService.getMaxPageNumber()">
+                        <button class="page-link" (click)="navigationService.pageForward()" [disabled]="navigationService.selectedPage==navigationService.getMaxPageNumber()">Next</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

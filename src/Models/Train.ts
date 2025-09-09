@@ -10,4 +10,5 @@ export class Train{
     public created_date!:string
 
     public lastUpdated_date!:string
+
 }

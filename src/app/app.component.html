@@ -1,12 +1,21 @@
+<!-- Full-width Wrapper -->
 <div class="app-wrapper">
-  <!-- Persistent Header -->
-  <app-header></app-header>
 
-  <!-- Dynamic Content Area -->
-  <main class="content-area">
-    <router-outlet></router-outlet>
+  <!-- Full-width Header -->
+  <div class="container-fluid px-0">
+    <app-header></app-header>
+  </div>
+
+  <!-- Responsive Main Content -->
+  <main class="container-fluid px-0">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
   </main>
 
-  <!-- Persistent Footer -->
-  <app-footer></app-footer>
+  <!-- Full-width Footer -->
+  <div class="container-fluid px-0">
+    <app-footer></app-footer>
+  </div>
+
 </div>

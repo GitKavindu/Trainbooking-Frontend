@@ -1,0 +1,61 @@
+ <form class="add-edit" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" *ngIf="endStationList.length!=0">
+      
+    <div class="form-group" *ngIf="trainList.length!=0">
+        <label for="trainType">Train</label>
+        <select id="trainType" title="Filter By:" formControlName="train" >
+            <option value="" disabled selected hidden>----------Select a train---------</option>
+            <option *ngFor="let train of trainList"  [ngValue]="train">{{train.train_name}}</option>
+        </select>
+    </div>
+
+    <div class="form-group" *ngIf="startStationList.length!=0">
+        <label for="startstation">Start Station</label>
+        <select id="startstation" title="Filter By:" formControlName="startstation" >
+            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+            <option *ngFor="let station of startStationList" [ngValue]="station">{{station.station_name}}</option>
+        </select>
+
+        <label for="startdate">Start date:</label>
+        <input type="date" id="startdate" name="startdate" formControlName="startDate">
+        
+        <label for="starttime">Start time:</label>
+        <input type="time" id="starttime" name="starttime" formControlName="startTime">
+    </div>
+
+    <div class="form-group" *ngIf="endStationList.length!=0">
+        <label for="endstation">End Station</label>
+        <select id="endstation" title="Filter By:" formControlName="endstation">
+            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+            <option *ngFor="let station of endStationList" [ngValue]="station">{{station.station_name}}</option>
+        </select>
+
+        <label for="enddate">End date:</label>
+        <input type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
+
+        <label for="endtime">End time:</label>
+        <input type="time" id="endtime" name="endtime" formControlName="endTime">
+
+        <span class="error-message" *ngIf="!validateEndDate() && getControl('endDate').untouched==false && getControl('endTime').untouched==false">
+            Select a date and time larger than start date and time
+        </span>
+    </div>
+      
+    <div class="form-buttons">
+        <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
+        <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
+        <button class="btn btn-secondary" type="button" (dblclick)="closeForm()">Close</button>
+    </div>
+    <br>
+    <div class="form-group">
+    <span class="error-message" *ngIf="errMessege!='' ">
+        {{errMessege}}
+    </span>
+    </div>
+
+  </form>
+
+<div class="form-buttons" *ngIf="endStationList.length!=0">
+    <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
+        {{ scheduleDetails ? 'Update Schedule' : 'Add Schedule' }}
+    </button>
+</div>

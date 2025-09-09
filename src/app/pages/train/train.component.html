@@ -14,15 +14,15 @@
           </button>
         </div>
         <div class="modal-body">
-          <app-add-edit-train  *ngIf="ActivateAddEditTrainComp" [Train]="Train"></app-add-edit-train>
-          <app-apartment  *ngIf="ActivateAddEditTrainComp && Train.train_no!=0"  [trainId]="Train.train_no" [trainSeqNo]="Train.train_seq_no" ></app-apartment>
+          <app-add-edit-train  *ngIf="ActivateAddEditTrainComp==true" [Train]="Train"></app-add-edit-train>
+          
         </div>
   
       </div>
     </div>
   </div>
   
-  <table class="table table-striped">
+  <table class="table table-striped" >
       <thead>
          <tr>
             <th>
@@ -60,9 +60,10 @@
             <th>Options</th>
         </tr>
       </thead>
-      <tbody *ngFor="let dataItem of TrainList">
-           <td>{{dataItem.train_no}}</td>
-           <td>{{dataItem.train_name}}</td>
+      <tbody *ngFor="let dataItem of TrainList;let i=index" >
+        <tr>   
+          <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_no}}</td>
+           <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_name}}</td>
            <td>{{dataItem.created_date}}</td>
            <td>{{dataItem.lastUpdated_date}}</td>
            <td>
@@ -79,6 +80,11 @@
                 </svg>
               </button>
            </td>
+        </tr>
       </tbody>
   </table>
+
+
+
+
   

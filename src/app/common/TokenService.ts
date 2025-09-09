@@ -1,5 +1,4 @@
 import { Token } from "../../Models/Token";
-import { SharedServiceService } from "../shared-service.service";
 
 
 export class TokenService {
@@ -41,5 +40,9 @@ export class TokenService {
     setToken(token: Token): Token {
         localStorage.setItem('userToken', JSON.stringify(token));
         return token
+    }
+
+    getIsUserAdmin():boolean | undefined{
+        return this.returnToken()?.isAdmin
     }
   }
