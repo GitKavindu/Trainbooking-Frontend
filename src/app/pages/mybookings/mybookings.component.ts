@@ -40,12 +40,24 @@ export class MybookingsComponent {
      
   }
 
-  rowClick(rowNo:number){
-   
+  rowClick(booking:BookingDetails){
+
+    let rowNo:number=this.getRealRow(booking)
+
     if(this.bookingDetails[rowNo].showRow==false)
       this.getMoreBookingDetails(rowNo)
     else
       this.displayRow(rowNo)
+  }
+
+  getRealRow(booking:BookingDetails):number{
+    
+    for(let i=0;i<this.bookingDetails.length;i++){
+      if(booking.getbookingDetailsDto.bookingId==this.bookingDetails[i].getbookingDetailsDto.bookingId)
+        return i
+    }
+
+    return -1
   }
 
   displayRow(rowNo:number){

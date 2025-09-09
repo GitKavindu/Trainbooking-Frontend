@@ -30,6 +30,7 @@ export class BookingFormComponent {
   endStationList:Station[]=[]
 
   getSortedSchedulesDto:GetSortedSchedulesDto
+  isEndDateAndTimeValidated:boolean=true
 
   private timeService:TimeService
 
@@ -78,11 +79,25 @@ export class BookingFormComponent {
         //console.log(JSON.stringify(this.lastSelectedStartStation),'\n\n',JSON.stringify(this.lastSelectedEndStation))
     });
 
+    this.bookingForm.get('endDate')?.valueChanges.subscribe(() => {
+        this.requestDto()
+        this.validateEndDateAndTime()
+    });
+
     this.bookingForm.get('endTime')?.valueChanges.subscribe((val) => {
         this.requestDto()
+        this.validateEndDateAndTime()
     });
 
     this.setDefaultValues()
+    this.activateDeactivateEndStationRibbon()
+    console.log('width ',window.innerWidth)
+  }
+
+  validateEndDateAndTime():void{
+    if(this.getControl('endDate').value!='' && this.getControl('endTime').value!=''){
+       this.isEndDateAndTimeValidated= this.validateEndDate()
+    }   
   }
 
   onClear(): void {
@@ -191,6 +206,20 @@ export class BookingFormComponent {
   isEndStationRibbonActivated:boolean=false
   activateDeactivateEndStationRibbon(){
     this.isEndStationRibbonActivated=!this.isEndStationRibbonActivated
+    const state=this.bookingForm.get('endDate')?.disabled
+
+    if(state){
+      this.bookingForm.get('endDate')?.enable()
+      this.bookingForm.get('endTime')?.enable()
+    }
+    else{
+      this.bookingForm.get('endDate')?.disable()
+      this.bookingForm.get('endTime')?.disable()
+
+      this.bookingForm.get('endDate')?.setValue('')
+      this.bookingForm.get('endTime')?.setValue('')
+      this.isEndDateAndTimeValidated=true
+    }
   }
 
   requestDto(){

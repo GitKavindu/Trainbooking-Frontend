@@ -94,3 +94,62 @@
   input.uppercase-input::placeholder {
     text-transform: none;
   }
+
+
+
+  /************/
+
+  .toggle-container {
+    display: inline-block;
+  }
+
+  .toggle-checkbox {
+    display: none;
+  }
+
+  .toggle-button {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border: 2px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+    margin-top: 15px;
+  }
+
+  .toggle-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+  .toggle-button::before {
+    content: '+';
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .toggle-checkbox:checked + .toggle-button::before {
+    content: '−';
+    transform: rotate(180deg);
+  }
+
+  
+  /***/
+  .thead-custom{
+    background-color: #e9ecef;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    height: 3rem;
+    text-align: center;
+  }

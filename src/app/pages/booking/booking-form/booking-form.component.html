@@ -1,57 +1,83 @@
-<div class="login-container">
-    <h2>Log In</h2>
+
+
+<form [formGroup]="bookingForm" >
   
-    <form [formGroup]="bookingForm" >
-      
-       <div class="form-group" *ngIf="startStationList.length!=0">
-        <label for="startstation">Start Station</label>
-        <select id="startstation" title="Filter By:" formControlName="startstation" >
-            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
-            <option *ngFor="let station of startStationList" [ngValue]="station">{{station.station_name}}</option>
-        </select>
+    <div class="form-group" *ngIf="startStationList.length!=0">
+          
+          <div class="row">
+              <div class="col-lg-6 col-12">
+                  
+                  <div class="row">
+                      <div class="col-12 dropdown">
+                          <label for="startstation">Start Station</label>
+                          <select class="form-control" id="startstation" title="Filter By:" formControlName="startstation" >
+                              <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+                              <option *ngFor="let station of startStationList" [ngValue]="station">{{station.station_name}}</option>
+                          </select>
+                      </div>
 
-        <label for="startdate">Start date:</label>
-        <input type="date" id="startdate" name="startdate" formControlName="startDate">
-        
-        <label for="starttime">Start time:</label>
-        <input type="time" id="starttime" name="starttime" formControlName="startTime">
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-6 col-12 text-left">
+                          <label for="startdate">Start date:&emsp;</label>
+                          <input class="form-control" type="date" id="startdate" name="startdate" formControlName="startDate">
+                      </div>
+                      <div class="col-lg-6 col-12 text-left">
+                          <label for="starttime">Start time:&emsp;</label>
+                          <input class="form-control" type="time" id="starttime" name="starttime" formControlName="startTime">
+                      </div>
+                  </div>
 
-        <label for="endstation">End Station</label>
-        <select id="endstation" title="Filter By:" formControlName="endstation">
-            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
-            <option *ngFor="let station of endStationList" [ngValue]="station">{{station.station_name}}</option>
-        </select>
-       </div>
+              </div>
 
-       <!------------------ -->
-       <p (click)="activateDeactivateEndStationRibbon()" *ngIf="isEndStationRibbonActivated==false"><u>Search also by destination Date +++</u></p>
-       <p (click)="activateDeactivateEndStationRibbon()" *ngIf="isEndStationRibbonActivated==true"><u>Search only by start Date ---</u></p>
+              <div class="col-lg-6 col-12">
+                  
+                <div class="row">
+                      <div class="col-12 dropdown">
+                          <label for="endstation">End Station</label>
+                          <select class="form-control" id="endstation" title="Filter By:" formControlName="endstation">
+                              <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+                              <option *ngFor="let station of endStationList" [ngValue]="station">{{station.station_name}}</option>
+                          </select>
+                      </div>
+                  </div>
 
-       <div class="form-group" *ngIf="endStationList.length!=0 && isEndStationRibbonActivated==true">
-                
-        <label for="enddate">End date:</label>
-        <input type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
+                  <div class="row">
+                      <div class="col-lg-2 col-12 checkbox-wrapper-6">
+                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" (change)="activateDeactivateEndStationRibbon()"/>
+                            <label class="tgl-btn" for="cb1-6"></label>
+                      </div>
+                      <div class="col-lg-5 col-12 text-left" >
+                          <label for="enddate">End date:&emsp;</label>
+                          <input class="form-control" type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
+                      </div>
+                      <div class="col-lg-5 col-12 text-left">
+                          <label for="endtime">End time:&emsp;</label>
+                          <input class="form-control" type="time" id="endtime" name="endtime" formControlName="endTime">
+                      </div>
+                  </div>
 
-        <label for="endtime">End time:</label>
-        <input type="time" id="endtime" name="endtime" formControlName="endTime">
+              </div>
+          </div>
 
-        <span class="error-message" *ngIf="!validateEndDate() && getControl('endDate').untouched==false && getControl('endTime').untouched==false">
-            Select a date and time larger than start date and time
-        </span>
-    </div>
-      
-      <div class="form-buttons">
-        <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
-      </div>
-      <br>
-      <div class="form-group">
-        <span class="error-message" *ngIf="errMessege!='' ">
-          {{errMessege}}
-        </span>
-      </div>
-
-    </form>
+    <span class="error-message" *ngIf="isEndDateAndTimeValidated==false">
+        Select a date and time larger than start date and time
+    </span>
+</div>
+  
+  <div class="form-buttons">
+    <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
   </div>
+  <br>
+  <div class="form-group">
+    <span class="error-message" *ngIf="errMessege!='' ">
+      {{errMessege}}
+    </span>
+  </div>
+
+</form>
+
   
+
 
 

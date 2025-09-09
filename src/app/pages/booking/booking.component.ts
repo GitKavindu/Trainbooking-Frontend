@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ReturnSortedSchedulesDto } from '../../../Models/DTOs/ReturnSortedSchedulesDto';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DeviceService } from '../../common/DeviceService';
 
 @Component({
   selector: 'app-booking',
@@ -9,14 +10,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './booking.component.css'
 })
 export class BookingComponent {
+
     scheduleLit!:ReturnSortedSchedulesDto[]
     trainId!:number
     trainSeqNo!:number
     scheduleId!:string
     startJourneyId!:number
     endJourneyId!:number
+    deviceService:DeviceService
 
-    constructor(private router:Router,private route:ActivatedRoute){}
+    constructor(private router:Router,private route:ActivatedRoute){
+      this.deviceService=new DeviceService()
+    }
 
     ngOnInit():void{
       this.route.queryParams.subscribe(params => {
@@ -53,6 +58,11 @@ export class BookingComponent {
             endJourneyId:schedule.endJourneyId
           }
       });
+    }
+
+    //toggleMoreDetails on mobile screens
+    toggleMoreDetails(rowNo:number) {
+      this.scheduleLit[rowNo].activateMoreDetails=!this.scheduleLit[rowNo].activateMoreDetails
     }
 
     

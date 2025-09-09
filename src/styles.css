@@ -3,3 +3,10 @@
   all: unset;
   display: contents; /* behaves like the div doesn't exist */
 }
+
+
+app-booking {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+}

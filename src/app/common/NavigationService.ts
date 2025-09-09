@@ -35,4 +35,19 @@ export class NavigationService<T>{
     else
       return false
   }
+
+  getVisibleRows(): Array<T> {
+    const firstIndex = this.pageSize * (this.selectedPage - 1);
+    let lastIndex: number; // ✅ 'let' allows delayed assignment
+
+    if (firstIndex + this.pageSize > this.itemsArr.length) {
+      lastIndex = this.itemsArr.length;
+    } 
+    else {
+      lastIndex = firstIndex + this.pageSize;
+    }
+
+    return this.itemsArr.slice(firstIndex, lastIndex);
+  }
+
 }

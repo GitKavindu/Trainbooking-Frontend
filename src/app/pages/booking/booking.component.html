@@ -26,7 +26,7 @@
                     <i class="fas fa-chevron-right text-primary"></i>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive" *ngIf="deviceService.getScreenSize()>990">
                     <table class="table table-hover table-bordered">
                         <thead class="thead-light">
                             <tr>
@@ -54,6 +54,37 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div *ngIf="deviceService.getScreenSize()<=990">
+                    
+                        <div class="row thead-custom">
+                            <div class="col">
+                                Train Details
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row"  *ngFor="let schedule of scheduleLit;let i=index">
+                            <div class="col-2 text-left">
+                                <div class="toggle-container">
+                                    <input type="checkbox" id="toggle" class="toggle-checkbox" (click)="toggleMoreDetails(i)">
+                                    <label for="toggle" class="toggle-button"></label>
+                                </div>
+                            </div>
+                            <div class="col-10 text-center">
+                                    <strong>{{schedule.trainName}}</strong><br>
+                                    {{schedule.startDestDetails.startstation}} - {{schedule.startDestDetails.endstation}}<br><br>
+                            </div>
+                            <div class="col-12 text-left" *ngIf="schedule.activateMoreDetails==true">
+                                {{"Depart:  "+schedule.startTime +" on "+ schedule.startDate}}
+                            </div>
+                            <div class="col-12 text-left" *ngIf="schedule.activateMoreDetails==true">
+                                {{"Arrives "+schedule.endTime +" on "+ schedule.endDate}}
+                            </div>
+                        </div>
+                        
+                   
+                </div>
+                                
 
                 <!-- ✅ Styled Pagination Below Table -->
                 <nav aria-label="Page navigation">

@@ -26,6 +26,9 @@ export class ReturnSortedSchedulesDto
 
       public startJourneyId!:number
       public endJourneyId!:number
+
+      //Give more details on mobile screens
+      activateMoreDetails:boolean=false
 }
 
 

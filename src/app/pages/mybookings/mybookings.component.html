@@ -27,9 +27,9 @@
                         </tr>
                     </thead>
                     <tbody *ngIf="bookingDetails!=undefined">
-                        <ng-container *ngFor="let booking of bookingDetails;let i=index">
-                            <ng-container *ngIf="navigationService.isRowVisible(i)">
-                                <tr class="table-row"  (click)="rowClick(i)">
+                        <ng-container *ngFor="let booking of navigationService.getVisibleRows()">
+                            <ng-container >
+                                <tr class="table-row"  (click)="rowClick(booking)">
                                     <td>{{ getBookingId(booking.getbookingDetailsDto.bookingId) }}</td>
                                     <td>
                                     <strong>{{ booking.getbookingDetailsDto.trainName }}</strong><br>
