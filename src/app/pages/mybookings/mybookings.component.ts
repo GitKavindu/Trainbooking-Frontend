@@ -7,6 +7,7 @@ import { TokenDto } from '../../../Models/DTOs/TokenDto';
 import { BookingDetails } from '../../../Models/BookingDetails';
 import { Apartment } from '../../../Models/Apartment';
 import { NavigationService } from '../../common/NavigationService';
+import { DeviceService } from '../../common/DeviceService';
 
 @Component({
   selector: 'app-mybookings',
@@ -19,9 +20,11 @@ export class MybookingsComponent {
   getbookingDetailsDto!:GetBookingDetailsDto[] 
   bookingDetails:BookingDetails[]=[]
   navigationService:NavigationService<BookingDetails>
-
+  deviceService:DeviceService
+  
   constructor(private service:SharedServiceService,private router:Router){
     this.navigationService=new NavigationService<BookingDetails>(this.bookingDetails)
+    this.deviceService=new DeviceService()
   }
 
   ngOnInit(){
@@ -162,6 +165,11 @@ export class MybookingsComponent {
 
   }
 
+  getVisibleRows():BookingDetails[]{
+    let visibleRows:BookingDetails[]= this.navigationService.getVisibleRows()
+    return visibleRows
+  }
+
   getMoreBookingDetails(rowNo:number):void{
     this.service.getBookingDetails(this.bookingDetails[rowNo].getbookingDetailsDto.bookingId).subscribe((res)=>{
         this.bookingDetails[rowNo].getbookingDetailsDto.bookedSeats=res.Data.bookedSeats
@@ -174,7 +182,15 @@ export class MybookingsComponent {
         this.getApartmentIds(rowNo)
     })
   }
-  
-  
+
+  pageForward(){
+    this.navigationService.pageForward()
+    //this.router.navigate(['/mybookings'], { fragment: 'next' });
+  }
+
+  pageBackward(){
+    this.navigationService.pageBackward()
+    //this.router.navigate(['/mybookings'], { fragment: 'prev' });
+  }
 
 }

@@ -1,68 +1,62 @@
-/* ✅ Ensure container uses full screen width on mobile */
-@media (max-width: 576px) {
-  .container {
-    max-width: 100% !important;
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+ /***/
+.thead-custom{
+  background-color: #e9ecef;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  height: 3rem;
+  text-align: center;
+}
+
+/************/
+
+  .toggle-container {
+    display: inline-block;
   }
 
-  .card {
-    width: 100% !important;
+  .toggle-checkbox {
+    display: none;
   }
 
-  /* ✅ Stack card-header content vertically on small screens */
-  .card-header {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center;
+  .toggle-button {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border: 2px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
   }
 
-  .card-header img {
-    height: 40px !important;
-    margin-top: 10px !important;
+  .toggle-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: scale(1.05);
   }
 
-  /* ✅ Stack the d-flex row inside card-body */
-  .card-body .d-flex {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.5rem;
+  .toggle-button::before {
+    content: '+';
+    transition: all 0.3s ease;
+    transform-origin: center;
   }
 
-  .card-body .d-flex i {
-    align-self: flex-end;
-    margin-top: 0.5rem;
+  .toggle-checkbox:checked + .toggle-button::before {
+    content: '−';
+    transform: rotate(180deg);
   }
 
-  /* ✅ Enable table scroll on small screens */
-  .table-responsive {
-    display: block !important;
-    width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    border: none;
-  }
 
-  .table {
-    min-width: 700px !important;
-    table-layout: auto;
-    width: 100%;
-  }
-
-  .table th,
-  .table td {
-    white-space: nowrap !important;
-    font-size: 14px;
-  }
-
-  /* ✅ Adjust badge size on small screens */
-  .badge {
-    font-size: 12px !important;
-    padding: 5px 8px !important;
-  }
-
-  /* ✅ Center pagination on small screens */
-  .pagination {
-    justify-content: center !important;
-  }
+  .circle {
+  width: 12px;  /* Set width */
+  height: 12px; /* Set height */
+  border-radius: 100%; /* Make it a circle */
+  background-color: blue; /* Optional: Add color */
 }

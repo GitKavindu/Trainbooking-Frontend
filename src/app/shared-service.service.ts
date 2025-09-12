@@ -33,7 +33,8 @@ import { AppointAdmin } from '../Models/DTOs/AppointAdmin';
 })
 export class SharedServiceService {
 
-  readonly APIUrl="http://localhost:5000";
+  //readonly APIUrl="http://localhost:5000";
+  readonly APIUrl="http://192.168.8.102:5000";
 
  
   public tokenService:TokenService

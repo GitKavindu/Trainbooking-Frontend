@@ -74,11 +74,15 @@
                                     <strong>{{schedule.trainName}}</strong><br>
                                     {{schedule.startDestDetails.startstation}} - {{schedule.startDestDetails.endstation}}<br><br>
                             </div>
-                            <div class="col-12 text-left" *ngIf="schedule.activateMoreDetails==true">
-                                {{"Depart:  "+schedule.startTime +" on "+ schedule.startDate}}
-                            </div>
-                            <div class="col-12 text-left" *ngIf="schedule.activateMoreDetails==true">
-                                {{"Arrives "+schedule.endTime +" on "+ schedule.endDate}}
+                            <div (click)="goToBooking(schedule)" *ngIf="schedule.activateMoreDetails==true">
+                                <div class="py-3 border-bottom">
+                                    <div class="col-12 text-center">{{"Depart "+schedule.startTime +" on "+ schedule.startDate}}</div>
+                                    <div class="col-12 text-center">{{"From "+schedule.startStationName}}</div>
+                                </div>
+                                <div class="py-3 border-bottom">
+                                    <div class="col-12 text-center">{{"Arrives "+schedule.endTime +" on "+ schedule.endDate}}</div>
+                                    <div class="col-12 text-center">{{"To "+schedule.endStationName}}</div>
+                                </div>
                             </div>
                         </div>
                         
