@@ -1,3 +1,82 @@
+    <!-- Topbar Start -->
+  <div class="container-fluid px-0 d-none d-lg-block">
+    <div class="row no-gutters">
+      <!-- <div class="col-lg-4 text-center bg-light py-3">
+        <div class="d-inline-flex align-items-center justify-content-center">
+          <i class="bi bi-envelope h1 text-primary mr-3"></i>
+          <div class="text-left">
+            <h6 class="mb-1">Email Us</h6>
+            <span>info&#64;example.com</span>
+          </div>
+        </div>
+      </div> -->
+      <div class="col text-center main-header py-3">
+        <div class="d-inline-flex align-items-center justify-content-center">
+          <a class="logo navbar-brand">
+            <h1 class="m-0 ">
+              <i class="fa fa-hospital h1 mr-3"></i>TrainBooking System
+            </h1>
+          </a>
+        </div>
+      </div>
+      <!-- <div class="col-lg-4 text-center bg-light py-3">
+        <div class="d-inline-flex align-items-center justify-content-center">
+          <i class="bi bi-phone-vibrate h1 text-primary mr-3"></i>
+          <div class="text-left">
+            <h6 class="mb-1">Call Us</h6>
+            <span>+012 345 6789</span>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  <!-- Topbar End -->
+
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top py-4 px-4 px-lg-5">
+    <a href="index.html" class="navbar-brand d-block d-lg-none">
+      <h1 class="m-0 text-uppercase text-primary">
+        <i class="fa fa-hospital h1 mr-3"></i>TrainBooking System
+      </h1>
+    </a>
+
+    <div class="d-none d-lg-flex w-25">
+      <a href="#" class="btn btn-light px-3">Search A Surgeon</a>
+    </div>
+
+    <!-- FIXED: Changed Bootstrap 5 data-bs-* to Bootstrap 4 data-* -->
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav mx-auto bg-light py-3 py-lg-0 px-3">
+        <a routerLink="/station" class="nav-item nav-link active">Station</a>
+        <a href="about.html" class="nav-item nav-link">About Us</a>
+        <a href="service.html" class="nav-item nav-link">Our Services</a>
+
+        <div class="nav-item dropdown">
+          <!-- FIXED: Bootstrap 4 uses data-toggle -->
+          <a href="#" class="nav-link " data-toggle="dropdown">Pages <small>▼</small></a>
+          <div class="dropdown-menu bg-light border-0 m-0">
+            <a routerLink="/station" class="dropdown-item">Station</a>
+            <a routerLink="/users" class="dropdown-item">Users</a>
+            <a href="team.html" class="dropdown-item">Team Members</a>
+            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+            <a href="404.html" class="dropdown-item">404 Page</a>
+          </div>
+        </div>
+
+        <a href="contact.html" class="nav-item nav-link">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="d-none d-lg-block w-25 text-right">
+      <a href="#" class="btn btn-light px-3">Make Appointment</a>
+    </div>
+  </nav>
+  <!-- Navbar End -->
+   
 <header class="main-header">
     <div class="header-container">
       <div class="logo">
@@ -14,3 +93,5 @@
       </nav>
     </div>
   </header>
+
+
