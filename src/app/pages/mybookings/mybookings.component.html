@@ -16,7 +16,7 @@
                 </div>
 
                 <!-- On large screens -->
-                <div class="table-responsive" *ngIf="deviceService.getScreenSize()>=990">
+                <div class="table-responsive" *ngIf="deviceService.getScreenSize() >=990">
                     <table class="table table-hover table-bordered">
                         <thead class="thead-light">
                             <tr class="text-center">
@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- On small screens -->
-                <ng-container *ngIf="deviceService.getScreenSize()<=990">
+                <ng-container *ngIf="deviceService.getScreenSize()  <990">
                     <div class="row thead-custom">
                         <div class="col-12">
                             Booking Details

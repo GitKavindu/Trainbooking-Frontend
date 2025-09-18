@@ -39,7 +39,7 @@
 
             <div class="nav-item dropdown" *ngIf="service.tokenService.getIsUserAdmin()!=undefined">
               <!-- FIXED: Bootstrap 4 uses data-toggle -->
-              <div class="nav-link" data-toggle="dropdown" (click)="changePagesArrow()">{{"Pages"+getPagesArrow()}}</div>
+              <div class="nav-link" data-toggle="dropdown">{{"Pages"}}</div>
               <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.getIsUserAdmin()==true">
                 <a routerLink="/station" class="dropdown-item">Station</a>
                 <a routerLink="/train" class="dropdown-item">Train</a>
@@ -59,10 +59,13 @@
 
             <div class="nav-item dropdown d-block d-lg-none">
               <!-- FIXED: Bootstrap 4 uses data-toggle -->
-              <div class="nav-link" data-toggle="dropdown" (click)="changeProfileArrow()">{{getMobileProfileText()}}</div>
+              <div class="nav-link" data-toggle="dropdown">{{getProfileText()}}</div>
               <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()==undefined">
                 <a routerLink="/login" class="dropdown-item">Login</a>
                 <a routerLink="/register" class="dropdown-item">Register</a>
+              </div>
+              <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
+                <a class="dropdown-item">Logout</a>
               </div>
             </div>
           </div>
@@ -71,16 +74,19 @@
         <!-- Collapsible Content -->
         <div class="col-1 nav-item dropdown d-none d-lg-block">
          
-          <div class="nav-link" data-toggle="dropdown" (click)="changeProfileArrow()">
+          <div class="nav-link" data-toggle="dropdown">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" >
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
               <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-            </svg> {{getDesktopProfileText()}}
+            </svg> {{getProfileText()}}
           </div>
 
           <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()==undefined">
             <a routerLink="/login" class="dropdown-item">Login</a>
             <a routerLink="/register" class="dropdown-item">Register</a>
+          </div>
+          <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
+            <a class="dropdown-item">Logout</a>
           </div>
         </div>
 

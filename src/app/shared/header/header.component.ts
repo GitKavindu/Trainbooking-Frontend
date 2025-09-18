@@ -13,10 +13,7 @@ export class HeaderComponent {
   
   constructor(public service:SharedServiceService){}
 
-  profileArrowBit:boolean=false  // false ▼ , true ▲
-  pagesArrowBit:boolean=false // false ▼ , true ▲
-
-  private getProfileText():string | undefined{
+  public getProfileText():string | undefined{
     if(this.service.tokenService.returnToken()!=undefined){
       return this.service.tokenService.returnToken()?.PreferedName
     }
@@ -24,33 +21,4 @@ export class HeaderComponent {
     return "Login / Register"
   }
 
-  changeProfileArrow(){
-    this.profileArrowBit=!this.profileArrowBit
-  }
-
-  changePagesArrow(){
-    this.pagesArrowBit=!this.pagesArrowBit
-  }
-
-  getProfileArrow():string{
-    if(this.profileArrowBit==false)
-      return " ▼"
-    else
-      return " ▲"
-  }
-
-  getPagesArrow():string{
-    if(this.pagesArrowBit==false)
-      return " ▼"
-    else
-      return " ▲"
-  }
-
-  getMobileProfileText(){
-    return this.getProfileText()+this.getProfileArrow()
-  }
-
-  getDesktopProfileText():string{
-    return this.getProfileText()+this.getProfileArrow()
-  }
 }
