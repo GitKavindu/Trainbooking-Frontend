@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { TokenService } from '../../common/TokenService';
-import { Token } from '../../../Models/Token';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +11,12 @@ import { Token } from '../../../Models/Token';
 })
 export class HeaderComponent {
   
-  constructor(public service:SharedServiceService){}
+  tokenService:TokenService
+  isDropdown:boolean=true
+
+  constructor(public service:SharedServiceService,private router:Router,  private cdRef: ChangeDetectorRef){
+    this.tokenService=new TokenService()
+  }
 
   public getProfileText():string | undefined{
     if(this.service.tokenService.returnToken()!=undefined){
@@ -19,6 +24,18 @@ export class HeaderComponent {
     }
 
     return "Login / Register"
+  }
+
+  public logOut(){
+    this.isDropdown=false
+    this.tokenService.removeToken()
+    this.router.navigate(['/login'])
+    this.isDropdown=true
+  }
+
+  click(){
+    
+    console.log(this.tokenService.returnToken())
   }
 
 }

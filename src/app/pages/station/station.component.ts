@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { StationDto } from '../../../Models/DTOs/StationDto';
 import { Station } from '../../../Models/Station';
+import { DeviceService } from '../../common/DeviceService';
 
 @Component({
   selector: 'app-station',
@@ -11,9 +12,7 @@ import { Station } from '../../../Models/Station';
 })
 export class StationComponent {
 
-  constructor(private service:SharedServiceService){}
-
-    stationList:any=[]
+    stationList:Station[]=[]
     ModalTitle!:string
     ActivateAddEditStationComp:boolean=false
     Station!:Station
@@ -21,8 +20,14 @@ export class StationComponent {
     stationIdFilter:string=""
     stationNameFilter:string=""
     stationListWithoutFilter:any=[]
+    deviceService:DeviceService
+
     ngOnInit():void{
       this.refreshStationList();
+    }
+   
+    constructor(private service:SharedServiceService){
+      this.deviceService=new DeviceService()
     }
 
     addClick(){
@@ -32,7 +37,8 @@ export class StationComponent {
         station_name:'',
         created_date: '',
         lastUpdated_date:'',
-        added_by:''
+        added_by:'',
+        showRow:false
       }
       this.ModalTitle="Add station"
       this.ActivateAddEditStationComp=true
@@ -96,5 +102,9 @@ export class StationComponent {
             return (a[prop]<b[prop])?1:((a[prop]>b[prop])?-1:0)
           }
         })
+    }
+
+    toggleMoreDetails(rowNo:number) {
+      this.stationList[rowNo].showRow=!this.stationList[rowNo].showRow
     }
 }

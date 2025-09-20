@@ -17,14 +17,14 @@
     </div>
 </header> -->
 
-<nav class="navbar navbar-expand-md main-header">
+<nav class="navbar navbar-expand-lg main-header">
     <div class="container header-container">
        
         <div class="col-lg-4 col-10 logo">
-          <h1 class="text-lg-left text-center">Train Booking <br class="d-block d-lg-none">System</h1>
+          <h1 class="text-lg-left text-center">Train Booking <br class="d-block d-md-none">System</h1>
         </div>
 
-        <div class="col-2 d-xl-none">
+        <div class="col-2 d-lg-none">
             <button class="navbar-toggler" data-toggle="collapse"
               data-target="#navbarCollapse" aria-controls="nav" aria-label="expand navigation">
               <span class="navbar-toggler-icon"></span>
@@ -65,7 +65,7 @@
                 <a routerLink="/register" class="dropdown-item">Register</a>
               </div>
               <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
-                <a class="dropdown-item">Logout</a>
+                <a class="dropdown-item" (click)="logOut()">Logout</a>
               </div>
             </div>
           </div>
@@ -74,19 +74,23 @@
         <!-- Collapsible Content -->
         <div class="col-1 nav-item dropdown d-none d-lg-block">
          
-          <div class="nav-link" data-toggle="dropdown">
+          <div class="nav-link" data-toggle="dropdown" >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" >
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
               <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
             </svg> {{getProfileText()}}
           </div>
 
-          <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()==undefined">
-            <a routerLink="/login" class="dropdown-item">Login</a>
-            <a routerLink="/register" class="dropdown-item">Register</a>
-          </div>
-          <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
-            <a class="dropdown-item">Logout</a>
+          <div class="dropdown-menu  border-0 m-0">
+            <ng-container *ngIf="service.tokenService.returnToken()==undefined">
+                <a routerLink="/login" class="dropdown-item">Login</a>
+                <a routerLink="/register" class="dropdown-item">Register</a>
+            </ng-container>
+
+            <ng-container *ngIf="service.tokenService.returnToken()!=undefined">
+                <div class="dropdown-item" (click)="logOut()">Logout</div>
+            </ng-container>
+
           </div>
         </div>
 

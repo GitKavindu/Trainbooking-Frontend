@@ -10,4 +10,7 @@ export class Station{
     public created_date!:string
 
     public lastUpdated_date!:string
+
+    public showRow:boolean=false
+
 }

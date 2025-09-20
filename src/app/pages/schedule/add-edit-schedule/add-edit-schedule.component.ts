@@ -46,7 +46,8 @@ export class AddEditScheduleComponent {
       station_name:'----------Select a station---------',
       added_by:'',
       created_date:'',
-      lastUpdated_date:''
+      lastUpdated_date:'',
+      showRow:false
     }
 
     this.lastSelectedStartStation=this.defaultStation
