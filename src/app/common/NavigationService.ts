@@ -50,4 +50,7 @@ export class NavigationService<T>{
     return this.itemsArr.slice(firstIndex, lastIndex);
   }
 
+  getRealRowNum(rowNo:number):number{
+    return this.pageSize * (this.selectedPage-1) + rowNo
+  }
 }

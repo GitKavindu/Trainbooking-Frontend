@@ -1,8 +1,3 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary float-right m-2" data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false">
-    Add Train
-  </button>
-  
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -21,68 +16,172 @@
       </div>
     </div>
   </div>
-  
-  <table class="table table-striped" >
-      <thead>
-         <tr>
-            <th>
-              <div class="d-flex flex-row">
-                <input [(ngModel)]="TrainIdFilter" class="form-control" (keyup)="filterFn()" placeholder="Filter">
-                <button type="button" class="btn btn-light" (click)="sortResult('Train_id',true)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-                    </svg>
-                </button>
-                <button type="button" class="btn btn-light" (click)="sortResult('Train_id',false)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-                    </svg>
-                </button>
+
+<div class="container-lg mt-4 mb-4">
+  <div class="card shadow border-primary">
+      <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+          <div>
+              <i class="fas fa-subway mr-2"></i>
+              <strong class="h5 mb-0">Trains</strong>
+          </div>
+          <img src="images/icons/train_2.svg" height="50" alt="Booking Icon">
+      </div>
+
+      <div class="card-body">
+        <div class="mb-3 d-flex align-items-center justify-content-between">
+            <span class="text-muted d-none d-lg-block">Select a Train and edit <b>Or</b> Add a new Train</span>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary float-right m-2" 
+              data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false" >
+                  Add Train
+            </button>
+        </div>
+
+        <!-- On large screens -->
+        <div class="table-responsive" *ngIf="deviceService.getScreenSize()>990">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                    <tr class="text-center">
+                        <th>
+                          Train Id
+                        </th>
+                        <th>
+                          Train Name
+                        </th>
+                        <th>Created Date</th>
+                        <th>Last Updated</th>
+                        <th colspan="2">Options</th>
+                    </tr>
+                </thead>
+
+                <!-- <tbody *ngIf="loadingBit==true || returnedUsers==undefined || returnedUsers.length==0">
+                  <tr>
+                    <td colspan="6" class="text-center">{{getLabelTextWhenNotHavingUsers()}}</td>
+                  </tr>
+                </tbody> -->
+
+                <tbody *ngIf="TrainList!=undefined && TrainList.length!=0">                      
+                    <ng-container *ngFor="let dataItem of getVisibleRows()">
+                          <tr class="table-row text-center">
+                              <td>{{getTrainId(dataItem.train_no)}}</td>
+                              <td>
+                                <strong>{{ dataItem.train_name }}</strong><br>
+                              </td>
+                              <td>{{dataItem.created_date}}</td>
+                              <td *ngIf="dataItem.lastUpdated_date==null"> ---------------</td>
+                              <td *ngIf="dataItem.lastUpdated_date!=null">{{ dataItem.lastUpdated_date }}</td>
+                              <td class="text-center">
+                                  <button type="button" class="btn btn-light mr-1"
+                                      data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                      </svg>
+                                  </button>
+                              </td>
+                              <td class="text-center">
+                                  <button type="button" class="btn btn-light mr-1" (click)="deleteClick(dataItem.train_no)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                      <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                    </svg>
+                                  </button>
+                              </td>
+                          </tr>                         
+                      
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- On small screens -->
+        <ng-container *ngIf="deviceService.getScreenSize()<=990">
+          
+          <ng-container *ngIf="TrainList!=undefined && TrainList.length!=0">
+              <div class="row thead-custom">
+                  <div class="col">
+                      Train Details
+                  </div>
               </div>
-              TrainId</th>
-            <th>
-              <div class="d-flex flex-row">
-                <input [(ngModel)]="TrainNameFilter" class="form-control" (keyup)="filterFn()" placeholder="Filter">
-                <button type="button" class="btn btn-light" (click)="sortResult('Train_name',true)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-                  </svg>
-              </button>
-              <button type="button" class="btn btn-light" (click)="sortResult('Train_name',false)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-                  </svg>
-              </button>
+              
+              <br>
+              <div *ngFor="let dataItem of getVisibleRows();let i=index">
+
+                  <div class="row">
+                      <div class="col-2 toggle-container">
+                              <input type="checkbox" id="toggle{{i}}" class="toggle-checkbox" (click)="toggleMoreDetails(i)">
+                              <label for="toggle{{i}}" class="toggle-button"></label>
+                      </div>
+                      <div class="col-10">
+                          {{dataItem.train_name | uppercase}}
+                      </div>
+                                            
+                  </div>
+
+                  <ng-container *ngIf="dataItem.showRow==true">
+                    <!-- Train Id -->
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted ">Train Id:</div>
+                      <div class="col-6 ">{{ getTrainId(dataItem.train_no) }}</div>
+                    </div>
+
+                    <!-- Created date -->
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Created date:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.created_date }}</div>
+                    </div>
+
+                    <!-- Updated date -->
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Updated date:</div><br> 
+                      <div class="col-6 text-left" *ngIf="dataItem.lastUpdated_date==null">( Not Updated )</div>
+                      <div class="col-6 text-left" *ngIf="dataItem.lastUpdated_date!=null">{{ dataItem.lastUpdated_date }} </div>
+                    </div>
+
+                    <div class="d-flex mt-3 align-items-center">
+
+                      <!-- Edit Button-->
+                      <div  class="mr-3"> 
+                        <button class="col-12 btn btn-outline-success mr-2"  
+                            data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                          Edit Train
+                        </button>
+                      </div>
+
+                      <!-- Delete Button-->
+                      <div  class="mr-3"> 
+                        <button class="col-12 btn btn-outline-danger mr-2"  (click)="deleteClick(dataItem)">
+                          Delete Train
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <br>
+                  </ng-container>                 
+                  <hr>
+            
               </div>
-              TrainName</th>
-            <th>Created Date</th>
-            <th>Last Updated</th>
-            <th>Options</th>
-        </tr>
-      </thead>
-      <tbody *ngFor="let dataItem of TrainList;let i=index" >
-        <tr>   
-          <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_no}}</td>
-           <td (click)="enableDisableApartmentForTrain(i,dataItem.train_no,dataItem.train_seq_no)">{{dataItem.train_name}}</td>
-           <td>{{dataItem.created_date}}</td>
-           <td>{{dataItem.lastUpdated_date}}</td>
-           <td>
-              <button type="button" class="btn btn-light mr-1"
-                  data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-                  </svg>
-              </button>
-              <button type="button" class="btn btn-light mr-1" (click)="deleteClick(dataItem.train_no)">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                </svg>
-              </button>
-           </td>
-        </tr>
-      </tbody>
-  </table>
+          </ng-container>
+          
+        </ng-container>
+
+          <!-- ✅ Styled Pagination Below Table -->
+          <nav aria-label="Page navigation" *ngIf="TrainList!=undefined && TrainList.length!=0">
+              <ul class="pagination justify-content-end mt-4 mb-0">
+                  <li class="page-item" [class.disabled]="navigationService.selectedPage === 1" id="prev">
+                      <button class="page-link" tabindex="-1" (click)="pageBackward()" [disabled]="navigationService.selectedPage==1">Previous</button>
+                  </li>
+                  <li class="page-item active disabled">
+                      <a class="page-link">{{navigationService.selectedPage}}</a>
+                  </li>
+                  <li class="page-item" id="next" [class.disabled]="navigationService.selectedPage === navigationService.getMaxPageNumber()">
+                      <button class="page-link" (click)="pageForward()" [disabled]="navigationService.selectedPage==navigationService.getMaxPageNumber()">Next</button>
+                  </li>
+              </ul>
+          </nav>
+
+      </div>
+  </div>
+</div>
 
 
 

@@ -11,4 +11,6 @@ export class Train{
 
     public lastUpdated_date!:string
 
+    public showRow:boolean=false
+
 }

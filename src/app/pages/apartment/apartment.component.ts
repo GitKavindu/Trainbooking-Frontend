@@ -7,6 +7,8 @@ import { SeatModel } from '../../../Models/SeatModel';
 import { Seat } from '../../../Models/Seat';
 import { ApartmentDto } from '../../../Models/DTOs/ApartmentDto';
 import { TokenService } from '../../common/TokenService';
+import { DeviceService } from '../../common/DeviceService';
+import { NavigationService } from '../../common/NavigationService';
 
 @Component({
   selector: 'app-apartment',
@@ -15,15 +17,11 @@ import { TokenService } from '../../common/TokenService';
   styleUrl: './apartment.component.css'
 })
 export class ApartmentComponent {
-  constructor(private service:SharedServiceService,private route:ActivatedRoute){
-    this.trainId=0
-    this.trainSeqNo=0
-    this.tokenService=new TokenService()
-  }
+  
   trainId:number
   trainSeqNo:number
 
-  ApartmentList:Apartment[]=[]
+  ApartmentList:Apartment[]
   ModalTitle!:string
   ActivateAddEditApartmentComp:boolean=false
   Apartment!:Apartment
@@ -32,6 +30,19 @@ export class ApartmentComponent {
   ApartmentNameFilter:string=""
   ApartmentListWithoutFilter:any=[]
   tokenService:TokenService
+
+  deviceService:DeviceService
+  navigationService:NavigationService<Apartment>
+
+  constructor(private service:SharedServiceService,private route:ActivatedRoute){
+    this.trainId=0
+    this.trainSeqNo=0
+    this.tokenService=new TokenService()
+
+    this.ApartmentList=new Array<Apartment>()
+    this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
+    this.deviceService=new DeviceService()
+  }
   
   ngOnInit():void{
     this.route.queryParams.subscribe(params => {
@@ -46,7 +57,6 @@ export class ApartmentComponent {
       }
       this.refreshApartmentList(this.trainId,this.trainSeqNo);
     });
-
     
   }
 
@@ -58,7 +68,8 @@ export class ApartmentComponent {
        seatModel: seat,
       created_date: '',
       lastUpdated_date:'',
-      added_by:''
+      added_by:'',
+      showRow:false
     }
     this.ModalTitle="Add Apartment"
     this.ActivateAddEditApartmentComp=true
@@ -103,10 +114,25 @@ export class ApartmentComponent {
   }
 
   refreshApartmentList(trainId:number, seqNo:number){
+    this.ApartmentList=new Array<Apartment>()
+    this.ApartmentListWithoutFilter=new Array<Apartment>()
+    
+    let selectedPage=this.navigationService.selectedPage
+    this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
+    
     this.service.getAllApartments(trainId,seqNo).subscribe(res=>{
-      this.ApartmentList=res.Data;
-      this.ApartmentListWithoutFilter=res.Data
+
+      for(let i=0;i<res.Data.length;i++){
+        this.ApartmentList.push(res.Data[i])
+        this.ApartmentListWithoutFilter.push(res.Data[i])
+      }
+
+      if(selectedPage!=undefined && selectedPage<=this.navigationService.getMaxPageNumber())
+        this.navigationService.selectedPage=selectedPage
+      else
+        this.navigationService.selectedPage=1
     })
+
   }
 
   filterFn(){
@@ -122,6 +148,9 @@ export class ApartmentComponent {
         ApartmentNameFilter.toString().trim().toLowerCase()
       )
     })
+    this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
+    console.log(this.ApartmentList)
+    console.log(this.navigationService.getVisibleRows())
   }
 
   sortResult(prop:any,asc:boolean){
@@ -134,6 +163,27 @@ export class ApartmentComponent {
       })
   }
 
+  toggleMoreDetails(rowNo:number) {
+    rowNo=this.navigationService.getRealRowNum(rowNo)
+    this.ApartmentList[rowNo].showRow=!this.ApartmentList[rowNo].showRow
+  }
+
+  getApartmentId(TrainNum:number){
+    return 'AP' + (TrainNum.toString().padStart(6, '0'))
+  }
+
+  getVisibleRows():Apartment[]{
+    let visibleRows:Apartment[]= this.navigationService.getVisibleRows()
+    return visibleRows
+  }
+
+  pageForward(){
+    this.navigationService.pageForward()
+  }
+
+  pageBackward(){
+    this.navigationService.pageBackward()
+  }
   
 
 

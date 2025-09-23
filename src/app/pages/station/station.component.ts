@@ -3,6 +3,7 @@ import { SharedServiceService } from '../../shared-service.service';
 import { StationDto } from '../../../Models/DTOs/StationDto';
 import { Station } from '../../../Models/Station';
 import { DeviceService } from '../../common/DeviceService';
+import { NavigationService } from '../../common/NavigationService';
 
 @Component({
   selector: 'app-station',
@@ -12,7 +13,7 @@ import { DeviceService } from '../../common/DeviceService';
 })
 export class StationComponent {
 
-    stationList:Station[]=[]
+    stationList:Station[]
     ModalTitle!:string
     ActivateAddEditStationComp:boolean=false
     Station!:Station
@@ -21,13 +22,16 @@ export class StationComponent {
     stationNameFilter:string=""
     stationListWithoutFilter:any=[]
     deviceService:DeviceService
+    navigationService:NavigationService<Station>
+
+    constructor(private service:SharedServiceService){
+      this.stationList=new Array<Station>()
+      this.navigationService=new NavigationService<Station>(this.stationList)
+      this.deviceService=new DeviceService()
+    }
 
     ngOnInit():void{
       this.refreshStationList();
-    }
-   
-    constructor(private service:SharedServiceService){
-      this.deviceService=new DeviceService()
     }
 
     addClick(){
@@ -73,9 +77,18 @@ export class StationComponent {
     }
 
     refreshStationList(){
+      this.stationList=new Array<Station>()
+      this.navigationService=new NavigationService<Station>(this.stationList)
+      this.stationListWithoutFilter=new Array<Station>()
+      
       this.service.getAllStations().subscribe(res=>{
-        this.stationList=res.Data;
-        this.stationListWithoutFilter=res.Data
+
+        for(let i=0;i<res.Data.length;i++){
+          
+          this.stationList.push(res.Data[i]);
+          this.stationListWithoutFilter.push(res.Data[i]);
+        }
+
       })
     }
 
@@ -105,6 +118,24 @@ export class StationComponent {
     }
 
     toggleMoreDetails(rowNo:number) {
+      rowNo=this.navigationService.getRealRowNum(rowNo)
       this.stationList[rowNo].showRow=!this.stationList[rowNo].showRow
+    }
+
+    getStationId(stationNum:number){
+      return 'ST' + (stationNum.toString().padStart(6, '0'))
+    }
+
+    getVisibleRows():Station[]{
+      let visibleRows:Station[]= this.navigationService.getVisibleRows()
+      return visibleRows
+    }
+
+    pageForward(){
+      this.navigationService.pageForward()
+    }
+
+    pageBackward(){
+      this.navigationService.pageBackward()
     }
 }
