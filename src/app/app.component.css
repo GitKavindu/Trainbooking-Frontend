@@ -13,3 +13,9 @@
     max-width: 1500px;
     margin: 0 auto;
   }
+
+  @media (min-width: 990px) {
+    .container {
+        max-width: 1500px;
+    }
+  }

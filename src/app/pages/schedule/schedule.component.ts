@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Schedule } from '../../../Models/Schedule';
 import { TokenService } from '../../common/TokenService';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DeviceService } from '../../common/DeviceService';
+import { NavigationService } from '../../common/NavigationService';
 
 @Component({
   selector: 'app-schedule',
@@ -12,11 +14,9 @@ import { Router } from '@angular/router';
 })
 export class ScheduleComponent {
   
-  constructor(private service:SharedServiceService,private router:Router){
-    this.tokenService=new TokenService()
-  }
   
-      ScheduleList:Schedule[]=[]
+  
+      ScheduleList:Schedule[]
       ModalTitle!:string
       ActivateAddEditScheduleComp:boolean=false
 
@@ -39,8 +39,37 @@ export class ScheduleComponent {
       selectedModel:string='start'
       tokenService:TokenService
 
+      deviceService:DeviceService
+      navigationService:NavigationService<Schedule>
+
+      constructor(private service:SharedServiceService,private router:Router,private route:ActivatedRoute){
+        this.tokenService=new TokenService()
+        this.ScheduleList=new Array<Schedule>()
+        this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
+        this.deviceService=new DeviceService()
+      }
+
       ngOnInit():void{
-        this.refreshScheduleList();
+        this.route.queryParams.subscribe(params => {
+          if (Object.keys(params).length === 0) {
+            console.log('No query parameters');
+            this.scheduleId=''
+            this.enablethisschedule=false
+            this.refreshScheduleList();
+
+          } else if(params['scheduleId']=='SHNONE'){
+            this.scheduleId='SHNONE'
+            this.enablethisschedule=false
+          }
+          else {
+            this.scheduleId = params['scheduleId'];
+            this.enablethisschedule=true
+            this.refreshScheduleList();
+          }
+
+          
+        });
+       
       }
   
       addClick(){
@@ -52,10 +81,18 @@ export class ScheduleComponent {
         //   lastUpdated_date:'',
         //   added_by:''
         // }
+
+        this.router.navigate(['/schedule'], {
+          queryParams: { scheduleId:'SHNONE'}
+        });
+
         this.ModalTitle="Add Schedule"
         this.ActivateAddEditScheduleComp=true
 
-        this.ScheduleList=[]
+        this.ScheduleList=new Array<Schedule>()        
+        this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
+
+        
       }
   
       editClick(item: Schedule){
@@ -88,58 +125,108 @@ export class ScheduleComponent {
       }
   
       refreshScheduleList(){
+        this.ScheduleList=new Array<Schedule>()
+        this.ScheduleListWithoutFilter=new Array<Schedule>()
+
+        let selectedPage=this.navigationService.selectedPage
+        this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
+
         if(this.enablethisschedule==false){
+          
             this.service.getAllSchedules().subscribe(res=>{
-            this.ScheduleList=res.Data;
-            this.ScheduleListWithoutFilter=res.Data
+
+            for(let i=0;i<res.Data.length;i++){
+              this.ScheduleList.push(res.Data[i])
+              this.ScheduleListWithoutFilter.push(res.Data[i])
+            }
+
+            if(selectedPage!=undefined && selectedPage<=this.navigationService.getMaxPageNumber())
+              this.navigationService.selectedPage=selectedPage
+            else
+              this.navigationService.selectedPage=1
+
+            this.ActivateAddEditScheduleComp=false
+            
             this.titleText='Click here to see more details'
           })
+
         }
         else{
           this.service.getSchedule(this.scheduleId).subscribe(res=>{
-          this.ScheduleList=res.Data;
-          this.ScheduleListWithoutFilter=res.Data
-          if(this.Schedule!=undefined)
-            this.ActivateAddEditScheduleComp=true
-          this.titleText='Click here to go back'
-        })
+
+            for(let i=0;i<res.Data.length;i++){
+              this.ScheduleList.push(res.Data[i])
+              this.ScheduleListWithoutFilter.push(res.Data[i])
+            }
+
+            if(selectedPage!=undefined && selectedPage<=this.navigationService.getMaxPageNumber())
+              this.navigationService.selectedPage=selectedPage
+            else
+              this.navigationService.selectedPage=1
+
+            if(this.Schedule!=undefined)
+              this.ActivateAddEditScheduleComp=true
+
+            this.titleText='Click here to go back'
+          
+          })
+         
+          
         }
       }
 
       filterFn(){
         var FromStationFilter=this.FromStationFilter
+        this.ScheduleList=new Array<Schedule>()
+        
+        this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
+        let schedule:Schedule[]
         
         if(this.selectedModel=='start'){
-          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+          schedule=this.ScheduleListWithoutFilter.filter(function(el:any){
             return el.startstation.toString().toLowerCase().includes(
               FromStationFilter.toString().trim().toLowerCase()
             )
           })
         }
         else if(this.selectedModel=='train'){
-          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+          schedule=this.ScheduleListWithoutFilter.filter(function(el:any){
             return el.train.toString().toLowerCase().includes(
               FromStationFilter.toString().trim().toLowerCase()
             )
           })
         }
         else{
-          this.ScheduleList=this.ScheduleListWithoutFilter.filter(function(el:any){
+          schedule=this.ScheduleListWithoutFilter.filter(function(el:any){
             return el.endstation.toString().toLowerCase().includes(
              FromStationFilter.toString().trim().toLowerCase()
             )
           })
         }
+
+        for(let i=0;i<schedule.length;i++){
+          this.ScheduleList.push(schedule[i])
+        }
+
       }
 
       sortResult(prop:string){
-        this.ScheduleList=this.ScheduleListWithoutFilter.sort((a:any,b:any)=>{
+        this.ScheduleList=new Array<Schedule>()
+        
+        this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
+
+        let schedule:Schedule[]=this.ScheduleListWithoutFilter.sort((a:any,b:any)=>{
             if(this.asc===true){
                 return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0) //asc true
             }else{
               return (a[prop]<b[prop])?1:((a[prop]>b[prop])?-1:0)
             }
         })
+
+        for(let i=0;i<schedule.length;i++){
+          this.ScheduleList.push(schedule[i])
+        }
+
         this.asc=!this.asc
 
         if(prop=='startstation'){
@@ -169,10 +256,14 @@ export class ScheduleComponent {
 
       
       enableScheduleDetails(schedule_id:string){
-        this.enablethisschedule=!this.enablethisschedule
-        this.scheduleId=this.enablethisschedule ? schedule_id:''
-        this.scheduleId=schedule_id
-        this.refreshScheduleList()
+       
+        //this.refreshScheduleList()
+        
+
+        this.router.navigate(['/schedule'], {
+          queryParams: { scheduleId:schedule_id}
+        });
+
         this.resetOptions()
       }
 
@@ -193,4 +284,34 @@ export class ScheduleComponent {
         });
       }
 
+      toggleMoreDetails(rowNo:number) {
+        rowNo=this.navigationService.getRealRowNum(rowNo)
+        this.ScheduleList[rowNo].showRow=!this.ScheduleList[rowNo].showRow
+      }
+      
+      getScheduleId(TrainNum:string){
+        return 'SH' + TrainNum.slice(0,10)
+      }
+    
+      getVisibleRows():Schedule[]{
+        let visibleRows:Schedule[]= this.navigationService.getVisibleRows()
+        return visibleRows
+      }
+    
+      pageForward(){
+        this.navigationService.pageForward()
+      }
+    
+      pageBackward(){
+        this.navigationService.pageBackward()
+      }
+
+      getbannerText(){
+        if (this.ActivateAddEditScheduleComp==true && this.enablethisschedule==false) //Add new schedule
+          return "Add journeys to the Schedule"
+        else if (this.ActivateAddEditScheduleComp==true && this.enablethisschedule==true)
+          return "Add more journeys to the Schedule"
+        else
+          return "Select a Schedule and edit <b>Or</b> Add a new Schedule"
+      }
 }

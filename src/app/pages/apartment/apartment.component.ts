@@ -148,9 +148,8 @@ export class ApartmentComponent {
         ApartmentNameFilter.toString().trim().toLowerCase()
       )
     })
+
     this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
-    console.log(this.ApartmentList)
-    console.log(this.navigationService.getVisibleRows())
   }
 
   sortResult(prop:any,asc:boolean){
