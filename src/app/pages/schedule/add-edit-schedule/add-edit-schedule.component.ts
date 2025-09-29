@@ -6,6 +6,7 @@ import { Station } from '../../../../Models/Station';
 import { AddJourneyStationDto, ScheduleDto } from '../../../../Models/DTOs/ScheduleDto';
 import { Schedule } from '../../../../Models/Schedule';
 import { TimeService } from '../../../common/TimeService';
+import { DeviceService } from '../../../common/DeviceService';
 
 @Component({
   selector: 'app-add-edit-schedule',
@@ -38,6 +39,7 @@ export class AddEditScheduleComponent {
 
   defaultStation:Station
   private timeService:TimeService
+  deviceService:DeviceService
 
   constructor(private service:SharedServiceService){
     this.defaultStation={
@@ -47,16 +49,18 @@ export class AddEditScheduleComponent {
       added_by:'',
       created_date:'',
       lastUpdated_date:'',
+      isActive:false,
       showRow:false
     }
 
     this.lastSelectedStartStation=this.defaultStation
     this.lastSelectedEndStation=this.defaultStation
     this.timeService=new TimeService()
+    this.deviceService=new DeviceService()
   }
 
   ngOnInit(): void {
-
+    console.log(this.scheduleDetails)
     this.scheduleForm = new FormGroup({
       train: new FormControl('', Validators.required), // or new FormControl(new Train())
       startstation: new FormControl(this.defaultStation, Validators.required),

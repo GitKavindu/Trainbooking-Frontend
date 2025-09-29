@@ -11,6 +11,8 @@ export class Station{
 
     public lastUpdated_date!:string
 
+    public isActive!:boolean
+
     public showRow:boolean=false
 
 }

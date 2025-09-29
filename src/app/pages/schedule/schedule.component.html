@@ -1,4 +1,4 @@
-<div class="filters">
+<div class="filters" *ngIf="ActivateAddEditScheduleComp==false">
     <select id="filterType" title="Filter By:"  [(ngModel)]="selectedModel">
       <option value="start">Start</option>
       <option value="destination">Destination</option>
@@ -49,7 +49,7 @@
                       
                       <th>End Date</th>
                       <th>End Time</th>
-                      <th colspan="2" *ngIf="enablethisschedule==false">Options</th>
+                      <th colspan="2" *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">Options</th>
                       
                   </tr>
                 </thead>
@@ -139,25 +139,32 @@
                   </div>
                   
                   <ng-container *ngIf="dataItem.showRow==true">
+
+                    <!-- Schedule Id -->
+                    <div class="row py-3 border-bottom text-left" *ngIf="ActivateAddEditScheduleComp==false">
+                      <div class="col-6 text-muted ">Schedule Id:</div>
+                      <div class="col-6"> {{ getScheduleId(dataItem.scheduleId) | uppercase }} </div>
+                    </div>
+
                     <!-- Train -->
                     <div class="row py-3 border-bottom text-left">
-                      <div class="col-6 text-muted ">Schedule Id:</div>
+                      <div class="col-6 text-muted ">Train Name:</div>
                       <div class="col-6 ">{{ dataItem.train }}</div>
                     </div>
 
                     <!-- Start -->
                     <div class="row py-3 border-bottom text-left">
-                      <div class="col-6 text-muted text-left">Created date:</div><br> 
+                      <div class="col-6 text-muted text-left">Start Station:</div><br> 
                       <div class="col-6 text-left">{{ dataItem.startstation }}</div>
                     </div>
 
                     <div class="row py-3 border-bottom text-left">
-                      <div class="col-6 text-muted text-left">Created date:</div><br> 
+                      <div class="col-6 text-muted text-left">Start date:</div><br> 
                       <div class="col-6 text-left">{{ dataItem.startingDate }}</div>
                     </div>
 
                     <div class="row py-3 border-bottom text-left">
-                      <div class="col-6 text-muted text-left">Created date:</div><br> 
+                      <div class="col-6 text-muted text-left">Start date:</div><br> 
                       <div class="col-6 text-left">{{ dataItem.startingTime }}</div>
                     </div>
 

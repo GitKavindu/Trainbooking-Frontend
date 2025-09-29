@@ -42,6 +42,7 @@ export class BookingFormComponent {
       added_by:'',
       created_date:'',
       lastUpdated_date:'',
+      isActive:false,
       showRow:false
     }
 

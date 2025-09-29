@@ -89,6 +89,7 @@ export class ScheduleComponent {
         this.ModalTitle="Add Schedule"
         this.ActivateAddEditScheduleComp=true
 
+        this.Schedule.scheduleId='SHNONE'
         this.ScheduleList=new Array<Schedule>()        
         this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
 

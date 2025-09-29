@@ -46,6 +46,7 @@ export class TrainComponent {
           created_date: '',
           lastUpdated_date:'',
           added_by:'',
+          isActive:false,
           showRow:false
         }
         this.ModalTitle="Add Train"
