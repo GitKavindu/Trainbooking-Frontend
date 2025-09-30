@@ -56,3 +56,23 @@ app-booking {
     content: '−';
     transform: rotate(180deg);
   }
+
+  .background-box {
+    position: relative;
+    padding: 40px;
+    color: white;       /* or black, based on image contrast */
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .background-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+
+    background: url('Assets/gallery-4.jpg') center/cover no-repeat;
+    opacity: 0.4;        /* Adjust this value to control image strength */
+
+    z-index: -1;
+    pointer-events: none; /* Makes sure it doesn't block clicks */
+  }

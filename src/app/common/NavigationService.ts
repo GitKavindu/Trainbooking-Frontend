@@ -7,7 +7,7 @@ export class NavigationService<T>{
    constructor(arr:Array<T>){
      this.itemsArr=arr
      this.selectedPage=1
-     this.pageSize=3
+     this.pageSize=2
    }
    
    getMaxPageNumber():number{

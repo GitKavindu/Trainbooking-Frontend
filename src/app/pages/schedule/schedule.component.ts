@@ -53,11 +53,14 @@ export class ScheduleComponent {
         this.route.queryParams.subscribe(params => {
           if (Object.keys(params).length === 0) {
             console.log('No query parameters');
+            this.Schedule=new Schedule()
             this.scheduleId=''
             this.enablethisschedule=false
             this.refreshScheduleList();
 
           } else if(params['scheduleId']=='SHNONE'){
+            this.Schedule=new Schedule()
+            this.Schedule.scheduleId='SHNONE'
             this.scheduleId='SHNONE'
             this.enablethisschedule=false
           }
@@ -89,10 +92,8 @@ export class ScheduleComponent {
         this.ModalTitle="Add Schedule"
         this.ActivateAddEditScheduleComp=true
 
-        this.Schedule.scheduleId='SHNONE'
         this.ScheduleList=new Array<Schedule>()        
         this.navigationService=new NavigationService<Schedule>(this.ScheduleList)
-
         
       }
   
@@ -121,6 +122,7 @@ export class ScheduleComponent {
   
       closeClick(){
         this.ActivateAddEditScheduleComp=false
+        this.router.navigateByUrl('/schedule')
         this.refreshScheduleList()
         this.resetOptions()
       }

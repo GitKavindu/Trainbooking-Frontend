@@ -2,13 +2,13 @@ import { Component, Input } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { Apartment } from '../../../Models/Apartment';
 import { ActivatedRoute } from '@angular/router';
-import { CommonService } from '../../common/CommonService';
-import { SeatModel } from '../../../Models/SeatModel';
 import { Seat } from '../../../Models/Seat';
 import { ApartmentDto } from '../../../Models/DTOs/ApartmentDto';
 import { TokenService } from '../../common/TokenService';
 import { DeviceService } from '../../common/DeviceService';
 import { NavigationService } from '../../common/NavigationService';
+import { CommonService } from '../../common/CommonService';
+import { SeatModel } from '../../../Models/SeatModel';
 
 @Component({
   selector: 'app-apartment',
@@ -21,27 +21,38 @@ export class ApartmentComponent {
   trainId:number
   trainSeqNo:number
 
+  startJourneyId:number
+  endJourneyId:number
+
   ApartmentList:Apartment[]
   ModalTitle!:string
   ActivateAddEditApartmentComp:boolean=false
   Apartment!:Apartment
 
   ApartmentIdFilter:string=""
-  ApartmentNameFilter:string=""
+  ApartmentClassFilter:string="All"
   ApartmentListWithoutFilter:any=[]
   tokenService:TokenService
 
   deviceService:DeviceService
   navigationService:NavigationService<Apartment>
+  ApartmentClasses:string[]
+  commonService:CommonService
 
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
     this.trainId=0
     this.trainSeqNo=0
+
+    this.startJourneyId=0
+    this.endJourneyId=0
+
     this.tokenService=new TokenService()
 
     this.ApartmentList=new Array<Apartment>()
     this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
     this.deviceService=new DeviceService()
+    this.ApartmentClasses=['First','Second','Third']
+    this.commonService=new CommonService()
   }
   
   ngOnInit():void{
@@ -53,7 +64,8 @@ export class ApartmentComponent {
       } else {
         this.trainId = params['trainId'];
         this.trainSeqNo = +params['seqNo']; // + converts it to number
-           
+        this.startJourneyId=+params['startJourneyId']
+        this.endJourneyId=+params['endJourneyId']
       }
       this.refreshApartmentList(this.trainId,this.trainSeqNo);
     });
@@ -136,20 +148,22 @@ export class ApartmentComponent {
   }
 
   filterFn(){
-    var ApartmentIdFilter=this.ApartmentIdFilter
-    var ApartmentNameFilter=this.ApartmentNameFilter
+    if(this.ApartmentClassFilter!="All"){
 
-    this.ApartmentList=this.ApartmentListWithoutFilter.filter(function(el:Apartment){
-      return el.Apartment_id.toString().toLowerCase().includes(
-        ApartmentIdFilter.toString().trim().toLowerCase()
-      )
-      &&
-      el.ApartmrntClass.toString().toLowerCase().includes(
-        ApartmentNameFilter.toString().trim().toLowerCase()
-      )
-    })
+      var ApartmentClassFilter=this.ApartmentClassFilter
+    
+      this.ApartmentList=this.ApartmentListWithoutFilter.filter(function(el:Apartment){
+        return el.ApartmrntClass.toString().toLowerCase().includes(
+          ApartmentClassFilter.toString().trim().toLowerCase()
+        )
+      })
 
-    this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
+      this.navigationService=new NavigationService<Apartment>(this.ApartmentList)
+
+    }
+    else{
+      this.refreshApartmentList(this.trainId,this.trainSeqNo)
+    }
   }
 
   sortResult(prop:any,asc:boolean){
@@ -183,7 +197,50 @@ export class ApartmentComponent {
   pageBackward(){
     this.navigationService.pageBackward()
   }
+
+  getTitleText():string{
+   
+    if(this.tokenService.getIsUserAdmin()==true){
+      return "Select a Apartment and edit <b>Or</b> Add a new Apartment"
+    }
+    else{
+      return "Select a Apartment to book seats"
+    }
+   
+  }
   
+  getAvailableSeatCount(seat:Seat[]):number{
+    let seatModel:SeatModel[]=this.commonService.convertSeatToSeatModel(seat)
+    let seatCount=0
+    console.log(seatModel)
+    for(let i=0;i<seatModel.length;i++){
+
+       for(let j=0;j<seatModel[i].left.length;j++){
+
+        if(seatModel[i].left[j].available==true)
+          seatCount++
+
+      }
+      
+      for(let j=0;j<seatModel[i].right.length;j++){
+        
+        if(seatModel[i].right[j].available==true)
+          seatCount++
+
+      }
+      
+    }
+   
+    return seatCount
+  }
+
+  bookedSeatCount(apartmentId:number):number{
+    let booedSeatCount=0
+    this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,apartmentId).subscribe((res)=>{
+      booedSeatCount=res.Data.length
+    })
+    return booedSeatCount
+  }
 
 
 }

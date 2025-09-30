@@ -28,9 +28,18 @@
 
       <div class="card-body">
         <div class="mb-3 d-flex align-items-center justify-content-between">
-            <span class="text-muted d-none d-lg-block">Select a Apartment and edit <b>Or</b> Add a new Apartment</span>
+            <span class="text-muted d-none d-lg-block" [innerHTML]="getTitleText()"></span>
+            
+            <div class="filters">
+
+                <select id="filterType" title="Filter By:"  [(ngModel)]="ApartmentClassFilter" (change)="filterFn()">
+                  <option value="All"  >All</option>
+                  <option  *ngFor="let class of ApartmentClasses" value="{{class}}">{{class | uppercase}}</option>
+                </select>
+            </div>            
+
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary float-right m-2" 
+            <button type="button" class="btn btn-primary float-right m-2" *ngIf="tokenService.getIsUserAdmin()==true"
               data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false" >
                   Add Apartment
             </button>
@@ -47,9 +56,12 @@
                         <th>
                           Apartment Class
                         </th>
-                        <th>Created Date</th>
-                        <th>Last Updated</th>
-                        <th colspan="2">Options</th>
+                        <th *ngIf="tokenService.getIsUserAdmin()==true">Created Date</th>
+                        <th *ngIf="tokenService.getIsUserAdmin()==true">Last Updated</th>
+                        <th *ngIf="tokenService.getIsUserAdmin()==false">Available seats</th>
+                        <th *ngIf="tokenService.getIsUserAdmin()==false">Price</th>
+                        <th colspan="2" *ngIf="tokenService.getIsUserAdmin()==true">Options</th>
+                        <th colspan="1" *ngIf="tokenService.getIsUserAdmin()==false">Book</th>
                     </tr>
                 </thead>
 
@@ -66,10 +78,13 @@
                               <td>
                                 <strong>{{ dataItem.ApartmrntClass}}</strong><br>
                               </td>
-                              <td>{{dataItem.created_date}}</td>
-                              <td *ngIf="dataItem.lastUpdated_date==null"> ---------------</td>
-                              <td *ngIf="dataItem.lastUpdated_date!=null">{{ dataItem.lastUpdated_date }}</td>
-                              <td class="text-center">
+                              <td *ngIf="tokenService.getIsUserAdmin()==false"> {{ getAvailableSeatCount(dataItem.seatModel) }} </td>
+                              <td *ngIf="tokenService.getIsUserAdmin()==false">$50.00</td>
+                              <td *ngIf="tokenService.getIsUserAdmin()==true">{{dataItem.created_date}}</td>
+                              <td *ngIf="tokenService.getIsUserAdmin()==true && dataItem.lastUpdated_date==null"> ---------------</td>
+                              <td *ngIf="tokenService.getIsUserAdmin()==true && dataItem.lastUpdated_date!=null">{{ dataItem.lastUpdated_date }}</td>
+
+                              <td class="text-center" *ngIf="tokenService.getIsUserAdmin()==true">
                                   <button type="button" class="btn btn-light mr-1"
                                       data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
@@ -77,7 +92,7 @@
                                       </svg>
                                   </button>
                               </td>
-                              <td class="text-center">
+                              <td class="text-center" *ngIf="tokenService.getIsUserAdmin()==true">
                                   <button type="button" class="btn btn-light mr-1" (click)="deleteClick(dataItem.Apartment_id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -85,6 +100,16 @@
                                     </svg>
                                   </button>
                               </td>
+
+                              <td class="text-center" *ngIf="tokenService.getIsUserAdmin()==false">
+                                  <button type="button" class="btn btn-light mr-1"
+                                      data-toggle="modal" data-target="#exampleModal" (click)="bookClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
+                                        <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                                      </svg>
+                                  </button>
+                              </td>
+
                           </tr>                         
                       
                     </ng-container>
@@ -137,20 +162,33 @@
 
                     <div class="d-flex mt-3 align-items-center">
 
-                      <!-- Edit Button-->
-                      <div  class="mr-3"> 
-                        <button class="col-12 btn btn-outline-success mr-2"  
-                            data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
-                          Edit Apartment
-                        </button>
-                      </div>
+                      <ng-container *ngIf="tokenService.getIsUserAdmin()==true">
+                          <!-- Edit Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-success mr-2"  
+                                data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                              Edit Apartment
+                            </button>
+                          </div>
 
-                      <!-- Delete Button-->
-                      <div  class="mr-3"> 
-                        <button class="col-12 btn btn-outline-danger mr-2"  (click)="deleteClick(dataItem)">
-                          Delete Apartment
-                        </button>
-                      </div>
+                          <!-- Delete Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-danger mr-2"  (click)="deleteClick(dataItem)">
+                              Delete Apartment
+                            </button>
+                          </div>
+                      </ng-container>
+
+                      <ng-container *ngIf="tokenService.getIsUserAdmin()==false">
+                          <!-- Book Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-success mr-2"  
+                                data-toggle="modal" data-target="#exampleModal" (click)="bookClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                              Book Seats
+                            </button>
+                          </div>
+                      </ng-container>
+
                     </div>
                     
                     <br>
