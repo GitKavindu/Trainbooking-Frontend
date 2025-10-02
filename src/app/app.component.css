@@ -1,21 +1,28 @@
 /* Main app layout */
 .app-wrapper {
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
   }
   
-  /* Content area styles */
-  .content-area {
-    
-    padding: 2rem 0;
-    width: 90%;
-    max-width: 1500px;
-    margin: 0 auto;
-  }
-
   @media (min-width: 990px) {
     .container {
         max-width: 1500px;
     }
+  }
+
+  .pos{
+    position: absolute;
+  
+    opacity: 0.4;
+    pointer-events: none;
+    
+    z-index: -1;
+  }
+  
+  img{
+    height: 100%;
+    width: 100%;
+  }
+
+  .main-con{
+    position: relative;
   }

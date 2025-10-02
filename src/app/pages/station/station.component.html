@@ -62,7 +62,7 @@
                   </tbody> -->
 
                   <tbody *ngIf="stationList!=undefined && stationList.length!=0">                      
-                      <ng-container *ngFor="let dataItem of stationList">
+                      <ng-container *ngFor="let dataItem of getVisibleRows()">
                             <tr class="table-row text-center">
                                 <td>{{getStationId(dataItem.station_id)}}</td>
                                 <td>

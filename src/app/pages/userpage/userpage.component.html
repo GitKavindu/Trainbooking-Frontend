@@ -1,27 +1,4 @@
-<div class="filters" >
-      <select id="filterType" title="Filter By:"  [(ngModel)]="selectedFilterType" (change)="filterFn()">
-        <option value=1>UserName</option>
-        <option value=2>MobileNo</option>
-        <option value=3>Email</option>
-        <option value=4>NationalId</option>
-        <option value=5>PreferedName</option>
-        <option value=6>FullName</option>
-      </select>
 
-      <select id="filterType" title="Filter By:" [(ngModel)]="selectedAccessType" (change)="filterFn()">
-        <option value=1>Admin only</option>
-        <option value=2>Passengers only</option>
-        <option value=0>Both</option>
-      </select>
-
-      <select id="filterType" title="Filter By:" [(ngModel)]="selectedUserType" (change)="filterFn()">
-        <option value=1>Active users only</option>
-        <option value=2>Inactive users only</option>
-        <option value=0>All user types</option>
-      </select>
-    
-    <input id="filterInput" (keyup)="filterFn()" [(ngModel)]="userFilter" placeholder="Search...">
-</div>
 
 <div class="container-lg mt-4 mb-4">
     <div class="card shadow border-primary">
@@ -34,10 +11,42 @@
         </div>
 
         <div class="card-body">
-          <div class="mb-3 d-flex align-items-center justify-content-between">
-              <span class="text-muted">Select a user and proceed</span>
-              <i class="fas fa-chevron-right text-primary"></i>
-          </div>
+        
+              <div class="row">
+                  <div class="col-lg-4 col-12">
+                    <span class="text-muted">Select a user and proceed</span>
+                  </div>                 
+              
+                  <div class="filters col-lg-8" >
+
+                      <select id="filterType" title="Filter By:"  [(ngModel)]="selectedFilterType" (change)="filterFn()">
+                        <option value=1>UserName</option>
+                        <option value=2>MobileNo</option>
+                        <option value=3>Email</option>
+                        <option value=4>NationalId</option>
+                        <option value=5>PreferedName</option>
+                        <option value=6>FullName</option>
+                      </select>             
+                              
+                      <select id="filterType" title="Filter By:" [(ngModel)]="selectedAccessType" (change)="filterFn()">
+                        <option value=1>Admin only</option>
+                        <option value=2>Passengers only</option>
+                        <option value=0>Both</option>
+                      </select>              
+                                             
+                      <select id="filterType" title="Filter By:" [(ngModel)]="selectedUserType" (change)="filterFn()">
+                        <option value=1>Active users only</option>
+                        <option value=2>Inactive users only</option>
+                        <option value=0>All user types</option>
+                      </select>
+
+                      <input id="filterInput" (keyup)="filterFn()" [(ngModel)]="userFilter" placeholder="Search...">
+                  </div> 
+                   
+                  
+                  
+              </div>
+         
 
           <!-- On large screens -->
           <div class="table-responsive" *ngIf="deviceService.getScreenSize()>990">

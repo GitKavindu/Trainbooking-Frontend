@@ -121,7 +121,7 @@ export class TrainComponent {
           })
       }
 
-      enableDisableApartmentForTrain(i:number,train_id:number,train_seq_no:number){
+      enableDisableApartmentForTrain(train_id:number,train_seq_no:number){
         this.enableApartment=!this.enableApartment;
         this.router.navigate(['/apartment'], {
           queryParams: { trainId: train_id, seqNo: train_seq_no}
@@ -133,8 +133,8 @@ export class TrainComponent {
         this.TrainList[rowNo].showRow=!this.TrainList[rowNo].showRow
       }
 
-      getTrainId(TrainNum:number){
-        return 'TR' + (TrainNum.toString().padStart(6, '0'))
+      getTrainId(TrainNum:number,TrainSeqNo:number){
+        return 'TR' +  TrainNum.toString().padStart(4, '0') +TrainSeqNo.toString().padStart(2, '0') 
       }
   
       getVisibleRows():Train[]{

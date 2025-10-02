@@ -70,9 +70,21 @@ app-booking {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
 
-    background: url('Assets/gallery-4.jpg') center/cover no-repeat;
+    background: url('../public/gallery-4.jpg') center/cover no-repeat;
     opacity: 0.4;        /* Adjust this value to control image strength */
 
     z-index: -1;
     pointer-events: none; /* Makes sure it doesn't block clicks */
+  }
+
+  /***/
+
+  .mb-4, .my-4 {
+    margin-bottom: 0px !important;
+     padding-bottom: 1.5rem;
+  }
+
+  .mt-4, .my-4 {
+    margin-top:  0px !important;
+    padding-top: 1.5rem;
   }

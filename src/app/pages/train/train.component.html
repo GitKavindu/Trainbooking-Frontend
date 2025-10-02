@@ -50,7 +50,8 @@
                         </th>
                         <th>Created Date</th>
                         <th>Last Updated</th>
-                        <th colspan="2">Options</th>
+                        <th>Status</th>
+                        <th colspan="3">Options</th>
                     </tr>
                 </thead>
 
@@ -63,18 +64,35 @@
                 <tbody *ngIf="TrainList!=undefined && TrainList.length!=0">                      
                     <ng-container *ngFor="let dataItem of getVisibleRows()">
                           <tr class="table-row text-center">
-                              <td>{{getTrainId(dataItem.train_no)}}</td>
+                              <td>{{getTrainId(dataItem.train_no,dataItem.train_seq_no)}}</td>
                               <td>
                                 <strong>{{ dataItem.train_name }}</strong><br>
                               </td>
                               <td>{{dataItem.created_date}}</td>
                               <td *ngIf="dataItem.lastUpdated_date==null"> ---------------</td>
                               <td *ngIf="dataItem.lastUpdated_date!=null">{{ dataItem.lastUpdated_date }}</td>
+
+                              <td class="text-center" *ngIf="dataItem.isActive==false">
+                                <span class="badge badge-pill badge-danger px-3 py-2">Inactive</span>
+                              </td>
+                              <td class="text-center" *ngIf="dataItem.isActive==true">
+                                <span class="badge badge-pill badge-success px-3 py-2">Active</span>
+                              </td>
+
+                              <!-- Buttons -->
+                              <td>
+                                <button type="button" class="btn btn-light mr-1" (click)="enableDisableApartmentForTrain(dataItem.train_no,dataItem.train_seq_no)">                                  
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
+                                      <path d="M8 14V15M16 14V15M5 11H12M19 11H12M6 21L8 18M16 18L18 21M12 6V11M12 6H5M12 6H19M5 6V16C5 17.1046 5.89543 18 7 18H17C18.1046 18 19 17.1046 19 16V6M5 6V6C5 4.34315 6.34315 3 8 3H16C17.6569 3 19 4.34315 19 6V6" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                  </svg>
+                                </button>
+                              </td>                            
+
                               <td class="text-center">
                                   <button type="button" class="btn btn-light mr-1"
                                       data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"  viewBox="0 0 16 16">
+                                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
                                       </svg>
                                   </button>
                               </td>
@@ -121,7 +139,7 @@
                     <!-- Train Id -->
                     <div class="row py-3 border-bottom text-left">
                       <div class="col-6 text-muted ">Train Id:</div>
-                      <div class="col-6 ">{{ getTrainId(dataItem.train_no) }}</div>
+                      <div class="col-6 ">{{ getTrainId(dataItem.train_no,dataItem.train_seq_no) }}</div>
                     </div>
 
                     <!-- Created date -->

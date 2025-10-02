@@ -210,27 +210,7 @@ export class ApartmentComponent {
   }
   
   getAvailableSeatCount(seat:Seat[]):number{
-    let seatModel:SeatModel[]=this.commonService.convertSeatToSeatModel(seat)
-    let seatCount=0
-    console.log(seatModel)
-    for(let i=0;i<seatModel.length;i++){
-
-       for(let j=0;j<seatModel[i].left.length;j++){
-
-        if(seatModel[i].left[j].available==true)
-          seatCount++
-
-      }
-      
-      for(let j=0;j<seatModel[i].right.length;j++){
-        
-        if(seatModel[i].right[j].available==true)
-          seatCount++
-
-      }
-      
-    }
-   
+    let seatCount=seat.length
     return seatCount
   }
 
@@ -238,6 +218,7 @@ export class ApartmentComponent {
     let booedSeatCount=0
     this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,apartmentId).subscribe((res)=>{
       booedSeatCount=res.Data.length
+      return booedSeatCount
     })
     return booedSeatCount
   }
