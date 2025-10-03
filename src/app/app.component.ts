@@ -2,6 +2,7 @@ import { Component} from '@angular/core';
 import { Location } from '@angular/common';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { SharedServiceService } from './shared-service.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,8 @@ import { filter } from 'rxjs';
 export class AppComponent {
 
   currentUrl: string;
-
-  constructor(private router: Router,private location: Location) {
+  
+  constructor(private router: Router,private location: Location,public service:SharedServiceService) {
     this.currentUrl=""
   }
 
@@ -29,5 +30,7 @@ export class AppComponent {
         console.log('Updated Url:', "m"+this.currentUrl);
       });
   }
+
+ 
 
 }

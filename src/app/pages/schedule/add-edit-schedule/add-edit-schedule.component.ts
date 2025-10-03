@@ -440,14 +440,17 @@ export class AddEditScheduleComponent {
   }
 
   submitSchedule(){
-    if(this.scheduleDetails==undefined){
+
+    if(this.scheduleDetails.scheduleId=='SHNONE'){
       this.service.addSchedule(this.scheduleDto).subscribe(res=>{
-        alert(res.Data.toString());
+        //alert(res.Data.toString());
+        this.service.submitReview(`Schedule added successfully!`)
       })
     }
     else{
       this.service.updateSchedule(this.scheduleDto).subscribe(res=>{
-        alert(res.Data.toString());
+        //alert(res.Data.toString());
+        this.service.submitReview(`Schedule updated successfully!`)
       })
     }
   }

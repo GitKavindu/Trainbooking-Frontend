@@ -24,6 +24,7 @@ import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
 import { CommonDetailsComponent } from './shared/common-details/common-details.component';
 import { HomeComponent } from './pages/home/home.component';
+import { UserprofileComponent } from './pages/userprofile/userprofile.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { HomeComponent } from './pages/home/home.component';
     MybookingsComponent,
     UserpageComponent,
     CommonDetailsComponent,
-    HomeComponent
+    HomeComponent,
+    UserprofileComponent
   ],
   imports: [
     BrowserModule,

@@ -92,5 +92,13 @@ app-booking {
     padding-top: 1.5rem;
   }
 
+  /* alert box*/
+  #alert {
+    transition: opacity 0.5s ease-in-out;
+    position: sticky;
+    top: 0px;
+    margin-bottom: 0px;
+  }
+
 
   

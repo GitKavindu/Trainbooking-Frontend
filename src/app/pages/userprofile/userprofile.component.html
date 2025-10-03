@@ -1,0 +1,115 @@
+
+
+<div class="container-lg mt-4 mb-4">
+    <div class="card shadow border-primary">
+        <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div>
+                <i class="fas fa-subway mr-2"></i>
+                <strong class="h5 mb-0">My Profile</strong>
+            </div>
+            <img src="images/icons/train_2.svg" height="50" alt="Booking Icon">
+        </div>
+
+        <div class="card-body">
+         
+
+          <ng-container>
+            
+            <ng-container>
+                <div class="row thead-custom">
+                    <div class="col text-center">
+                        <h3><b>User Details</b></h3>
+                    </div>
+                </div>
+               
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <ng-container>
+                        <!-- Full Name -->
+                        <div class="row py-3 text-center">
+                            <div class="col-12 text-muted text-center">Full Name:</div><br><br>
+                            <div class="col-12 text-center">{{ user.FullName }}</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="row py-3 text-center">
+                            <div class="col-12 text-muted text-center">Email</div><br>
+                            <div class="col-12 text-center">{{ user.Email }}</div>
+                        </div>
+
+                        <!-- Preferred Name -->
+                        <div class="row py-3 text-center">
+                            <div class="col-12 text-muted text-center">Preferred Name</div>
+                            <div class="col-12 text-center">{{ user.PreferedName }}</div>
+                        </div>
+
+
+
+                        <!-- Mobile No -->
+                        <div class="row py-3 text-center">
+                            <div class="col-12 text-muted text-center">Mobile Number</div>
+                            <div class="col-12 text-center">{{ user.MobileNo }}</div>
+                        </div>
+
+                        <!-- National ID -->
+                        <div class="row py-3 text-center">
+                            <div class="col-12 text-muted text-center">National ID</div>
+                            <div class="col-12 text-center">{{ user.NationalId }}</div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="row py-3 text-center">
+                            <div class="col-6 text-muted text-right">Status</div>
+                            <div class="col-6 text-left">
+                                <div class="text-left" *ngIf="user.IsActive==false">
+                                <span class="badge badge-pill badge-danger px-3 py-2">Disabled</span>
+                                </div>
+                                <div class="text-left" *ngIf="user.IsActive==true">
+                                <span class="badge badge-pill badge-success px-3 py-2">Active</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Admin -->
+                        <div class="row py-3 text-center">
+                            <div class="col-6 text-muted text-right">Type</div>
+                            <div class="col-6 text-left">
+                                <div class="text-left" *ngIf="user.IsAdmin==true">
+                                <span class="badge badge-pill badge-danger px-3 py-2">Admin</span>
+                                </div>
+                                <div class="text-left" *ngIf="user.IsAdmin==false">
+                                <span class="badge badge-pill badge-success px-3 py-2">Passenger</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row py-3 text-center">
+
+                            <!-- User Active/Inactive Control Buttons (Left Side) -->
+                            <div class="col-lg-5"></div>
+
+                            <div class="mr-3 col-lg-4 col-12 text-left">
+                                <button *ngIf="user.IsActive" class=" btn btn-outline-danger mr-2">
+                                    Delete my profile
+                                </button>
+                            </div>
+                            <div class="col-lg-5"></div>
+
+                        </div>      
+                        </ng-container>                 
+                        
+                    </div>
+                    
+              
+                </div>
+            </ng-container>
+            
+          </ng-container>
+
+         
+        </div>
+    </div>
+</div>
+
+

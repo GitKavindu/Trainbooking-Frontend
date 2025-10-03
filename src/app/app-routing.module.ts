@@ -10,6 +10,7 @@ import { BookingComponent } from './pages/booking/booking.component';
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
 import { HomeComponent } from './pages/home/home.component';
+import { UserprofileComponent } from './pages/userprofile/userprofile.component';
 
 const routes: Routes = [
   
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path: 'booking', component: BookingComponent },
   { path: 'mybookings', component: MybookingsComponent },
   { path: 'users', component: UserpageComponent },
-  { path: 'home', component: HomeComponent }
+  { path: 'home', component: HomeComponent },
+  { path: 'profile', component: UserprofileComponent }
 ];
 
 @NgModule({

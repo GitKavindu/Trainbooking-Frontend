@@ -5,6 +5,7 @@ import { TokenService } from '../../common/TokenService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceService } from '../../common/DeviceService';
 import { NavigationService } from '../../common/NavigationService';
+import { Token } from '../../../Models/Token';
 
 @Component({
   selector: 'app-schedule',
@@ -103,21 +104,24 @@ export class ScheduleComponent {
         this.enableScheduleDetails(item.scheduleId)
       }
   
-      deleteClick(ScheduleId:any){
-        if(confirm('Are you sure ?')){
-          
-          // let val:ScheduleDto={
-          //   schedule_id:ScheduleId,
-          //   schedule_name:'',
-          //   token_id:this.service.tokenService.returnToken()?.tokenId
-          // }
-  
-          // this.service.deleteSchedule(val).subscribe((res)=>{
-          //   alert(res.Data.toString());
-          //   this.refreshScheduleList()
-          // })
-        }
+      deleteClick(ScheduleId:string){
         
+        if(confirm('Are you sure ?')){
+
+          let token:Token | undefined=this.tokenService.returnToken()
+
+          if(token!=undefined){
+            this.service.deleteSchedule(token,ScheduleId).subscribe((res)=>{
+              this.service.submitReview(`Schedule deleted successfully!`)
+              this.refreshScheduleList()
+              this.resetOptions()
+            })
+          }
+          else{
+            this.router.navigateByUrl("/login")
+          }           
+          
+        }
       }
   
       closeClick(){
@@ -317,4 +321,6 @@ export class ScheduleComponent {
         else
           return "Select a Schedule and edit <b>Or</b> Add a new Schedule"
       }
+
+       
 }

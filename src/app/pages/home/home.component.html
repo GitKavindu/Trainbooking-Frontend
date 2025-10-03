@@ -8,12 +8,12 @@
         </div> 
         
         <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==false">
-            <button type="button" class="btn btn-primary" (click)="goToBooking()">Book a Train</button>
-            <button type="button" class="btn btn-primary" (click)="goToMyBookings()">My Bookings</button>
+            <button type="button" class="btn btn-primary btn-lg" (click)="goToBooking()">Book a Train</button>
+            <button type="button" class="btn btn-primary btn-lg" (click)="goToMyBookings()">My Bookings</button>
         </div>
 
         <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==true">
-            <button type="button" class="btn btn-primary" (click)="goToSchedule()">Place Train Schedule</button>
+            <button type="button" class="btn btn-primary btn-lg" (click)="goToSchedule()">Place Train Schedule</button>
         </div>  
     </div>
     

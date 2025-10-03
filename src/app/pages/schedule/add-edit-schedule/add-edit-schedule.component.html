@@ -1,4 +1,4 @@
- <form class="container add-edit" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" *ngIf="endStationList.length!=0">
+ <form class="container add-edit" [formGroup]="scheduleForm"  *ngIf="endStationList.length!=0">
 
     <div class="form-group">
 
@@ -100,13 +100,13 @@
                 <div class="row">
 
                     <div class="col-lg-6">
-                        <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0 || validateForm()==false" (click)="submitSchedule()"> 
-                            {{ scheduleDetails!=undefined ? 'Update Schedule' : 'Add Schedule' }}
+                        <button class="btn btn-primary" type="button" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
+                            {{ scheduleDetails.scheduleId !='SHNONE' ? 'Update Schedule' : 'Add Schedule' }}
                         </button>
                     </div>
 
                     <div class="col-lg-6 text-right">
-                        <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
+                        <button class="btn btn-primary" type="button" [disabled]="!validateForm()" (click)="addToSchedule()">Add</button>
                     </div>
 
                 </div>
@@ -142,7 +142,7 @@
 
             <div class="col-12"><br></div>
             <div class="col-12 text-center">
-                <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0 || validateForm()==false" (click)="submitSchedule()"> 
+                <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
                     {{ scheduleDetails.scheduleId!='SHNONE' ? 'Update Schedule' : 'Add Schedule' }}
                 </button>
             </div>

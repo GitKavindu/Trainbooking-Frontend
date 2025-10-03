@@ -66,6 +66,7 @@
               </div>
               <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
                 <a class="dropdown-item" (click)="logOut()">Logout</a>
+                <a routerLink="/profile" class="dropdown-item">My Profile</a>
               </div>
             </div>
           </div>
@@ -89,6 +90,7 @@
 
             <ng-container *ngIf="service.tokenService.returnToken()!=undefined">
                 <div class="dropdown-item" (click)="logOut()">Logout</div>
+                <a routerLink="/profile" class="dropdown-item">My Profile</a>
             </ng-container>
 
           </div>
