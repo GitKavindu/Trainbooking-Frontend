@@ -9,8 +9,13 @@ import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { BookingComponent } from './pages/booking/booking.component';
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
+  
+  /* Default route */
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'station', component: StationComponent },
@@ -19,7 +24,8 @@ const routes: Routes = [
   { path: 'schedule', component: ScheduleComponent },
   { path: 'booking', component: BookingComponent },
   { path: 'mybookings', component: MybookingsComponent },
-  { path: 'users', component: UserpageComponent }
+  { path: 'users', component: UserpageComponent },
+  { path: 'home', component: HomeComponent }
 ];
 
 @NgModule({

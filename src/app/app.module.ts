@@ -23,6 +23,7 @@ import { BookingFormComponent } from './pages/booking/booking-form/booking-form.
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
 import { CommonDetailsComponent } from './shared/common-details/common-details.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CommonDetailsComponent } from './shared/common-details/common-details.c
     BookingFormComponent,
     MybookingsComponent,
     UserpageComponent,
-    CommonDetailsComponent
+    CommonDetailsComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

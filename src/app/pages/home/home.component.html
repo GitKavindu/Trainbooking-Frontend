@@ -1,0 +1,21 @@
+
+<div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>Welcome to Sri Lankan Railways</h1>
+            <br>
+        </div> 
+        
+        <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==false">
+            <button type="button" class="btn btn-primary" (click)="goToBooking()">Book a Train</button>
+            <button type="button" class="btn btn-primary" (click)="goToMyBookings()">My Bookings</button>
+        </div>
+
+        <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==true">
+            <button type="button" class="btn btn-primary" (click)="goToSchedule()">Place Train Schedule</button>
+        </div>  
+    </div>
+    
+    <img src="gallery-4.jpg" alt="sdasds">
+</div>

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
+import { Location } from '@angular/common';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +10,24 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Trainbooking-Frontend';
+
+  currentUrl: string;
+
+  constructor(private router: Router,private location: Location) {
+    this.currentUrl=""
+  }
+
+  ngOnInit(): void {
+    // Set the initial Url
+    this.currentUrl = this.location.path();
+
+    // Update currentUrl on every navigation end
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.currentUrl = this.location.path();
+        console.log('Updated Url:', "m"+this.currentUrl);
+      });
+  }
+
 }

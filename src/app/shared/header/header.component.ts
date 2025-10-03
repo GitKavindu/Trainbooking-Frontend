@@ -13,7 +13,9 @@ export class HeaderComponent {
   
   tokenService:TokenService
   isDropdown:boolean=true
-
+  path:string="home"
+  fragment:string="our-quality"
+  
   constructor(public service:SharedServiceService,private router:Router,  private cdRef: ChangeDetectorRef){
     this.tokenService=new TokenService()
   }

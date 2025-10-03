@@ -77,7 +77,10 @@ app-booking {
     pointer-events: none; /* Makes sure it doesn't block clicks */
   }
 
-  /***/
+  /* 
+  * Remove container top and bottom marigin
+  * Conver it to a padding
+  */
 
   .mb-4, .my-4 {
     margin-bottom: 0px !important;
@@ -88,3 +91,6 @@ app-booking {
     margin-top:  0px !important;
     padding-top: 1.5rem;
   }
+
+
+  
