@@ -40,9 +40,11 @@ export class SharedServiceService {
   public tokenService:TokenService
   showMessage:boolean=false
   messege:string=""
+  apartmentClasses:string[]
   
   constructor(private http:HttpClient) {
-    this.tokenService=new TokenService() 
+    this.tokenService=new TokenService()
+    this.apartmentClasses=['First','Second','Third'] 
    }
 
   //User

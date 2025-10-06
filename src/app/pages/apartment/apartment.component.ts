@@ -38,6 +38,7 @@ export class ApartmentComponent {
   navigationService:NavigationService<Apartment>
   ApartmentClasses:string[]
   commonService:CommonService
+  bookedSeatCount:number[]
 
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
     this.trainId=0
@@ -53,6 +54,8 @@ export class ApartmentComponent {
     this.deviceService=new DeviceService()
     this.ApartmentClasses=['First','Second','Third']
     this.commonService=new CommonService()
+
+    this.bookedSeatCount=new Array<number>()
   }
   
   ngOnInit():void{
@@ -143,6 +146,15 @@ export class ApartmentComponent {
         this.navigationService.selectedPage=selectedPage
       else
         this.navigationService.selectedPage=1
+
+      this.bookedSeatCount=new Array<number>()
+
+      for(let i=0;i<res.Data.length;i++){
+         this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,res.Data[i].Apartment_id).subscribe((res)=>{
+            this.bookedSeatCount.push(res.Data.length)
+         })
+      }     
+      
     })
 
   }
@@ -210,18 +222,16 @@ export class ApartmentComponent {
   }
   
   getAvailableSeatCount(seat:Seat[]):number{
-    let seatCount=seat.length
+    let apartmentIndex:number=0
+
+    for(let i=0;i<this.bookedSeatCount.length;i++){
+      if(seat[0].apartmentId==this.ApartmentList[i].Apartment_id){
+        apartmentIndex=i
+        break
+      }
+    }
+    let seatCount=seat.length-this.bookedSeatCount[apartmentIndex]
     return seatCount
   }
-
-  bookedSeatCount(apartmentId:number):number{
-    let booedSeatCount=0
-    this.service.selectBookedSeatsForJourney(this.startJourneyId,this.endJourneyId,apartmentId).subscribe((res)=>{
-      booedSeatCount=res.Data.length
-      return booedSeatCount
-    })
-    return booedSeatCount
-  }
-
 
 }

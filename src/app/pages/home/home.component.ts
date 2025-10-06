@@ -26,4 +26,12 @@ export class HomeComponent {
   goToSchedule(){
     this.router.navigateByUrl("/schedule")
   }
+
+   goToLogin(){
+    this.router.navigateByUrl("/login")
+  }
+
+  goToRegister(){
+    this.router.navigateByUrl("/register")
+  }
 }

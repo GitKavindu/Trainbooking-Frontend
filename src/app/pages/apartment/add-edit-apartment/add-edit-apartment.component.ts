@@ -19,7 +19,7 @@ export class AddEditApartmentComponent {
 
   constructor(private service:SharedServiceService,private route:ActivatedRoute){
     this.tokenService=new TokenService()
-    this.apartmentClasses=['First','Second','Third']
+    this.apartmentClasses=service.apartmentClasses
   }
   Apartmentid!:number
   Apartmentclass!:string
