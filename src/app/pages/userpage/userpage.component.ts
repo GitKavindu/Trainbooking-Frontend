@@ -3,6 +3,7 @@ import { SharedServiceService } from '../../shared-service.service';
 import { GetUserStatusDto } from '../../../Models/DTOs/GetUserStatusDto';
 import { ReturnUUserStatusDto } from '../../../Models/DTOs/ReturnUUserStatusDto';
 import { AppointAdmin } from '../../../Models/DTOs/AppointAdmin';
+import { DeviceService } from '../../common/DeviceService';
 
 @Component({
   selector: 'app-userpage',
@@ -21,8 +22,10 @@ export class UserpageComponent {
 
   requestModel:GetUserStatusDto | null=null
   loadingBit:boolean=false
-
-  constructor(private service:SharedServiceService){}
+  deviceService:DeviceService
+  constructor(private service:SharedServiceService){
+    this.deviceService=new DeviceService()
+  }
 
   filterFn(){
     let val:GetUserStatusDto={
@@ -44,7 +47,7 @@ export class UserpageComponent {
         })
 
       }
-    },1000)
+    },500)
   }
 
   compareGetUserStatusDtos(val:GetUserStatusDto):boolean{
@@ -119,5 +122,9 @@ export class UserpageComponent {
       return "Search for users"
     else
       return "No matching users"
+  }
+
+  toggleMoreDetails(rowNo:number) {
+    this.returnedUsers[rowNo].showRow=!this.returnedUsers[rowNo].showRow
   }
 }

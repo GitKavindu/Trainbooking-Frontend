@@ -1,61 +1,157 @@
- <form class="add-edit" [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" *ngIf="endStationList.length!=0">
-      
-    <div class="form-group" *ngIf="trainList.length!=0">
-        <label for="trainType">Train</label>
-        <select id="trainType" title="Filter By:" formControlName="train" >
-            <option value="" disabled selected hidden>----------Select a train---------</option>
-            <option *ngFor="let train of trainList"  [ngValue]="train">{{train.train_name}}</option>
-        </select>
-    </div>
+ <form class="container add-edit" [formGroup]="scheduleForm"  *ngIf="endStationList.length!=0">
 
-    <div class="form-group" *ngIf="startStationList.length!=0">
-        <label for="startstation">Start Station</label>
-        <select id="startstation" title="Filter By:" formControlName="startstation" >
-            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
-            <option *ngFor="let station of startStationList" [ngValue]="station">{{station.station_name}}</option>
-        </select>
-
-        <label for="startdate">Start date:</label>
-        <input type="date" id="startdate" name="startdate" formControlName="startDate">
-        
-        <label for="starttime">Start time:</label>
-        <input type="time" id="starttime" name="starttime" formControlName="startTime">
-    </div>
-
-    <div class="form-group" *ngIf="endStationList.length!=0">
-        <label for="endstation">End Station</label>
-        <select id="endstation" title="Filter By:" formControlName="endstation">
-            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
-            <option *ngFor="let station of endStationList" [ngValue]="station">{{station.station_name}}</option>
-        </select>
-
-        <label for="enddate">End date:</label>
-        <input type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
-
-        <label for="endtime">End time:</label>
-        <input type="time" id="endtime" name="endtime" formControlName="endTime">
-
-        <span class="error-message" *ngIf="!validateEndDate() && getControl('endDate').untouched==false && getControl('endTime').untouched==false">
-            Select a date and time larger than start date and time
-        </span>
-    </div>
-      
-    <div class="form-buttons">
-        <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
-        <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
-        <button class="btn btn-secondary" type="button" (dblclick)="closeForm()">Close</button>
-    </div>
-    <br>
     <div class="form-group">
-    <span class="error-message" *ngIf="errMessege!='' ">
-        {{errMessege}}
-    </span>
+
+        <div class="row" *ngIf="trainList.length!=0">
+
+            <div class="col-lg-3"></div>
+            <div class="col-lg-6 col-12">
+                <label for="trainType">Train</label>
+                <select class="form-control" id="trainType" title="Filter By:" formControlName="train" >
+                    <option value="" disabled selected hidden>----------Select a train---------</option>
+                    <ng-container *ngFor="let train of trainList">
+                        <option *ngIf="train.isActive==true || scheduleDetails.scheduleId!='SHNONE' "  [ngValue]="train">{{train.train_name}}</option>
+                    </ng-container>
+                </select>
+            </div>
+            <div class="col-lg-3"></div>
+
+        </div>
+
+        <br>
+        <div class="row">
+
+            <div class="col-lg-6" *ngIf="startStationList.length!=0">
+                <div class="row">
+                    <div class="col-12 dropdown">
+                        <label for="startstation">Start Station</label>
+                        <select  class="form-control" id="startstation" title="Filter By:" formControlName="startstation" >
+                            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+                            <ng-container *ngFor="let station of startStationList">
+                                <option *ngIf="station.isActive==true" [ngValue]="station">{{station.station_name}}</option>
+                            </ng-container>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+                        <label for="startdate">Start date:</label>
+                        <input  class="form-control" type="date" id="startdate" name="startdate" formControlName="startDate">
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                        <label for="starttime">Start time:</label>
+                        <input  class="form-control" type="time" id="starttime" name="starttime" formControlName="startTime">            
+                    </div>
+
+                </div>
+                
+            </div>
+
+            <div class="col-lg-6" *ngIf="endStationList.length!=0">
+
+                <div class="row">
+                    <div class="col-12 dropdown">
+                        <label for="endstation">End Station</label>
+                        <select  class="form-control" id="endstation" title="Filter By:" formControlName="endstation">
+                            <option [ngValue]="defaultStation" disabled selected hidden>{{defaultStation.station_name}}</option>
+                            <ng-container *ngFor="let station of endStationList">
+                                <option  *ngIf="station.isActive==true" [ngValue]="station">{{station.station_name}}</option>
+                            </ng-container>
+                        </select>
+                    </div>
+                    
+                    <div class="col-lg-6 col-12">
+                        <label for="enddate">End date:</label>
+                        <input  class="form-control" type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">
+                    </div>
+
+                    <div class="col-lg-6 col-12">
+                        <label for="endtime">End time:</label>
+                        <input  class="form-control" type="time" id="endtime" name="endtime" formControlName="endTime">
+                    </div>
+
+                </div>
+                
+
+                <div class="col-lg-12">
+                    <span class="error-message" *ngIf="!validateEndDate() && getControl('endDate').untouched==false && getControl('endTime').untouched==false">
+                        Select a date and time larger than start date and time
+                    </span>
+                </div>  
+
+                
+            </div>
+
+        </div>
+
+        <br>
+        <div class="row">
+            <span class="error-message" *ngIf="errMessege!='' ">
+                {{errMessege}}
+            </span>
+        </div>
+        
+        <br>
+        <div class="row" *ngIf="deviceService.getScreenSize()>990">
+
+            <div class="col-lg-6">
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <button class="btn btn-primary" type="button" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
+                            {{ scheduleDetails.scheduleId !='SHNONE' ? 'Update Schedule' : 'Add Schedule' }}
+                        </button>
+                    </div>
+
+                    <div class="col-lg-6 text-right">
+                        <button class="btn btn-primary" type="button" [disabled]="!validateForm()" (click)="addToSchedule()">Add</button>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <button class="btn btn-secondary" type="button" (dblclick)="closeForm()">Close</button>
+                    </div>
+
+                </div>
+            </div>
+            
+            
+            
+        </div>
+
+        <div class="row" *ngIf="deviceService.getScreenSize()<=990">
+            
+            <div class="col-6">
+                <button class="btn btn-primary" type="submit" [disabled]="!validateForm()">Add</button>
+            </div>
+
+            <div class="col-6 text-right">
+                <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
+            </div>
+
+            <div class="col-12"><br></div>
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
+                    {{ scheduleDetails.scheduleId!='SHNONE' ? 'Update Schedule' : 'Add Schedule' }}
+                </button>
+            </div>
+
+            <div class="col-12"><br></div>
+            <div class="col-12 text-center">
+                <button class="btn btn-secondary" type="button" (dblclick)="closeForm()">Close</button>
+            </div>                    
+
+        </div>
+            
     </div>
-
-  </form>
-
-<div class="form-buttons" *ngIf="endStationList.length!=0">
-    <button class="btn btn-primary" type="submit" [disabled]="scheduleList.length==0" (click)="submitSchedule()"> 
-        {{ scheduleDetails ? 'Update Schedule' : 'Add Schedule' }}
-    </button>
-</div>

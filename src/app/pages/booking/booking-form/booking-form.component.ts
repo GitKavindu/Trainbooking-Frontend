@@ -41,7 +41,9 @@ export class BookingFormComponent {
       station_name:'----------Select a station---------',
       added_by:'',
       created_date:'',
-      lastUpdated_date:''
+      lastUpdated_date:'',
+      isActive:false,
+      showRow:false
     }
 
     this.lastSelectedStartStation=this.defaultStation

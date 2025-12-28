@@ -17,6 +17,7 @@
                       </div>
 
                   </div>
+                  <br>
                   <div class="row">
                       <div class="col-lg-6 col-12 text-left">
                           <label for="startdate">Start date:&emsp;</label>
@@ -42,11 +43,15 @@
                       </div>
                   </div>
 
+                  <br>
                   <div class="row">
-                      <div class="col-lg-2 col-12 checkbox-wrapper-6">
-                            <input class="tgl tgl-light" id="cb1-6" type="checkbox" (change)="activateDeactivateEndStationRibbon()"/>
-                            <label class="tgl-btn" for="cb1-6"></label>
+                      <div class="col-lg-2 col-12">
+                           <label class="switch text-center">
+                                <input type="checkbox" id="check"  (change)="activateDeactivateEndStationRibbon()">
+                                <span class="slider round"></span>
+                            </label>
                       </div>
+                        
                       <div class="col-lg-5 col-12 text-left" >
                           <label for="enddate">End date:&emsp;</label>
                           <input class="form-control" type="date" id="enddate" name="enddate" formControlName="endDate" [min]="'2020-05-01'">

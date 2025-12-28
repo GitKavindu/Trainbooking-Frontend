@@ -33,13 +33,18 @@ import { AppointAdmin } from '../Models/DTOs/AppointAdmin';
 })
 export class SharedServiceService {
 
-  readonly APIUrl="http://localhost:5000";
+  //readonly APIUrl="http://localhost:5000";
+  readonly APIUrl="http://192.168.8.102:5000";
 
  
   public tokenService:TokenService
-
+  showMessage:boolean=false
+  messege:string=""
+  apartmentClasses:string[]
+  
   constructor(private http:HttpClient) {
-    this.tokenService=new TokenService() 
+    this.tokenService=new TokenService()
+    this.apartmentClasses=['First','Second','Third'] 
    }
 
   //User
@@ -53,6 +58,10 @@ export class SharedServiceService {
 
   getTokenDetails(tokenId:string){
     return this.http.get<BaseResponse<ReturnUserDto>>(this.APIUrl+`/User/getTokenDetails/${tokenId}`);
+  }
+
+  getUserDetails(token:TokenDto){
+    return this.http.post<BaseResponse<ReturnUUserStatusDto>>(this.APIUrl+"/User/GetUserDetails",token);
   }
 
   //Station
@@ -143,6 +152,12 @@ export class SharedServiceService {
     );
   }
 
+  deleteSchedule(token:TokenDto,scheduleId:string){
+     return this.http.delete<BaseResponse<string>>(this.APIUrl+`/Journey/deleteJourney/${scheduleId}`, {
+      body: token
+    });
+  }
+
   //booking
   selectSortedSchedules(getSortedSchedulesDto:GetSortedSchedulesDto) {
     return this.http.post<BaseResponse<ReturnSortedSchedulesDto[]>>(
@@ -210,6 +225,18 @@ export class SharedServiceService {
       body: appointAdmin
     });
   }
+
+  //
+  submitReview(messege:string) {
+    this.showMessage = true;        
+    this.messege=messege
+    
+    setTimeout(() => {
+      this.showMessage = false;
+      this.messege=""
+    }, 3000);
+    
+  } 
 
   //
   getSeatModel(){

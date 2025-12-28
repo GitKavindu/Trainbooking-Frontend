@@ -1,73 +1,255 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary float-right m-2" (click)="addClick()" data-backdrop="static" *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">
-    Add Schedule
-  </button>
- 
-  <div class="filters" *ngIf="ScheduleList.length!=0">
-      <select id="filterType" title="Filter By:"  [(ngModel)]="selectedModel">
-        <option value="start">Start</option>
-        <option value="destination">Destination</option>
-        <option value="train" *ngIf="enablethisschedule==false">Train</option>
-      </select>
-    
-    <input id="filterInput" (keyup)="filterFn()"  [(ngModel)]="FromStationFilter" placeholder="Search...">
-  </div>
+<div class="filters" *ngIf="ActivateAddEditScheduleComp==false">
+    <select id="filterType" title="Filter By:"  [(ngModel)]="selectedModel">
+      <option value="start">Start</option>
+      <option value="destination">Destination</option>
+      <option value="train" *ngIf="enablethisschedule==false">Train</option>
+    </select>
+  
+  <input id="filterInput" (keyup)="filterFn()"  [(ngModel)]="FromStationFilter" placeholder="Search...">
+</div>
 
-  <table class="table table-striped" *ngIf="ScheduleList.length!=0">
-      <thead>
-         <tr>
-            <th (click)="sortResult('train')" *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">Train  
-              <div class="no-style-wrapper" *ngIf="train==true">{{ asc == true ? '▲' : '▼' }}</div>
-            </th>
-            <th (click)="sortResult('startstation')">Start  
-              <div class="no-style-wrapper" *ngIf="startStation==true">{{ asc == true ? '▲' : '▼' }}</div>
-            </th>
-            <th>Start Date</th>
-            <th>Start Time</th>
-            <th (click)="sortResult('endstation')">
-              Destination
-              <div class="no-style-wrapper" *ngIf="endStation==true">{{ asc == true ? '▲' : '▼' }}</div>
-            </th>
+<div class="container-lg mt-4 mb-4" >
+  <div class="card shadow border-primary">
+      <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+          <div>
+              <i class="fas fa-subway mr-2"></i>
+              <strong class="h5 mb-0">Schedules</strong>
+          </div>
+          <img src="images/icons/Schedule_2.svg" height="50" alt="Booking Icon">
+      </div>
+
+      <div class="card-body">
+        <div class="mb-3 d-flex align-items-center justify-content-between">
+            <span class="text-muted d-none d-lg-block" [innerHTML]="getbannerText()"></span>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary float-right m-2" *ngIf="ActivateAddEditScheduleComp==false && enablethisschedule==false"
+              data-toggle="modal" data-target="#exampleModal" (click)="addClick()" data-backdrop="static" data-keyboard="false" >
+                  Add Schedule
+            </button>
+        </div>
+
+        <!-- On large screens -->
+        <div class="table-responsive" *ngIf="deviceService.getScreenSize()>990">
+            <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                  <tr class="text-center">
+                      <th (click)="sortResult('train')" *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">Train  
+                        <div class="no-style-wrapper" *ngIf="train==true">{{ asc == true ? '▲' : '▼' }}</div>
+                      </th>
+                      <th *ngIf="ActivateAddEditScheduleComp==false">Schedule Id</th>
+                      <th (click)="sortResult('startstation')">Start  
+                        <div class="no-style-wrapper" *ngIf="startStation==true">{{ asc == true ? '▲' : '▼' }}</div>
+                      </th>
+                      <th>Start Date</th>
+                      <th>Start Time</th>
+                      <th (click)="sortResult('endstation')">
+                        Destination
+                        <div class="no-style-wrapper" *ngIf="endStation==true">{{ asc == true ? '▲' : '▼' }}</div>
+                      </th>
+                      
+                      <th>End Date</th>
+                      <th>End Time</th>
+                      <th colspan="2" *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">Options</th>
+                      
+                  </tr>
+                </thead>
+
+                <!-- <tbody *ngIf="loadingBit==true || returnedUsers==undefined || returnedUsers.length==0">
+                  <tr>
+                    <td colspan="6" class="text-center">{{getLabelTextWhenNotHavingUsers()}}</td>
+                  </tr>
+                </tbody> -->
+
+                <tbody *ngIf="ScheduleList!=undefined && ScheduleList.length!=0">                      
+                    <ng-container *ngFor="let dataItem of getVisibleRows()">
+                      <tr class="table-row text-center">
+                        
+                          <ng-container (click)="enableScheduleDetails(dataItem.scheduleId)">
+                              <td *ngIf="ActivateAddEditScheduleComp==false && enablethisschedule==false">  {{  dataItem.train  }}  </td>
+                              <td *ngIf="ActivateAddEditScheduleComp==false">{{  getScheduleId(dataItem.scheduleId) | uppercase }}</td>
+                              <td>
+                                <strong>{{ dataItem.startstation}}</strong><br>
+                              </td>
+                              <td>{{dataItem.startingDate}}</td>
+                              <td>{{dataItem.startingTime}}</td>
+                              <td>
+                                <strong>{{ dataItem.endstation}}</strong><br>
+                              </td>
+                              <td>{{dataItem.endingDate}}</td>
+                              <td>{{dataItem.endingTime}}</td>
+                          </ng-container>                          
+                         
+                          <ng-container  *ngIf="enablethisschedule==false && tokenService.getIsUserAdmin()!=undefined">
+                                
+                                <ng-container *ngIf="tokenService.getIsUserAdmin()==true && enablethisschedule==false && ActivateAddEditScheduleComp==false">
+
+                                    <td class="text-center" >
+                                      <button type="button" class="btn btn-light mr-1"
+                                          data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false" >
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                                          </svg>
+                                      </button>
+                                    </td>
+
+                                    <td class="text-center">
+                                      <button type="button" class="btn btn-light mr-1" (click)="deleteClick(dataItem.scheduleId)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                          <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                        </svg>
+                                      </button>
+                                    </td>
+
+                                </ng-container>                                
+
+                                <td class="text-center" *ngIf="tokenService.getIsUserAdmin()==false">
+                                  <button type="button" class="btn btn-light mr-1" (click)="bookSeats(dataItem)" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 16 16">
+                                      <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                                    </svg>
+                                  </button>
+                                </td>
+                          </ng-container>
+                          
+                          
+                      </tr>                         
+                      
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- On small screens -->
+        <ng-container *ngIf="deviceService.getScreenSize()<=990">
+          
+          <ng-container *ngIf="ScheduleList!=undefined && ScheduleList.length!=0">
+              <div class="row thead-custom">
+                  <div class="col">
+                      Schedule Details
+                  </div>
+              </div>
+              
+              <br>
+              <div *ngFor="let dataItem of getVisibleRows();let i=index">
+
+                  <div class="row">
+                      <div class="col-2 toggle-container">
+                              <input type="checkbox" id="toggle{{i}}" class="toggle-checkbox" [checked]="dataItem.showRow" (click)="toggleMoreDetails(i)">
+                              <label for="toggle{{i}}" class="toggle-button"></label>
+                      </div>
+                      <div class="col-10">                          
+                          {{ dataItem.startstation +" - "+ dataItem.endstation }}
+                      </div>               
+                  </div>
+                  
+                  <ng-container *ngIf="dataItem.showRow==true">
+
+                    <!-- Schedule Id -->
+                    <div class="row py-3 border-bottom text-left" *ngIf="ActivateAddEditScheduleComp==false">
+                      <div class="col-6 text-muted ">Schedule Id:</div>
+                      <div class="col-6"> {{ getScheduleId(dataItem.scheduleId) | uppercase }} </div>
+                    </div>
+
+                    <!-- Train -->
+                    <div class="row py-3 border-bottom text-left" *ngIf="ActivateAddEditScheduleComp==false">
+                      <div class="col-6 text-muted ">Train Name:</div>
+                      <div class="col-6 ">{{ dataItem.train }}</div>
+                    </div>
+
+                    <!-- Start -->
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Start Station:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.startstation }}</div>
+                    </div>
+
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Start date:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.startingDate }}</div>
+                    </div>
+
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Start date:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.startingTime }}</div>
+                    </div>
+
+                    <!-- End -->
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">Destination:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.endstation }}</div>
+                    </div>
+
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">End date:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.endingDate }}</div>
+                    </div>
+
+                    <div class="row py-3 border-bottom text-left">
+                      <div class="col-6 text-muted text-left">End Time:</div><br> 
+                      <div class="col-6 text-left">{{ dataItem.endingTime }}</div>
+                    </div>
+
+                    <div class="d-flex mt-3 align-items-center">
+
+                      <ng-container *ngIf="tokenService.getIsUserAdmin()==true">
+
+                           <!-- Edit Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-success mr-2"  
+                                data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false">
+                              Edit Schedule
+                            </button>
+                          </div>
+
+                          <!-- Delete Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-danger mr-2"  (click)="deleteClick(dataItem.scheduleId)">
+                              Delete Schedule
+                            </button>
+                          </div>
+
+                      </ng-container>
+
+                      <ng-container *ngIf="tokenService.getIsUserAdmin()==false">
+
+                          <!-- Book Button-->
+                          <div  class="mr-3"> 
+                            <button class="col-12 btn btn-outline-danger mr-2"  (click)="bookSeats(dataItem)">
+                              Book Seats
+                            </button>
+                          </div>
+
+                      </ng-container>
+
+                    </div>
+                    
+                    <br>
+                  </ng-container>                 
+                  <hr>
             
-            <th>End Date</th>
-            <th>End Time</th>
-            <th *ngIf="enablethisschedule==false">Options</th>
-        </tr>
-      </thead>
-      <tbody *ngFor="let dataItem of ScheduleList;let i=index" >
-        <tr>   
-           <div class="no-style-wrapper" (click)="enableScheduleDetails(dataItem.scheduleId)" [title]="titleText">
-              <td *ngIf="enablethisschedule==false && ActivateAddEditScheduleComp==false">{{dataItem.train}}</td>  
-              <td>{{dataItem.startstation}}</td>
-              <td>{{dataItem.startingDate}}</td>
-              <td>{{dataItem.startingTime}}</td>
-              <td>{{dataItem.endstation}}</td>
-              <td>{{dataItem.endingDate}}</td>
-              <td>{{dataItem.endingTime}}</td>
-           </div>
-           <td class="no-style-wrapper" *ngIf="enablethisschedule==false && tokenService.getIsUserAdmin()!=undefined">
-              <button type="button" class="btn btn-light mr-1"
-                  data-toggle="modal" data-target="#exampleModal" (click)="editClick(dataItem)" data-backdrop="static" data-keyboard="false" *ngIf="tokenService.getIsUserAdmin()==true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
-                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
-                  </svg>
-              </button>
-              <button type="button" class="btn btn-light mr-1" (click)="deleteClick(dataItem)" *ngIf="tokenService.getIsUserAdmin()==true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-                </svg>
-              </button>
-              <button type="button" class="btn btn-light mr-1" (click)="bookSeats(dataItem)" *ngIf="tokenService.getIsUserAdmin()==false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 16 16">
-                  <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
-                </svg>
-              </button>
-           </td>
-        </tr>
-        <!-- <tr><br></tr> -->
-      </tbody>
-  </table>
+              </div>
+          </ng-container>
+          
+        </ng-container>
+
+          <!-- ✅ Styled Pagination Below Table -->
+          <nav aria-label="Page navigation" *ngIf="ScheduleList!=undefined && ScheduleList.length!=0">
+              <ul class="pagination justify-content-end mt-4 mb-0">
+                  <li class="page-item" [class.disabled]="navigationService.selectedPage === 1" id="prev">
+                      <button class="page-link" tabindex="-1" (click)="pageBackward()" [disabled]="navigationService.selectedPage==1">Previous</button>
+                  </li>
+                  <li class="page-item active disabled">
+                      <a class="page-link">{{navigationService.selectedPage}}</a>
+                  </li>
+                  <li class="page-item" id="next" [class.disabled]="navigationService.selectedPage === navigationService.getMaxPageNumber()">
+                      <button class="page-link" (click)="pageForward()" [disabled]="navigationService.selectedPage==navigationService.getMaxPageNumber()">Next</button>
+                  </li>
+              </ul>
+          </nav>
+
+      </div>
+  </div>
+</div>
 
   <app-add-edit-schedule 
     *ngIf="ActivateAddEditScheduleComp==true" 

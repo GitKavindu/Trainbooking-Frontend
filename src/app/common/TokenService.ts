@@ -18,6 +18,9 @@ export class TokenService {
                 return userToken
                 
             }
+            else{
+              this.removeToken()
+            }
             return userToken
            
         } 
@@ -44,5 +47,9 @@ export class TokenService {
 
     getIsUserAdmin():boolean | undefined{
         return this.returnToken()?.isAdmin
+    }
+
+    removeToken(){
+        localStorage.removeItem('userToken')
     }
   }

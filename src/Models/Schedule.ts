@@ -24,4 +24,6 @@ export class Schedule{
 
   public trainId!:number
   public trainSeqNo!:number
+
+  showRow:boolean=false
 }

@@ -22,6 +22,10 @@ import { BookingComponent } from './pages/booking/booking.component';
 import { BookingFormComponent } from './pages/booking/booking-form/booking-form.component';
 import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
+import { CommonDetailsComponent } from './shared/common-details/common-details.component';
+import { HomeComponent } from './pages/home/home.component';
+import { UserprofileComponent } from './pages/userprofile/userprofile.component';
+import { PaymentGatewayComponentComponent } from './pages/payment-gateway-component/payment-gateway-component.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import { UserpageComponent } from './pages/userpage/userpage.component';
     BookingComponent,
     BookingFormComponent,
     MybookingsComponent,
-    UserpageComponent
+    UserpageComponent,
+    CommonDetailsComponent,
+    HomeComponent,
+    UserprofileComponent,
+    PaymentGatewayComponentComponent
   ],
   imports: [
     BrowserModule,

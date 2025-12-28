@@ -10,3 +10,95 @@ app-booking {
   width: 100% !important;
   max-width: 100% !important;
 }
+
+
+  /************/
+
+  .toggle-container {
+    display: inline-block;
+  }
+
+  .toggle-checkbox {
+    display: none;
+  }
+
+  .toggle-button {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    border: 2px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    position: relative;
+  }
+
+  .toggle-button:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+  .toggle-button::before {
+    content: '+';
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .toggle-checkbox:checked + .toggle-button::before {
+    content: '−';
+    transform: rotate(180deg);
+  }
+
+  .background-box {
+    position: relative;
+    padding: 40px;
+    color: white;       /* or black, based on image contrast */
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .background-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+
+    background: url('../public/gallery-4.jpg') center/cover no-repeat;
+    opacity: 0.4;        /* Adjust this value to control image strength */
+
+    z-index: -1;
+    pointer-events: none; /* Makes sure it doesn't block clicks */
+  }
+
+  /* 
+  * Remove container top and bottom marigin
+  * Conver it to a padding
+  */
+
+  .mb-4, .my-4 {
+    margin-bottom: 0px !important;
+     padding-bottom: 1.5rem;
+  }
+
+  .mt-4, .my-4 {
+    margin-top:  0px !important;
+    padding-top: 1.5rem;
+  }
+
+  /* alert box*/
+  #alert {
+    transition: opacity 0.5s ease-in-out;
+    position: sticky;
+    top: 0px;
+    margin-bottom: 0px;
+  }
+
+
+  

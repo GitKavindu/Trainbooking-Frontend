@@ -80,11 +80,9 @@
     text-transform: none;
   }
 
-.add-edit {
-  max-width: 800px;
-  position: relative;
-  left: 300px;
-}
+  .add-edit {
+    max-width: 1800px;
+  }
 
 .filters {
   display: flex;

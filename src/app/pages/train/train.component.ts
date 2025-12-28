@@ -3,6 +3,8 @@ import { SharedServiceService } from '../../shared-service.service';
 import { Train } from '../../../Models/Train';
 import { TrainDto } from '../../../Models/DTOs/TrainDto';
 import { Router } from '@angular/router';
+import { DeviceService } from '../../common/DeviceService';
+import { NavigationService } from '../../common/NavigationService';
 
 @Component({
   selector: 'app-train',
@@ -11,9 +13,9 @@ import { Router } from '@angular/router';
   styleUrl: './train.component.css'
 })
 export class TrainComponent {
-  constructor(private service:SharedServiceService,private router:Router){}
   
-      TrainList:Train[]=[]
+  
+      TrainList:Train[]
       ModalTitle!:string
       ActivateAddEditTrainComp:boolean=false
 
@@ -23,6 +25,15 @@ export class TrainComponent {
       TrainIdFilter:string=""
       TrainNameFilter:string=""
       TrainListWithoutFilter:any=[]
+      deviceService:DeviceService
+      navigationService:NavigationService<Train>
+
+      constructor(private service:SharedServiceService,private router:Router){
+        this.TrainList=new Array<Train>()
+        this.navigationService=new NavigationService<Train>(this.TrainList)
+        this.deviceService=new DeviceService()
+      }
+
       ngOnInit():void{
         this.refreshTrainList();
       }
@@ -34,7 +45,9 @@ export class TrainComponent {
           train_seq_no:0,
           created_date: '',
           lastUpdated_date:'',
-          added_by:''
+          added_by:'',
+          isActive:false,
+          showRow:false
         }
         this.ModalTitle="Add Train"
         this.ActivateAddEditTrainComp=true
@@ -69,9 +82,17 @@ export class TrainComponent {
       }
   
       refreshTrainList(){
+        this.TrainList=new Array<Train>()
+        this.navigationService=new NavigationService<Train>(this.TrainList)
+        this.TrainListWithoutFilter=new Array<Train>()
+
         this.service.getAllTrains().subscribe(res=>{
-          this.TrainList=res.Data;
-          this.TrainListWithoutFilter=res.Data
+
+          for(let i=0;i<res.Data.length;i++){
+            this.TrainList.push(res.Data[i])
+            this.TrainListWithoutFilter.push(res.Data[i])
+          }
+
         })
       }
   
@@ -100,10 +121,32 @@ export class TrainComponent {
           })
       }
 
-      enableDisableApartmentForTrain(i:number,train_id:number,train_seq_no:number){
+      enableDisableApartmentForTrain(train_id:number,train_seq_no:number){
         this.enableApartment=!this.enableApartment;
         this.router.navigate(['/apartment'], {
           queryParams: { trainId: train_id, seqNo: train_seq_no}
         });
+      }
+
+      toggleMoreDetails(rowNo:number) {
+        rowNo=this.navigationService.getRealRowNum(rowNo)
+        this.TrainList[rowNo].showRow=!this.TrainList[rowNo].showRow
+      }
+
+      getTrainId(TrainNum:number,TrainSeqNo:number){
+        return 'TR' +  TrainNum.toString().padStart(4, '0') +TrainSeqNo.toString().padStart(2, '0') 
+      }
+  
+      getVisibleRows():Train[]{
+        let visibleRows:Train[]= this.navigationService.getVisibleRows()
+        return visibleRows
+      }
+  
+      pageForward(){
+        this.navigationService.pageForward()
+      }
+  
+      pageBackward(){
+        this.navigationService.pageBackward()
       }
 }

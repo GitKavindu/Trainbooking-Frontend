@@ -19,7 +19,9 @@ export class GetBookingDetailsDto{
 
     public fromStationNo!:number
     public fromStationSeqNo!:number
+    public fromStation!:string
 
     public toStationNo!:number
     public toStationSeqNo!:number
+    public toStation!:string
 }

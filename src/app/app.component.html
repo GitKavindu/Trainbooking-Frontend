@@ -6,12 +6,35 @@
     <app-header></app-header>
   </div>
 
-  <!-- Responsive Main Content -->
-  <main class="container-fluid px-0">
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
-  </main>
+  
+
+  <div class="main-con">
+    <img class="pos" src="gallery-4.jpg" alt="sdasds">
+      
+      <!-- Responsive Main Content -->
+      <ng-container *ngIf="currentUrl=='/home' ">
+          <router-outlet></router-outlet>
+      </ng-container>
+
+      <div class="container">
+        
+        <div class="row">
+          <div class="col-lg-9"></div>
+          <div class="col-lg-3 col-12">
+              <div *ngIf="service.showMessage==true" 
+                class="alert alert-success alert-dismissible fade show text-center" 
+                role="alert" id="alert" [innerHtml]="service.messege">              
+              </div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="currentUrl!='/home' ">
+            <router-outlet></router-outlet>
+        </ng-container>
+        <app-common-details></app-common-details> 
+      </div> 
+      
+  </div>
 
   <!-- Full-width Footer -->
   <div class="container-fluid px-0">

@@ -1,3 +1,5 @@
+<!-- 
+   
 <header class="main-header">
     <div class="header-container">
       <div class="logo">
@@ -13,4 +15,93 @@
         <a routerLink="/login" class="nav-link" *ngIf="service.tokenService.returnToken()==undefined">Login</a>
       </nav>
     </div>
-  </header>
+</header> -->
+
+<nav class="navbar navbar-expand-lg main-header">
+    <div class="container header-container">
+       
+        <div class="col-lg-4 col-10 logo">
+          <h1 class="text-lg-left text-center">Train Booking <br class="d-block d-md-none">System</h1>
+        </div>
+
+        <div class="col-2 d-lg-none">
+            <button class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbarCollapse" aria-controls="nav" aria-label="expand navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="col-lg-6 col-12 collapse navbar-collapse " id="navbarCollapse">
+          <div class="navbar-nav mx-auto  py-3 py-lg-0 px-3 ">
+            <a routerLink="/home" class="nav-item nav-link active">Home</a>
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="about-us" (click)="scrollToSection('about-us')">About Us</a>
+
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="our-quality" (click)="scrollToSection('our-quality')">Our Quality</a>
+
+            <div class="nav-item dropdown" *ngIf="service.tokenService.getIsUserAdmin()!=undefined">
+              <!-- FIXED: Bootstrap 4 uses data-toggle -->
+              <div class="nav-link" data-toggle="dropdown">{{"Pages"}}</div>
+              <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.getIsUserAdmin()==true">
+                <a routerLink="/station" class="dropdown-item">Station</a>
+                <a routerLink="/train" class="dropdown-item">Train</a>
+                <a routerLink="/apartment" class="dropdown-item">Apartment</a>
+                <a routerLink="/schedule" class="dropdown-item">Schedule</a>
+                <a routerLink="/users" class="dropdown-item">Users</a>
+              </div>
+
+              <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.getIsUserAdmin()==false">
+                
+                <a routerLink="/booking" class="dropdown-item">Booking</a>
+                <a routerLink="/mybookings" class="dropdown-item">My bookings</a>
+              </div>
+            </div>
+
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="contact-us" 
+                (click)="scrollToSection('contact-us')" *ngIf="service.tokenService.getIsUserAdmin()!=undefined">Contact Us</a>
+
+            <div class="nav-item dropdown d-block d-lg-none">
+              <!-- FIXED: Bootstrap 4 uses data-toggle -->
+              <div class="nav-link" data-toggle="dropdown">{{getProfileText()}}</div>
+              <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()==undefined">
+                <a routerLink="/login" class="dropdown-item">Login</a>
+                <a routerLink="/register" class="dropdown-item">Register</a>
+              </div>
+              <div class="dropdown-menu  border-0 m-0" *ngIf="service.tokenService.returnToken()!=undefined">
+                <a class="dropdown-item" (click)="logOut()">Logout</a>
+                <a routerLink="/profile" class="dropdown-item">My Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collapsible Content -->
+        <div class="col-0.25"></div>
+        <div class="col-1.5 nav-item dropdown d-none d-lg-block">
+         
+          <div class="nav-link text-center" data-toggle="dropdown" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16" >
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+            </svg> {{getProfileText()}}
+          </div>
+
+          <div class="dropdown-menu  border-0 m-0">
+            <ng-container *ngIf="service.tokenService.returnToken()==undefined">
+                <a routerLink="/login" class="dropdown-item">Login</a>
+                <a routerLink="/register" class="dropdown-item">Register</a>
+            </ng-container>
+
+            <ng-container *ngIf="service.tokenService.returnToken()!=undefined">
+                <div class="dropdown-item" (click)="logOut()">Logout</div>
+                <a routerLink="/profile" class="dropdown-item">My Profile</a>
+            </ng-container>
+
+          </div>
+        </div>
+        <div class="col-0.25"></div>
+
+        
+
+    </div>
+</nav>
+
