@@ -7,17 +7,17 @@
             <br>
         </div> 
         
-        <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==undefined">
+        <div class="col-12 text-center" *ngIf="tokenService.returnToken()==undefined">
             <button type="button" class="btn btn-primary btn-lg" (click)="goToLogin()">Login</button>
             <br class="d-lg-none"><br class="d-lg-none">
             <button type="button" class="btn btn-primary btn-lg" (click)="goToRegister()">Register</button>
         </div>
-        <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==false">
+        <div class="col-12 text-center" *ngIf="tokenService.returnToken()!=undefined && tokenService.getIsUserAdmin()==false">
             <button type="button" class="btn btn-primary btn-lg" (click)="goToBooking()">Book a Train</button>
             <button type="button" class="btn btn-primary btn-lg" (click)="goToMyBookings()">My Bookings</button>
         </div>
 
-        <div class="col-12 text-center" *ngIf="tokenService.returnToken!=undefined && tokenService.getIsUserAdmin()==true">
+        <div class="col-12 text-center" *ngIf="tokenService.returnToken()!=undefined && tokenService.getIsUserAdmin()==true">
             <button type="button" class="btn btn-primary btn-lg" (click)="goToSchedule()">Place Train Schedule</button>
         </div>  
     </div>

@@ -24,7 +24,7 @@ export class TokenService {
             return userToken
            
         } 
-        
+
         return userToken
     }
 

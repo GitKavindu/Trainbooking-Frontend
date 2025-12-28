@@ -11,6 +11,7 @@ import { MybookingsComponent } from './pages/mybookings/mybookings.component';
 import { UserpageComponent } from './pages/userpage/userpage.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UserprofileComponent } from './pages/userprofile/userprofile.component';
+import { PaymentGatewayComponentComponent } from './pages/payment-gateway-component/payment-gateway-component.component';
 
 const routes: Routes = [
   
@@ -27,7 +28,8 @@ const routes: Routes = [
   { path: 'mybookings', component: MybookingsComponent },
   { path: 'users', component: UserpageComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'profile', component: UserprofileComponent }
+  { path: 'profile', component: UserprofileComponent },
+  { path: 'paywall', component: PaymentGatewayComponentComponent }
 ];
 
 @NgModule({

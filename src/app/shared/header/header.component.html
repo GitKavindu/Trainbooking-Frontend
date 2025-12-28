@@ -34,8 +34,9 @@
         <div class="col-lg-6 col-12 collapse navbar-collapse " id="navbarCollapse">
           <div class="navbar-nav mx-auto  py-3 py-lg-0 px-3 ">
             <a routerLink="/home" class="nav-item nav-link active">Home</a>
-            <a routerLink="/home" fragment="about-us" class="nav-item nav-link">About Us</a>
-            <a  routerLink="/home" fragment="our-quality" class="nav-item nav-link">Our Quality</a>
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="about-us" (click)="scrollToSection('about-us')">About Us</a>
+
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="our-quality" (click)="scrollToSection('our-quality')">Our Quality</a>
 
             <div class="nav-item dropdown" *ngIf="service.tokenService.getIsUserAdmin()!=undefined">
               <!-- FIXED: Bootstrap 4 uses data-toggle -->
@@ -55,7 +56,8 @@
               </div>
             </div>
 
-            <a  routerLink="/home" fragment="contact-us" class="nav-item nav-link">Contact Us</a>
+            <a [routerLink]="[]" class="nav-item nav-link" fragment="contact-us" 
+                (click)="scrollToSection('contact-us')" *ngIf="service.tokenService.getIsUserAdmin()!=undefined">Contact Us</a>
 
             <div class="nav-item dropdown d-block d-lg-none">
               <!-- FIXED: Bootstrap 4 uses data-toggle -->

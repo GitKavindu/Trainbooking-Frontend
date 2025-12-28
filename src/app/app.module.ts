@@ -25,6 +25,7 @@ import { UserpageComponent } from './pages/userpage/userpage.component';
 import { CommonDetailsComponent } from './shared/common-details/common-details.component';
 import { HomeComponent } from './pages/home/home.component';
 import { UserprofileComponent } from './pages/userprofile/userprofile.component';
+import { PaymentGatewayComponentComponent } from './pages/payment-gateway-component/payment-gateway-component.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { UserprofileComponent } from './pages/userprofile/userprofile.component'
     UserpageComponent,
     CommonDetailsComponent,
     HomeComponent,
-    UserprofileComponent
+    UserprofileComponent,
+    PaymentGatewayComponentComponent
   ],
   imports: [
     BrowserModule,

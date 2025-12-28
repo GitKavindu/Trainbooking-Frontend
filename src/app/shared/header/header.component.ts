@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { SharedServiceService } from '../../shared-service.service';
 import { TokenService } from '../../common/TokenService';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class HeaderComponent {
   isDropdown:boolean=true
   path:string="home"
   fragment:string="our-quality"
+  currentUrl!:string
   
   constructor(public service:SharedServiceService,private router:Router,  private cdRef: ChangeDetectorRef){
     this.tokenService=new TokenService()
@@ -39,5 +40,13 @@ export class HeaderComponent {
     
     console.log(this.tokenService.returnToken())
   }
+
+  scrollToSection(section:string): void {
+    const element = document.getElementById(section);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
 
 }

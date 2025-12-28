@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
 import { SeatModel } from '../../../../Models/SeatModel';
 import { Seat } from '../../../../Models/Seat';
 import { CompartmentSeatModel } from '../../../../Models/CompartmentSeatModel';
@@ -6,7 +6,7 @@ import { SharedServiceService } from '../../../shared-service.service';
 import { TokenService } from '../../../common/TokenService';
 import { CommonService } from '../../../common/CommonService';
 import { AddBookingDto } from '../../../../Models/DTOs/AddBookingDto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CancelBookingDto } from '../../../../Models/DTOs/CancelBookingDto';
 
 @Component({
@@ -61,7 +61,7 @@ export class TrainCompartmentComponent {
     
   }
 
-  constructor(private service:SharedServiceService,private route:ActivatedRoute){
+  constructor(private service:SharedServiceService,private route:ActivatedRoute,private router:Router,private renderer: Renderer2){
      this.tokenService=new TokenService()
      this.apartmentId=0
      this.bookingId=0
@@ -149,6 +149,10 @@ export class TrainCompartmentComponent {
     return selectedSeatsString
   }
 
+  getSeatPrice():string{
+    return "$"+(this.selectedSeats.length * 50).toFixed(2)
+  }
+
   getUnselectedtedSeats(){
   for(let i=0;i<this.selectedSeats.length;i++){     
   }
@@ -175,6 +179,7 @@ export class TrainCompartmentComponent {
     }
     else if(this.type==4){
       this.cancelBooking()
+      this.router.navigateByUrl("/mybookings")
     }
     
   }
@@ -199,7 +204,16 @@ export class TrainCompartmentComponent {
       seatModel:this.selectedSeats
     }
     this.service.bookSeats(val).subscribe(res=>{
-      alert(res.Data.toString());
+    
+      const backdrop = document.querySelector('.modal-backdrop');
+      if (backdrop) {
+        this.renderer.removeChild(document.body, backdrop);
+      }
+      //alert(res.Data.toString());
+      this.router.navigate(['/paywall'], {
+        queryParams: { price:this.selectedSeats.length * 50}
+      });
+      
     })
   }
 

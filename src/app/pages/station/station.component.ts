@@ -18,11 +18,16 @@ export class StationComponent {
     ActivateAddEditStationComp:boolean=false
     Station!:Station
 
-    stationIdFilter:string=""
-    stationNameFilter:string=""
     stationListWithoutFilter:any=[]
     deviceService:DeviceService
     navigationService:NavigationService<Station>
+
+    asc:boolean=true //represents ascending order
+    station_id:boolean=false
+    station_name:boolean=false
+
+    selectedModel:string='id'
+    StationFilter:string=""
 
     constructor(private service:SharedServiceService){
       this.stationList=new Array<Station>()
@@ -94,32 +99,68 @@ export class StationComponent {
     }
 
     filterFn(){
-      var stationIdFilter=this.stationIdFilter
-      var stationNameFilter=this.stationNameFilter
+      var StationFilter=this.StationFilter
 
-      this.stationList=this.stationListWithoutFilter.filter(function(el:any){
-        return el.station_id.toString().toLowerCase().includes(
-          stationIdFilter.toString().trim().toLowerCase()
-        )
-        &&
-        el.station_name.toString().toLowerCase().includes(
-          stationNameFilter.toString().trim().toLowerCase()
-        )
-      })
+      this.stationList=new Array<Station>()
+      this.navigationService=new NavigationService<Station>(this.stationList)
+      
+      let stations:Station[]
+
+      if(this.selectedModel=='id')
+      {
+        stations=this.stationListWithoutFilter.filter(function(el:any){
+          return el.station_id.toString().toLowerCase().includes(
+            StationFilter.toString().trim().toLowerCase()
+          )
+        })
+      }
+      else
+      {
+        stations=this.stationListWithoutFilter.filter(function(el:any){
+          return el.station_name.toString().toLowerCase().includes(
+            StationFilter.toString().trim().toLowerCase()
+          )
+        })
+      }
+
+      for(let i=0;i<stations.length;i++){
+        this.stationList.push(stations[i])
+      }
+
     }
 
-    sortResult(prop:any,asc:boolean){
-        this.stationList=this.stationListWithoutFilter.sort(function(a:any,b:any){
-          if(asc){
+    sortResult(prop:any){
+        this.stationList=new Array<Station>()
+        this.navigationService=new NavigationService<Station>(this.stationList)
+
+        let stations:Station[]=this.stationListWithoutFilter.sort((a:any,b:any)=>{
+          if(this.asc===true){
               return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0)
           }else{
             return (a[prop]<b[prop])?1:((a[prop]>b[prop])?-1:0)
           }
         })
+        
+
+         for(let i=0;i<stations.length;i++){
+          this.stationList.push(stations[i])
+        }
+
+        this.asc=!this.asc
+
+        if(prop=='station_id'){
+          this.station_id=true
+          this.station_name=false
+        }
+        else{
+          this.station_id=false
+          this.station_name=true
+        }
     }
 
     toggleMoreDetails(rowNo:number) {
       rowNo=this.navigationService.getRealRowNum(rowNo)
+      console.log(rowNo)
       this.stationList[rowNo].showRow=!this.stationList[rowNo].showRow
     }
 

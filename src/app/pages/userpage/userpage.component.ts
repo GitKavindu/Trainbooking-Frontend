@@ -47,7 +47,7 @@ export class UserpageComponent {
         })
 
       }
-    },1000)
+    },500)
   }
 
   compareGetUserStatusDtos(val:GetUserStatusDto):boolean{
